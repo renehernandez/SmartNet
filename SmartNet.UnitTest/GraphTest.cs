@@ -188,5 +188,46 @@ namespace GraphNet.TestBase
 
         # endregion
 
+        # region Adding edge without nodes
+
+        [Test]
+        public void AddEdgeWithoutVerticesIntegerGraph()
+        {
+            Assert.AreEqual(intGraph.NumberOfEdges, 0);
+            Assert.AreEqual(intGraph.NumberOfVertices, 0);
+
+            intGraph.AddEdge(1, 2);
+
+            Assert.AreEqual(intGraph.NumberOfVertices, 2);
+            Assert.AreEqual(intGraph.NumberOfEdges, 1);
+
+        }
+
+        [Test]
+        public void AddEdgeWithoutVerticesStringGraph()
+        {
+            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
+            Assert.AreEqual(intGraph.NumberOfVertices, 0);
+
+            stringGraph.AddEdge("me", "you");
+
+            Assert.AreEqual(stringGraph.NumberOfEdges, 1);
+            Assert.AreEqual(stringGraph.NumberOfVertices, 2);
+        }
+
+        [Test]
+        public void AddEdgeWtihoutVerticesClassGraph()
+        {
+            Assert.AreEqual(classGraph.NumberOfEdges, 0);
+            Assert.AreEqual(classGraph.NumberOfVertices, 0);
+
+            classGraph.AddEdge(new ClassTest(20), new ClassTest(15));
+
+            Assert.AreEqual(classGraph.NumberOfVertices, 2);
+            Assert.AreEqual(classGraph.NumberOfEdges, 1);
+        }
+
+        # endregion
+
     }
 }
