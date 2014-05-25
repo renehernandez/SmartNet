@@ -1,12 +1,12 @@
-﻿using GraphNet.Core.Exceptions;
-using GraphNet.Core.Interfaces;
+﻿using SmartNet.Exceptions;
+using SmartNet.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphNet.Core
+namespace SmartNet
 {
     public class Graph<T> where T : IEquatable<T>
     {

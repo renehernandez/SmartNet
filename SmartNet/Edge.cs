@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GraphNet.Core.Interfaces;
+using SmartNet.Interfaces;
 
-namespace GraphNet.Core
+namespace SmartNet
 {
     public class Edge<T> where T : IEquatable<T>
     {

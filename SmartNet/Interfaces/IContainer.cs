@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphNet.Core.Interfaces
+namespace SmartNet.Interfaces
 {
     public interface IContainer
     {

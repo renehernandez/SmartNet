@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphNet.Core.Exceptions
+namespace SmartNet.Exceptions
 {
     public class EdgeNotFoundException : BaseException
     {
