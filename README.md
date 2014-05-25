@@ -1,0 +1,1 @@
+SmartNet aims to be a framework api, written in C#, for the creation, manipulation and analysis of the structure, characteristics and functions of complex networks. 
