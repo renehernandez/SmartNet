@@ -18,6 +18,7 @@ namespace SmartNet
         # endregion
 
         # region Public Properties
+
         public int NumberOfVertices { get; private set; }
 
         public int NumberOfEdges { get; private set; }
@@ -76,6 +77,30 @@ namespace SmartNet
             adj = new Dictionary<T, Dictionary<T, Edge<T>>>();
         }
 
+        public Graph(IEnumerable<T> vertices): this()
+        {
+            foreach (var vertex in vertices)
+            {
+                AddVertex(vertex);
+            }
+        }
+
+        public Graph(params T[] vertices):this(vertices.AsEnumerable())
+        {
+        }
+
+        public Graph(IEnumerable<Edge<T>> edges):this()
+        {
+            foreach (var edge in edges)
+            {
+                AddEdge(edge);
+            }
+        }
+
+        public Graph(params Edge<T>[] edges):this(edges.AsEnumerable())
+        {
+        }
+        
         public Graph(IEqualityComparer<T> comparer)
         {
             NumberOfEdges = 0;
@@ -83,13 +108,25 @@ namespace SmartNet
             adj = new Dictionary<T, Dictionary<T, Edge<T>>>(comparer);
         }
 
-        public Graph(params T[] vertices)
+        public Graph(IEqualityComparer<T> comparer, IEnumerable<T> vertices)
+            : this(vertices)
+        {
+            adj = new Dictionary<T, Dictionary<T, Edge<T>>>(comparer);
+        }
+
+        public Graph(IEqualityComparer<T> comparer, params T[] vertices)
+            : this(comparer, vertices.AsEnumerable())
         {
         }
 
-        public Graph(params Edge<T>[] edges)
+        public Graph(IEqualityComparer<T> comparer, IEnumerable<Edge<T>> edges): this(edges)
         {
+            adj = new Dictionary<T, Dictionary<T, Edge<T>>>(comparer);
+        }
 
+        public Graph(IEqualityComparer<T> comparer, params Edge<T>[] edges)
+            : this(comparer, edges.AsEnumerable())
+        {
         }
 
         # endregion
@@ -99,19 +136,24 @@ namespace SmartNet
         public void AddVertex(T v)
         {
             if (adj.ContainsKey(v))
-                throw new Exception(string.Format("Vertex {0} already present in graph", v));
+                throw new Exception(string.Format("Vertex {0} already found in graph", v));
 
             adj[v] = new Dictionary<T, Edge<T>>();
             
             NumberOfVertices++;
         }
 
-        public void AddVertexFrom(IEnumerable<T> vertexList)
+        public void AddVerticesFrom(IEnumerable<T> vertexList)
         {
             foreach (var vertex in vertexList)
             {
                 AddVertex(vertex);
             }
+        }
+
+        public void AddVerticesFrom(params T[] vertices)
+        {
+            AddVerticesFrom(vertices.AsEnumerable());
         }
 
         public void AddEdge(Edge<T> edge)
@@ -142,6 +184,19 @@ namespace SmartNet
             AddEdge(edge);
         }
 
+        public void AddEdgesFrom(IEnumerable<Edge<T>> edges)
+        {
+            foreach (var edge in edges)
+            {
+                AddEdge(edge);
+            }
+        }
+
+        public void AddEdgesFrom(params Edge<T>[] edges)
+        {
+            AddEdgesFrom(edges.AsEnumerable());
+        }
+
         public bool HasVertex(T v)
         {
             return adj.ContainsKey(v);
@@ -150,6 +205,73 @@ namespace SmartNet
         public bool HasEdge(T v, T w)
         {
             return adj[v].ContainsKey(w);
+        }
+
+        public bool HasEdge(Edge<T> edge)
+        {
+            return HasEdge(edge.First, edge.Second);
+        }
+
+        public void RemoveVertex(T v)
+        {
+            if (!adj.ContainsKey(v))
+                throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", v));
+
+            adj.Remove(v);
+
+            foreach (var w in adj.Keys)
+            {
+                if (adj[w].ContainsKey(v))
+                {
+                    adj[w].Remove(v);
+                }
+            }
+        }
+
+        public void RemoveVertices(IEnumerable<T> vertices)
+        {
+            foreach (var vertex in vertices)
+            {
+                RemoveVertex(vertex);
+            }
+        }
+
+        public void RemoveVertices(params T[] vertices)
+        {
+            RemoveVertices(vertices.AsEnumerable());
+        }
+
+        public void RemoveEdge(T v, T w)
+        {
+            if (!adj.ContainsKey(v))
+                throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", v));
+
+            if (!adj.ContainsKey(w))
+                throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", w));
+
+            if (!adj[v].ContainsKey(w))
+                throw new EdgeNotFoundException(string.Format("Edge ({0}, {1}) not found in graph", v, w));
+
+            adj[v].Remove(w);
+            adj[w].Remove(v);
+        }
+
+        public void RemoveEdge(Edge<T> edge)
+        {
+            RemoveEdge(edge.First, edge.Second);
+        }
+
+        public void RemoveEdges(IEnumerable<Edge<T>> edges)
+        {
+            foreach (var edge in edges)
+            {
+                RemoveEdge(edge);
+            }
+        }
+
+        public void RemoveEdges(params Edge<T>[] edges)
+        {
+            RemoveEdges(edges.AsEnumerable());
         }
 
         # endregion
