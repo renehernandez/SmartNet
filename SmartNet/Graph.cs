@@ -283,17 +283,47 @@ namespace SmartNet
             RemoveEdges(edges.AsEnumerable());
         }
 
-        public IEnumerable<T> NeighborsIterator(T v)
+        public IEnumerable<T> NeighborsIterator(T vertex)
         {
-            if (!HasVertex(v))
-                throw new VertexNotFoundException("Vertex {0} not found in graph", v);
+            if (!HasVertex(vertex))
+                throw new VertexNotFoundException("Vertex {0} not found in graph", vertex);
 
-            return adj[v].Keys.AsEnumerable();
+            return adj[vertex].Keys.AsEnumerable();
         }
 
-        public T[] Neighbors(T v)
+        public T[] Neighbors(T vertex)
         {
-            return NeighborsIterator(v).ToArray();
+            return NeighborsIterator(vertex).ToArray();
+        }
+
+        public int Degree(T vertex)
+        {
+            if (!HasVertex(vertex))
+            {
+                throw new VertexNotFoundException("Vertex {0} not found", vertex);
+            }
+
+            return adj[vertex].Count;
+        }
+
+        public IEnumerable<int> DegreesIterator(IEnumerable<T> vertices)
+        {
+            return vertices.Select(v => Degree(v));
+        }
+
+        public IEnumerable<int> DegreesIterator(params T[] vertices)
+        {
+            return DegreesIterator(vertices.AsEnumerable());
+        }
+
+        public int[] Degrees(IEnumerable<T> vertices)
+        {
+            return DegreesIterator(vertices).ToArray();
+        }
+
+        public int[] Degrees(params T[] vertices)
+        {
+            return DegreesIterator(vertices).ToArray();
         }
 
         # endregion
