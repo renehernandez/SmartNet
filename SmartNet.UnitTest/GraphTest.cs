@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartNet;
 
-namespace GraphNet.TestBase
+namespace SmartNet.UnitTest
 {
 
     [TestFixture]
