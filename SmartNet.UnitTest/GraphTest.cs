@@ -81,13 +81,11 @@ namespace GraphNet.TestBase
             };
         }
 
-        # region Empty graph creation
+        # region Empty graph constructors
 
         [Test]
-        public void IntegerGraphCreation()
+        public void ConstructorEmptyIntegerGraph()
         {
-            intGraph = new Graph<int>();
-
             Assert.AreEqual(intGraph.NumberOfVertices, 0);
             Assert.AreEqual(intGraph.NumberOfEdges, 0);
             Assert.AreEqual(intGraph.Vertices.Length, 0);
@@ -95,10 +93,8 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void StringGraphCreation()
+        public void ConstructorEmptyStringGraph()
         {
-            stringGraph = new Graph<string>();
-
             Assert.AreEqual(stringGraph.NumberOfVertices, 0);
             Assert.AreEqual(stringGraph.NumberOfEdges, 0);
             Assert.AreEqual(stringGraph.Vertices.Length, 0);
@@ -106,10 +102,8 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void ClassGraphCreation()
+        public void ConstructorEmptyClassGraph()
         {
-            classGraph = new Graph<ClassTest>();
-
             Assert.AreEqual(classGraph.NumberOfVertices, 0);
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
             Assert.AreEqual(classGraph.Vertices.Length, 0);
@@ -119,10 +113,10 @@ namespace GraphNet.TestBase
 
         # endregion
 
-        # region Graph creation with vertices data
+        # region Graph constructors with vertices data
 
         [Test]
-        public void IntegerEnumerableDataGraphCreation()
+        public void ConstructorEnumerableVertexDataIntegerGraph()
         {
             intGraph = new Graph<int>(intData);
 
@@ -133,19 +127,7 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void IntegerArrayDataGraphCreatino()
-        {
-            var arrayData = intData.ToArray();
-            intGraph = new Graph<int>(arrayData);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, arrayData.Length);
-            Assert.AreEqual(intGraph.NumberOfEdges, 0);
-            Assert.AreEqual(intGraph.Vertices.Length, arrayData.Length);
-            Assert.AreEqual(intGraph.Edges.Length, 0);
-        }
-
-        [Test]
-        public void StringEnumerableDataGraphCreation()
+        public void ConstructorEnumerableVertexDataStringGraph()
         {
             stringGraph = new Graph<string>(stringData);
 
@@ -156,19 +138,7 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void StringArrayDataGraphCreation()
-        {
-            var arrayData = stringData.ToArray();
-            stringGraph = new Graph<string>(stringData);
-
-            Assert.AreEqual(stringGraph.NumberOfVertices, arrayData.Length);
-            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
-            Assert.AreEqual(stringGraph.Vertices.Length, arrayData.Length);
-            Assert.AreEqual(stringGraph.Edges.Length, 0);
-        }
-
-        [Test]
-        public void ClassEnumerableDataGraphCreation()
+        public void ConstructorEnumerableVertexDataClassGraph()
         {
             classGraph = new Graph<ClassTest>(classData);
 
@@ -179,23 +149,47 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void ClassArrayDataGraphCreation()
+        public void ConstructorArrayVertexDataIntegerGraph()
         {
-            var arrayData = stringData.ToArray();
-            classGraph = new Graph<ClassTest>(classData);
+            var array = intData.ToArray();
+            intGraph = new Graph<int>(array[0], array[1], array[2], array[3], array[4]);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, arrayData.Length);
+            Assert.AreEqual(intGraph.NumberOfVertices, array.Length);
+            Assert.AreEqual(intGraph.NumberOfEdges, 0);
+            Assert.AreEqual(intGraph.Vertices.Length, array.Length);
+            Assert.AreEqual(intGraph.Edges.Length, 0);
+        }
+
+        [Test]
+        public void ConstructorArrayVertexDataStringGraph()
+        {
+            var array = stringData.ToArray();
+            stringGraph = new Graph<string>(array[0], array[1], array[2], array[3], array[4]);
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, array.Length);
+            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
+            Assert.AreEqual(stringGraph.Vertices.Length, array.Length);
+            Assert.AreEqual(stringGraph.Edges.Length, 0);
+        }
+
+        [Test]
+        public void ConstructorArrayVertexDataClassGraph()
+        {
+            var array = classData.ToArray();
+            classGraph = new Graph<ClassTest>(array[0], array[1], array[2], array[3], array[4]);
+
+            Assert.AreEqual(classGraph.NumberOfVertices, array.Length);
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
-            Assert.AreEqual(classGraph.Vertices.Length, arrayData.Length);
+            Assert.AreEqual(classGraph.Vertices.Length, array.Length);
             Assert.AreEqual(classGraph.Edges.Length, 0);
         }
 
         # endregion
 
-        # region Graph creation with edges data
+        # region Graph constructors with edges data
 
         [Test]
-        public void IntegerEnumerableEdgeDataGraphCreation()
+        public void ConstructorEnumerableEdgeDataIntegerGraph()
         {
             intGraph = new Graph<int>(intEdgeData);
 
@@ -206,7 +200,7 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void StringEnumerableEdgeDataGraphCreation()
+        public void ConstructorEnumerableEdgeDataStringGraph()
         {
             stringGraph = new Graph<string>(stringEdgeData);
 
@@ -217,9 +211,45 @@ namespace GraphNet.TestBase
         }
 
         [Test]
-        public void ClassEnumerableEdgeDataGraphCreation()
+        public void ConstructorEnumerableEdgeDataClassGraph()
         {
             classGraph = new Graph<ClassTest>(classEdgeData);
+
+            Assert.AreEqual(classGraph.NumberOfVertices, 6);
+            Assert.AreEqual(classGraph.NumberOfEdges, 3);
+            Assert.AreEqual(classGraph.Vertices.Length, 6);
+            Assert.AreEqual(classGraph.Edges.Length, 3);
+        }
+
+        [Test]
+        public void ConstructorArrayEdgeDataIntegerGraph()
+        {
+            var array = intEdgeData.ToArray();
+            intGraph = new Graph<int>(array[0], array[1], array[2]);
+
+            Assert.AreEqual(intGraph.NumberOfVertices, 4);
+            Assert.AreEqual(intGraph.NumberOfEdges, 3);
+            Assert.AreEqual(intGraph.Vertices.Length, 4);
+            Assert.AreEqual(intGraph.Edges.Length, 3);
+        }
+
+        [Test]
+        public void ConstructorArrayEdgeDataStringGraph()
+        {
+            var array = stringEdgeData.ToArray();
+            stringGraph = new Graph<string>(array[0], array[1], array[2]);
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, 5);
+            Assert.AreEqual(stringGraph.NumberOfEdges, 3);
+            Assert.AreEqual(stringGraph.Vertices.Length, 5);
+            Assert.AreEqual(stringGraph.Edges.Length, 3);
+        }
+
+        [Test]
+        public void ConstructorArrayEdgeDataClassGraph()
+        {
+            var array = classEdgeData.ToArray();
+            classGraph = new Graph<ClassTest>(array[0], array[1], array[2]);
 
             Assert.AreEqual(classGraph.NumberOfVertices, 6);
             Assert.AreEqual(classGraph.NumberOfEdges, 3);
@@ -315,22 +345,15 @@ namespace GraphNet.TestBase
         [Test]
         public void AddEdgeWithoutVerticesIntegerGraph()
         {
-            Assert.AreEqual(intGraph.NumberOfEdges, 0);
-            Assert.AreEqual(intGraph.NumberOfVertices, 0);
-
             intGraph.AddEdge(1, 2);
 
             Assert.AreEqual(intGraph.NumberOfVertices, 2);
             Assert.AreEqual(intGraph.NumberOfEdges, 1);
-
         }
 
         [Test]
         public void AddEdgeWithoutVerticesStringGraph()
         {
-            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
-            Assert.AreEqual(intGraph.NumberOfVertices, 0);
-
             stringGraph.AddEdge("me", "you");
 
             Assert.AreEqual(stringGraph.NumberOfEdges, 1);
@@ -340,14 +363,15 @@ namespace GraphNet.TestBase
         [Test]
         public void AddEdgeWtihoutVerticesClassGraph()
         {
-            Assert.AreEqual(classGraph.NumberOfEdges, 0);
-            Assert.AreEqual(classGraph.NumberOfVertices, 0);
-
             classGraph.AddEdge(new ClassTest(20), new ClassTest(15));
 
             Assert.AreEqual(classGraph.NumberOfVertices, 2);
             Assert.AreEqual(classGraph.NumberOfEdges, 1);
         }
+
+        # endregion
+
+        # region Neighbors for vertex
 
         # endregion
 

@@ -7,7 +7,7 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<T> where T : IEquatable<T>
+    public class Edge<T> : IEquatable<Edge<T>> where T : IEquatable<T> 
     {
 
         # region Private Fields
@@ -16,9 +16,9 @@ namespace SmartNet
 
         # region Public Properties
 
-        public T First { get; set; }
+        public T First { get; private set; }
 
-        public T Second { get; set; }
+        public T Second { get; private set; }
 
         public IContainer Data { get; set; }
 
@@ -68,6 +68,42 @@ namespace SmartNet
         public override string ToString()
         {
             return string.Format("({0}, {1})", First, Second);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Edge<T>);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17 * 31 + First.GetHashCode();
+            return hash * 31 + Second.GetHashCode();
+        }
+
+        public bool Equals(Edge<T> other)
+        {
+            if (Object.ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
+            if (Object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return First.Equals(other.First) && Second.Equals(other.Second);
+        }
+
+        public static bool operator ==(Edge<T> left, Edge<T> right)
+        {
+            return Object.Equals(left, right);
+        }
+
+        public static bool operator !=(Edge<T> left, Edge<T> right)
+        {
+            return !(left == right);
         }
 
         # endregion
