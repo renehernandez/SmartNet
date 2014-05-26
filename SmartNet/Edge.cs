@@ -22,8 +22,6 @@ namespace SmartNet
 
         public IContainer Data { get; set; }
 
-        public bool HasData { get; private set; }
-
         public T this[int index]
         {
             get
@@ -51,11 +49,11 @@ namespace SmartNet
         public Edge(T left, T right){
             First = left;
             Second = right;
+            Data = new BaseContainer();
         }
 
         public Edge(T left, T right, IContainer data): this(left, right) {
             Data = data;
-            HasData = true;
         }
 
         public Edge(Tuple<T, T> tuple)

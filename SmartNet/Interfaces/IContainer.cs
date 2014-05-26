@@ -8,5 +8,9 @@ namespace SmartNet.Interfaces
 {
     public interface IContainer
     {
+
+        int Weight { get; set; }
+
     }
+
 }
