@@ -147,7 +147,7 @@ namespace SmartNet
             NumberOfVertices++;
         }
 
-        public void AddVerticesFrom(IEnumerable<T> vertexList)
+        public void AddVertices(IEnumerable<T> vertexList)
         {
             foreach (var vertex in vertexList)
             {
@@ -155,9 +155,9 @@ namespace SmartNet
             }
         }
 
-        public void AddVerticesFrom(params T[] vertices)
+        public void AddVertices(params T[] vertices)
         {
-            AddVerticesFrom(vertices.AsEnumerable());
+            AddVertices(vertices.AsEnumerable());
         }
 
         public void AddEdge(Edge<T> edge)
@@ -171,7 +171,7 @@ namespace SmartNet
                 throw new DuplicatedEdgeException("Edge {0} already present in graph", edge);
 
             adj[edge.First].Add(edge.Second, edge);
-            adj[edge.Second].Add(edge.First, edge);
+            adj[edge.Second].Add(edge.First, edge.Reverse());
 
             NumberOfEdges++;
         }
@@ -198,7 +198,7 @@ namespace SmartNet
             AddEdge(tuple.Item1, tuple.Item2, data);
         }
 
-        public void AddEdgesFrom(IEnumerable<Edge<T>> edges)
+        public void AddEdges(IEnumerable<Edge<T>> edges)
         {
             foreach (var edge in edges)
             {
@@ -206,12 +206,12 @@ namespace SmartNet
             }
         }
 
-        public void AddEdgesFrom(params Edge<T>[] edges)
+        public void AddEdges(params Edge<T>[] edges)
         {
-            AddEdgesFrom(edges.AsEnumerable());
+            AddEdges(edges.AsEnumerable());
         }
 
-        public void AddEdgesFrom(IEnumerable<Tuple<T, T>> edges)
+        public void AddEdges(IEnumerable<Tuple<T, T>> edges)
         {
             foreach (var tuple in edges)
             {
@@ -219,9 +219,9 @@ namespace SmartNet
             }
         }
 
-        public void AddEdgesFrom(params Tuple<T, T>[] edges)
+        public void AddEdges(params Tuple<T, T>[] edges)
         {
-            AddEdgesFrom(edges.AsEnumerable());
+            AddEdges(edges.AsEnumerable());
         }
 
         public void AddPath(IEnumerable<T> vertices)
@@ -334,6 +334,14 @@ namespace SmartNet
             # endregion
 
             # region Deletions
+
+        public void Clear()
+        {
+            adj.Clear();
+
+            NumberOfVertices = 0;
+            NumberOfEdges = 0;
+        }
 
         public void RemoveVertex(T v)
         {
