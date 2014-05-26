@@ -335,6 +335,14 @@ namespace SmartNet
 
             # region Deletions
 
+        public void Clear()
+        {
+            adj.Clear();
+
+            NumberOfVertices = 0;
+            NumberOfEdges = 0;
+        }
+
         public void RemoveVertex(T v)
         {
             if (!adj.ContainsKey(v))
