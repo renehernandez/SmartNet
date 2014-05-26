@@ -47,7 +47,7 @@ namespace SmartNet
         {
             get 
             {
-                if (!adj.ContainsKey(v))
+                if (!HasVertex(v))
                     throw new VertexNotFoundException("Vertex {0} not found in graph", v);
                 return adj[v]; 
             }
@@ -57,9 +57,9 @@ namespace SmartNet
         {
             get 
             {
-                if (!adj.ContainsKey(v))
+                if (!HasVertex(v))
                     throw new EdgeNotFoundException("Vertex {0} not found in graph when looking for edge ({1}, {2}) ", v, v, w);
-                if (!adj.ContainsKey(w))
+                if (!HasVertex(w))
                     throw new EdgeNotFoundException("Vertex {0} not found in graph when looking for edge ({1}, {2}) ", v, v, w);
                 if(!adj[v].ContainsKey(w))
                     throw new EdgeNotFoundException("Edge ({0}, {1}) not found in graph", v, w);
@@ -281,6 +281,19 @@ namespace SmartNet
         public void RemoveEdges(params Edge<T>[] edges)
         {
             RemoveEdges(edges.AsEnumerable());
+        }
+
+        public IEnumerable<T> NeighborsIterator(T v)
+        {
+            if (!HasVertex(v))
+                throw new VertexNotFoundException("Vertex {0} not found in graph", v);
+
+            return adj[v].Keys.AsEnumerable();
+        }
+
+        public T[] Neighbors(T v)
+        {
+            return NeighborsIterator(v).ToArray();
         }
 
         # endregion
