@@ -171,7 +171,7 @@ namespace SmartNet
                 throw new DuplicatedEdgeException("Edge {0} already present in graph", edge);
 
             adj[edge.First].Add(edge.Second, edge);
-            adj[edge.Second].Add(edge.First, edge);
+            adj[edge.Second].Add(edge.First, edge.Reverse());
 
             NumberOfEdges++;
         }

@@ -65,6 +65,11 @@ namespace SmartNet
 
         # region Public Methods
 
+        public Edge<T> Reverse()
+        {
+            return new Edge<T>(this.Second, this.First, this.Data);
+        }
+
         public override string ToString()
         {
             return string.Format("({0}, {1})", First, Second);
@@ -77,8 +82,7 @@ namespace SmartNet
 
         public override int GetHashCode()
         {
-            int hash = 17 * 31 + First.GetHashCode();
-            return hash * 31 + Second.GetHashCode();
+            return First.GetHashCode() + Second.GetHashCode();
         }
 
         public bool Equals(Edge<T> other)
@@ -93,7 +97,8 @@ namespace SmartNet
                 return true;
             }
 
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return (First.Equals(other.First) && Second.Equals(other.Second)) || (
+                First.Equals(other.Second) && Second.Equals(other.First));
         }
 
         public static bool operator ==(Edge<T> left, Edge<T> right)
