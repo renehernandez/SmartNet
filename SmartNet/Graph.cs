@@ -135,6 +135,8 @@ namespace SmartNet
 
         # region Public Methods
 
+            # region Additions
+
         public void AddVertex(T v)
         {
             if (adj.ContainsKey(v))
@@ -186,6 +188,16 @@ namespace SmartNet
             AddEdge(edge);
         }
 
+        public void AddEdge(Tuple<T, T> tuple)
+        {
+            AddEdge(tuple.Item1, tuple.Item2);
+        }
+
+        public void AddEdge(Tuple<T, T> tuple, IContainer data)
+        {
+            AddEdge(tuple.Item1, tuple.Item2, data);
+        }
+
         public void AddEdgesFrom(IEnumerable<Edge<T>> edges)
         {
             foreach (var edge in edges)
@@ -198,6 +210,91 @@ namespace SmartNet
         {
             AddEdgesFrom(edges.AsEnumerable());
         }
+
+        public void AddEdgesFrom(IEnumerable<Tuple<T, T>> edges)
+        {
+            foreach (var tuple in edges)
+            {
+                AddEdge(tuple.Item1, tuple.Item2);
+            }
+        }
+
+        public void AddEdgesFrom(params Tuple<T, T>[] edges)
+        {
+            AddEdgesFrom(edges.AsEnumerable());
+        }
+
+        public void AddPath(IEnumerable<T> vertices)
+        {
+            T first = vertices.First();
+
+            foreach (var second in vertices.Skip(1))
+            {
+                AddEdge(first, second);
+                first = second;
+            }
+        }
+
+        public void AddPath(T[] vertices)
+        {
+            AddPath(vertices.AsEnumerable());
+        }
+
+        public void AddCycle(IEnumerable<T> vertices)
+        {
+            T first = vertices.First();
+            T current = first;
+
+            foreach (var next in vertices.Skip(1))
+            {
+                AddEdge(current, next);
+                current = next;
+            }
+            AddEdge(current, first);
+        }
+
+        public void AddCycle(params T[] vertices)
+        {
+            AddCycle(vertices.AsEnumerable());
+        }
+
+            # endregion
+
+            # region Degree Information
+
+        public int Degree(T vertex)
+        {
+            if (!HasVertex(vertex))
+            {
+                throw new VertexNotFoundException("Vertex {0} not found", vertex);
+            }
+
+            return adj[vertex].Count;
+        }
+
+        public IEnumerable<int> DegreesIterator(IEnumerable<T> vertices)
+        {
+            return vertices.Select(v => Degree(v));
+        }
+
+        public IEnumerable<int> DegreesIterator(params T[] vertices)
+        {
+            return DegreesIterator(vertices.AsEnumerable());
+        }
+
+        public int[] Degrees(IEnumerable<T> vertices)
+        {
+            return DegreesIterator(vertices).ToArray();
+        }
+
+        public int[] Degrees(params T[] vertices)
+        {
+            return DegreesIterator(vertices).ToArray();
+        }
+
+            # endregion
+
+            # region Contains-like Information
 
         public bool HasVertex(T v)
         {
@@ -216,6 +313,27 @@ namespace SmartNet
         {
             return HasEdge(edge.First, edge.Second);
         }
+
+            # endregion
+
+            # region Neighbors Search
+
+        public IEnumerable<T> NeighborsIterator(T vertex)
+        {
+            if (!HasVertex(vertex))
+                throw new VertexNotFoundException("Vertex {0} not found in graph", vertex);
+
+            return adj[vertex].Keys.AsEnumerable();
+        }
+
+        public T[] Neighbors(T vertex)
+        {
+            return NeighborsIterator(vertex).ToArray();
+        }
+
+            # endregion
+
+            # region Deletions
 
         public void RemoveVertex(T v)
         {
@@ -283,48 +401,7 @@ namespace SmartNet
             RemoveEdges(edges.AsEnumerable());
         }
 
-        public IEnumerable<T> NeighborsIterator(T vertex)
-        {
-            if (!HasVertex(vertex))
-                throw new VertexNotFoundException("Vertex {0} not found in graph", vertex);
-
-            return adj[vertex].Keys.AsEnumerable();
-        }
-
-        public T[] Neighbors(T vertex)
-        {
-            return NeighborsIterator(vertex).ToArray();
-        }
-
-        public int Degree(T vertex)
-        {
-            if (!HasVertex(vertex))
-            {
-                throw new VertexNotFoundException("Vertex {0} not found", vertex);
-            }
-
-            return adj[vertex].Count;
-        }
-
-        public IEnumerable<int> DegreesIterator(IEnumerable<T> vertices)
-        {
-            return vertices.Select(v => Degree(v));
-        }
-
-        public IEnumerable<int> DegreesIterator(params T[] vertices)
-        {
-            return DegreesIterator(vertices.AsEnumerable());
-        }
-
-        public int[] Degrees(IEnumerable<T> vertices)
-        {
-            return DegreesIterator(vertices).ToArray();
-        }
-
-        public int[] Degrees(params T[] vertices)
-        {
-            return DegreesIterator(vertices).ToArray();
-        }
+            # endregion
 
         # endregion
 
