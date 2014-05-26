@@ -14,13 +14,16 @@ namespace SmartNet.Exceptions
         public VertexNotFoundException()
             : base()
         {
-
         }
 
         public VertexNotFoundException(string message)
             : base(message)
         {
+        }
 
+        public VertexNotFoundException(string message, params object[] args)
+            : base(message, args)
+        {
         }
 
         # endregion

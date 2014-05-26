@@ -41,8 +41,10 @@
   <ItemGroup>
     <Compile Include="Edge.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
+    <Compile Include="Exceptions\DuplicatedEdgeException.cs" />
     <Compile Include="Exceptions\EdgeNotFoundException.cs" />
     <Compile Include="Exceptions\VertexNotFoundException.cs" />
+    <Compile Include="Exceptions\DuplicatedVertexException.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="Interfaces\IContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

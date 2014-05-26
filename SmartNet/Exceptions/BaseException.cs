@@ -12,16 +12,19 @@ namespace SmartNet.Exceptions
 
         # region Constructors
 
-        public BaseException()
+        protected BaseException()
             : base()
         {
-
         }
 
-        public BaseException(string message)
+        protected BaseException(string message)
             : base(message)
         {
+        }
 
+        protected BaseException(string message, params object[] args)
+            : this(string.Format(message, args))
+        {
         }
 
         # endregion

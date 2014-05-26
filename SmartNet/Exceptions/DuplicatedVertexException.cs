@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace SmartNet.Exceptions
 {
-    public class EdgeNotFoundException : BaseException
+    public class DuplicatedVertexException : BaseException
     {
 
         # region Constructors
 
-        public EdgeNotFoundException()
+        public DuplicatedVertexException()
             : base()
         {
         }
 
-        public EdgeNotFoundException(string message)
+        public DuplicatedVertexException(string message)
             : base(message)
         {
         }
 
-        public EdgeNotFoundException(string message, params object[] args)
+        public DuplicatedVertexException(string message, params object[] args)
             : base(message, args)
         {
         }

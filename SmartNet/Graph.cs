@@ -48,7 +48,7 @@ namespace SmartNet
             get 
             {
                 if (!adj.ContainsKey(v))
-                    throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", v));
+                    throw new VertexNotFoundException("Vertex {0} not found in graph", v);
                 return adj[v]; 
             }
         }
@@ -58,9 +58,11 @@ namespace SmartNet
             get 
             {
                 if (!adj.ContainsKey(v))
-                    throw new EdgeNotFoundException(string.Format("Vertex {0} not found in graph", v));
+                    throw new EdgeNotFoundException("Vertex {0} not found in graph when looking for edge ({1}, {2}) ", v, v, w);
+                if (!adj.ContainsKey(w))
+                    throw new EdgeNotFoundException("Vertex {0} not found in graph when looking for edge ({1}, {2}) ", v, v, w);
                 if(!adj[v].ContainsKey(w))
-                    throw new Exception(string.Format("Vertex {0} not found in graph", w));
+                    throw new EdgeNotFoundException("Edge ({0}, {1}) not found in graph", v, w);
                 
                 return adj[v][w]; 
             }
@@ -136,7 +138,7 @@ namespace SmartNet
         public void AddVertex(T v)
         {
             if (adj.ContainsKey(v))
-                throw new Exception(string.Format("Vertex {0} already found in graph", v));
+                throw new DuplicatedVertexException("Vertex {0} already found in graph", v);
 
             adj[v] = new Dictionary<T, Edge<T>>();
             
@@ -164,7 +166,7 @@ namespace SmartNet
                 AddVertex(edge.Second);
 
             if (adj[edge.First].ContainsKey(edge.Second))
-                throw new Exception(string.Format("Edge {0} already present in graph", edge));
+                throw new DuplicatedEdgeException("Edge {0} already present in graph", edge);
 
             adj[edge.First].Add(edge.Second, edge);
             adj[edge.Second].Add(edge.First, edge);
@@ -204,6 +206,9 @@ namespace SmartNet
 
         public bool HasEdge(T v, T w)
         {
+            if (!HasVertex(v))
+                return false;
+
             return adj[v].ContainsKey(w);
         }
 
@@ -215,7 +220,7 @@ namespace SmartNet
         public void RemoveVertex(T v)
         {
             if (!adj.ContainsKey(v))
-                throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", v));
+                throw new VertexNotFoundException("Vertex {0} not found in graph", v);
 
             adj.Remove(v);
 
@@ -226,6 +231,8 @@ namespace SmartNet
                     adj[w].Remove(v);
                 }
             }
+
+            NumberOfVertices--;
         }
 
         public void RemoveVertices(IEnumerable<T> vertices)
@@ -244,16 +251,18 @@ namespace SmartNet
         public void RemoveEdge(T v, T w)
         {
             if (!adj.ContainsKey(v))
-                throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", v));
+                throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge ({1}, {2})", v, v, w);
 
             if (!adj.ContainsKey(w))
-                throw new VertexNotFoundException(string.Format("Vertex {0} not found in graph", w));
+                throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge ({1}, {2})", v, v, w);
 
             if (!adj[v].ContainsKey(w))
-                throw new EdgeNotFoundException(string.Format("Edge ({0}, {1}) not found in graph", v, w));
+                throw new EdgeNotFoundException("Edge ({0}, {1}) not found in graph", v, w);
 
             adj[v].Remove(w);
             adj[w].Remove(v);
+
+            NumberOfEdges--;
         }
 
         public void RemoveEdge(Edge<T> edge)

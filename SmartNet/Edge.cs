@@ -67,6 +67,11 @@ namespace SmartNet
 
         # region Public Methods
 
+        public override string ToString()
+        {
+            return string.Format("({0}, {1})", First, Second);
+        }
+
         # endregion
 
         # region Private Methods
