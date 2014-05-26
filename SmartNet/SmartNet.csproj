@@ -51,7 +51,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Algorithms\" />
+    <Folder Include="Algorithms\Centrality\" />
+    <Folder Include="Algorithms\Communities\" />
+    <Folder Include="Algorithms\Components\" />
+    <Folder Include="Algorithms\Flows\" />
+    <Folder Include="Algorithms\Operations\" />
+    <Folder Include="Algorithms\ShortestPaths\" />
+    <Folder Include="Algorithms\SpanningTrees\" />
+    <Folder Include="Algorithms\Traversal\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
