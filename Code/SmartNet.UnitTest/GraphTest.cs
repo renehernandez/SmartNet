@@ -200,6 +200,9 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddVertexStringGraph()
         {
+            Assert.AreEqual(stringGraph.NumberOfVertices, 0);
+            Assert.AreEqual(stringGraph.Vertices.Length, 0);
+
             stringGraph.AddVertex("hello");
 
             Assert.AreEqual(stringGraph.NumberOfVertices, 1);
@@ -209,6 +212,9 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddVertexClassGraph()
         {
+            Assert.AreEqual(classGraph.NumberOfVertices, 0);
+            Assert.AreEqual(classGraph.Vertices.Length, 0);
+
             var klass = new ClassTest(20);
             classGraph.AddVertex(klass);
 
@@ -225,7 +231,9 @@ namespace SmartNet.UnitTest
         {
             stringGraph.AddVertex("me");
             stringGraph.AddVertex("you");
+
             Assert.AreEqual(stringGraph.NumberOfVertices, 2);
+            Assert.AreEqual(stringGraph.Edges.Length, 0);
 
             stringGraph.AddEdge("me", "you");
 
@@ -283,9 +291,7 @@ namespace SmartNet.UnitTest
             stringGraph.AddPath(stringData.ToArray());
 
             Assert.AreEqual(stringGraph.NumberOfVertices, stringData.Count);
-            Assert.AreEqual(stringGraph.Vertices.Length, stringData.Count);
             Assert.AreEqual(stringGraph.NumberOfEdges, stringData.Count - 1);
-            Assert.AreEqual(stringGraph.Edges.Length, stringData.Count - 1);
         }
 
         [Test]
@@ -294,9 +300,7 @@ namespace SmartNet.UnitTest
             classGraph.AddPath(classData);
 
             Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
-            Assert.AreEqual(classGraph.Vertices.Length, classData.Count);
             Assert.AreEqual(classGraph.NumberOfEdges, classData.Count - 1);
-            Assert.AreEqual(classGraph.Edges.Length, classData.Count - 1);
         }
 
         # endregion
@@ -313,9 +317,7 @@ namespace SmartNet.UnitTest
 
             stringGraph.AddPath(stringData);
             Assert.AreEqual(stringGraph.NumberOfVertices, stringData.Count);
-            Assert.AreEqual(stringGraph.Vertices.Length, stringData.Count);
             Assert.AreEqual(stringGraph.NumberOfEdges, stringData.Count - 1);
-            Assert.AreEqual(stringGraph.Edges.Length, stringData.Count - 1);
         }
 
         [Test]
@@ -328,9 +330,67 @@ namespace SmartNet.UnitTest
 
             classGraph.AddPath(classData);
             Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
-            Assert.AreEqual(classGraph.Vertices.Length, classData.Count);
             Assert.AreEqual(classGraph.NumberOfEdges, classData.Count - 1);
-            Assert.AreEqual(classGraph.Edges.Length, classData.Count - 1);
+        }
+
+        # endregion
+
+        # region Adding cycle without vertex in graph
+
+        [Test]
+        public void AddCycleNoVertexPresentStringGraph()
+        {
+            stringGraph.AddVertex("winterfell");
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, 1);
+            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
+
+            stringGraph.AddCycle(stringData);
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, 1 + stringData.Count);
+            Assert.AreEqual(stringGraph.NumberOfEdges, stringData.Count);
+        }
+
+        [Test]
+        public void AddCycleNoVertexPresentClassGraph()
+        {
+            classGraph.AddCycle(classData);
+
+            Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
+            Assert.AreEqual(classGraph.NumberOfEdges, classData.Count);
+        }
+
+        # endregion
+
+        # region Adding cycle with some vertex already present in graph
+
+        [Test]
+        public void AddCycleWithSomeVertexPresentStringGraph()
+        {
+            stringGraph.AddVertex(stringData[1]);
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, 1);
+            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
+
+            stringGraph.AddCycle(stringData);
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, stringData.Count);
+            Assert.AreEqual(stringGraph.NumberOfEdges, stringData.Count);
+        }
+
+        [Test]
+        public void AddCycleWithSomeVertexPresentClassGraph()
+        {
+            classGraph.AddVertices(classData[1], classData[0], new ClassTest(9826593));
+
+
+            Assert.AreEqual(classGraph.NumberOfVertices, 3);
+            Assert.AreEqual(classGraph.NumberOfEdges, 0);
+
+            classGraph.AddCycle(classData);
+
+            Assert.AreEqual(classGraph.NumberOfVertices, stringData.Count + 1);
+            Assert.AreEqual(classGraph.NumberOfEdges, stringData.Count);
         }
 
         # endregion
