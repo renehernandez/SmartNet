@@ -395,6 +395,61 @@ namespace SmartNet.UnitTest
 
         # endregion
 
+        # region Checking for vertex existence
+
+        [Test]
+        public void HasVertexStringGraph()
+        {
+            Assert.AreEqual(stringGraph.HasVertex("me"), false);
+
+            stringGraph.AddVertices(stringData);
+
+            Assert.AreEqual(stringGraph.HasVertex("me"), false);
+            Assert.AreEqual(stringGraph.HasVertex(stringData[2]), true);
+        }
+
+        [Test]
+        public void HasVertexClassGraph()
+        {
+            var klass = new ClassTest(40000);
+            Assert.AreEqual(classGraph.HasVertex(klass), false);
+
+            classGraph.AddEdge(classData[0], classData[1]);
+
+            Assert.AreEqual(classGraph.HasVertex(classData[0]), true);
+            Assert.AreEqual(classGraph.HasVertex(klass), false);
+        }
+
+        # endregion
+
+        # region Checking for edge existence
+
+        [Test]
+        public void HasEdgeStringGraph()
+        {
+            Assert.AreEqual(stringGraph.HasEdge(stringEdgeData[1]), false);
+
+            stringGraph.AddEdge("me", "you");
+
+            Assert.AreEqual(stringGraph.HasEdge("me", "you"), true);
+            Assert.AreEqual(stringGraph.HasEdge(stringEdgeData[1]), false);
+            Assert.AreEqual(stringGraph.HasEdge("you", "her"), false);
+        }
+
+        [Test]
+        public void HasEdgeClassGraph()
+        {
+            Assert.AreEqual(classGraph.HasEdge(classEdgeData[0]), false);
+
+            classGraph.AddEdge(classEdgeData[0]);
+
+            Assert.AreEqual(classGraph.HasEdge(classEdgeData[1]), false);
+            Assert.AreEqual(classGraph.HasEdge(classEdgeData[0]), true);
+
+        }
+
+        # endregion
+
         # region Neighbors for vertex
 
         [Test]
