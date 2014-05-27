@@ -27,6 +27,18 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
+        public void DFSForPathGraph()
+        {
+            intGraph.AddPath(new int[] { 1, 2, 3, 4, 5, 6 });
+
+            var check = new Edge<int>[] { new Edge<int>(3, 2), new Edge<int>(2, 1), 
+                new Edge<int>(3, 4), new Edge<int>(4, 5), new Edge<int>(5, 6) };
+
+            CheckValues(DFS.Edges(intGraph, 3).ToArray(), check);
+
+        }
+
+        [Test]
         public void DFSForTreeGraph()
         {
             intGraph.AddEdges(arrayEdge);
