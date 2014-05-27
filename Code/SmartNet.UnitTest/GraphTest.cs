@@ -18,7 +18,6 @@ namespace SmartNet.UnitTest
 
             public int Index { get; set; }
 
-
             public ClassTest(int index)
             {
                 Index = index;
@@ -52,6 +51,7 @@ namespace SmartNet.UnitTest
             classGraph = new Graph<ClassTest>();
 
             stringData = new List<string>() { "newer", "blackbox", "frickels", "average", "resume" };
+
             classData = new List<ClassTest>() 
             { 
                 new ClassTest(10), new ClassTest(-1), new ClassTest(20), 
@@ -275,7 +275,103 @@ namespace SmartNet.UnitTest
 
         # endregion
 
+        # region Adding path without vertex in graph
+
+        [Test]
+        public void AddPathNoVertexPresentStringGraph()
+        {
+            stringGraph.AddPath(stringData.ToArray());
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, stringData.Count);
+            Assert.AreEqual(stringGraph.Vertices.Length, stringData.Count);
+            Assert.AreEqual(stringGraph.NumberOfEdges, stringData.Count - 1);
+            Assert.AreEqual(stringGraph.Edges.Length, stringData.Count - 1);
+        }
+
+        [Test]
+        public void AddPathNoVertexPresentClassGraph()
+        {
+            classGraph.AddPath(classData);
+
+            Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
+            Assert.AreEqual(classGraph.Vertices.Length, classData.Count);
+            Assert.AreEqual(classGraph.NumberOfEdges, classData.Count - 1);
+            Assert.AreEqual(classGraph.Edges.Length, classData.Count - 1);
+        }
+
+        # endregion
+
+        # region Adding path with some vertex in graph
+
+        [Test]
+        public void AddPathSomeVertexPresentStringGraph()
+        {
+            stringGraph.AddVertices("newer", "blackbox");
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, 2);
+            Assert.AreEqual(stringGraph.NumberOfEdges, 0);
+
+            stringGraph.AddPath(stringData);
+            Assert.AreEqual(stringGraph.NumberOfVertices, stringData.Count);
+            Assert.AreEqual(stringGraph.Vertices.Length, stringData.Count);
+            Assert.AreEqual(stringGraph.NumberOfEdges, stringData.Count - 1);
+            Assert.AreEqual(stringGraph.Edges.Length, stringData.Count - 1);
+        }
+
+        [Test]
+        public void AddPathSomeVertexPresentClassGraph()
+        {
+            classGraph.AddVertices(classData);
+
+            Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
+            Assert.AreEqual(classGraph.NumberOfEdges, 0);
+
+            classGraph.AddPath(classData);
+            Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
+            Assert.AreEqual(classGraph.Vertices.Length, classData.Count);
+            Assert.AreEqual(classGraph.NumberOfEdges, classData.Count - 1);
+            Assert.AreEqual(classGraph.Edges.Length, classData.Count - 1);
+        }
+
+        # endregion
+
         # region Neighbors for vertex
+
+        [Test]
+        public void NeighborsForStringGraph()
+        {
+            stringGraph.AddEdges(stringEdgeData);
+            var neighbors = stringGraph.Neighbors("fork");
+
+            Assert.AreEqual(neighbors.Length, 2);
+            CheckValues(neighbors, new []{"together", "invalid"});
+        }
+
+        [Test]
+        public void NeighborsForClassGraph()
+        {
+            classGraph.AddEdges(classEdgeData);
+            var neighbors = classGraph.Neighbors(classEdgeData[2].Second);
+
+            Assert.AreEqual(neighbors.Length, 1);
+
+            CheckValues(neighbors, new[] { classEdgeData[2].First });
+
+        }
+
+        # endregion
+
+        # region Private Methods
+
+        private void CheckValues<T>(T[] array1, T[] array2)
+        {
+            Assert.AreEqual(array1.Length, array2.Length);
+
+            for (int i = 0; i < array1.Length; i++)
+            {
+                Assert.AreEqual(array1[i], array1[i]);
+            }
+        }
 
         # endregion
 
