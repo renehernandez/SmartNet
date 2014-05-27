@@ -9,6 +9,51 @@ namespace SmartNet.Algorithms.Traversal
     public static class DFS
     {
 
+        public static IEnumerable<T> Vertices<T>(Graph<T> graph) where T : IEquatable<T>
+        {
+            return Vertices(graph, graph.VerticesIterator.First());
+        }
+
+        public static IEnumerable<T> Vertices<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        {
+            var mark = new Dictionary<T, bool>();
+
+            foreach (var w in graph.VerticesIterator)
+                mark[w] = false;
+
+            mark[vertex] = true;
+
+            foreach (var w in VerticesVisit(graph, vertex, mark))
+                yield return w;
+
+            foreach (var w in graph.VerticesIterator)
+            {
+                if (mark[w])
+                    continue;
+
+                mark[w] = true;
+
+                foreach (var v in VerticesVisit(graph, w, mark))
+                    yield return v;
+            }
+
+        }
+
+        private static IEnumerable<T> VerticesVisit<T>(Graph<T> graph, T vertex, Dictionary<T, bool> mark) where T : IEquatable<T>
+        {
+            foreach (var w in graph.NeighborsIterator(vertex))
+            {
+                if (mark[w])
+                    continue;
+
+                mark[w] = true;
+                yield return w;
+
+                foreach (var v in VerticesVisit(graph, w, mark))
+                    yield return v;
+            }
+        }
+
         public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph) where T: IEquatable<T>
         {
             return Edges(graph, graph.VerticesIterator.First());
