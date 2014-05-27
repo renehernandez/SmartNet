@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet", "SmartNet\SmartN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet.UnitTest", "SmartNet.UnitTest\SmartNet.UnitTest.csproj", "{53964C7D-168E-47BB-BF28-44E662DE42F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet.ConsoleTest", "SmartNet.ConsoleTest\SmartNet.ConsoleTest.csproj", "{5D70C3C5-0F9A-4AA8-8567-96B7F3EC937E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet.ConsoleTest", "..\SmartNet.ConsoleTest\SmartNet.ConsoleTest.csproj", "{5D70C3C5-0F9A-4AA8-8567-96B7F3EC937E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

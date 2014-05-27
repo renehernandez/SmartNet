@@ -48,7 +48,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartNet\SmartNet.csproj">
+    <ProjectReference Include="..\Code\SmartNet\SmartNet.csproj">
       <Project>{883028c4-3235-449e-8607-7e1468e32e46}</Project>
       <Name>SmartNet</Name>
     </ProjectReference>

@@ -36,26 +36,21 @@ namespace SmartNet.UnitTest
 
         }
 
-        Graph<int> intGraph;     
         Graph<string> stringGraph;
         Graph<ClassTest> classGraph;
 
-        List<int> intData;
         List<string> stringData;
         List<ClassTest> classData;
 
-        List<Edge<int>> intEdgeData;
         List<Edge<string>> stringEdgeData;
         List<Edge<ClassTest>> classEdgeData;
 
         [SetUp]
         public void Init()
         {
-            intGraph = new Graph<int>();
             stringGraph = new Graph<string>();
             classGraph = new Graph<ClassTest>();
 
-            intData = new List<int>() { 1, 2, 3, 4, 5 };
             stringData = new List<string>() { "newer", "blackbox", "frickels", "average", "resume" };
             classData = new List<ClassTest>() 
             { 
@@ -63,10 +58,6 @@ namespace SmartNet.UnitTest
                 new ClassTest(0), new ClassTest(-20) 
             };
 
-            intEdgeData = new List<Edge<int>>() 
-            { 
-                new Edge<int>(1, 2), new Edge<int>(3, 4), new Edge<int>(2, 3) 
-            };
             stringEdgeData = new List<Edge<string>>() 
             {
                 new Edge<string>("together", "fork"), new Edge<string>("replaced", "frozen"),
@@ -82,15 +73,6 @@ namespace SmartNet.UnitTest
         }
 
         # region Empty graph constructors
-
-        [Test]
-        public void ConstructorEmptyIntegerGraph()
-        {
-            Assert.AreEqual(intGraph.NumberOfVertices, 0);
-            Assert.AreEqual(intGraph.NumberOfEdges, 0);
-            Assert.AreEqual(intGraph.Vertices.Length, 0);
-            Assert.AreEqual(intGraph.Edges.Length, 0);
-        }
 
         [Test]
         public void ConstructorEmptyStringGraph()
@@ -116,17 +98,6 @@ namespace SmartNet.UnitTest
         # region Graph constructors with vertices data
 
         [Test]
-        public void ConstructorEnumerableVertexDataIntegerGraph()
-        {
-            intGraph = new Graph<int>(intData);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, intData.Count);
-            Assert.AreEqual(intGraph.NumberOfEdges, 0);
-            Assert.AreEqual(intGraph.Vertices.Length, intData.Count);
-            Assert.AreEqual(intGraph.Edges.Length, 0);
-        }
-
-        [Test]
         public void ConstructorEnumerableVertexDataStringGraph()
         {
             stringGraph = new Graph<string>(stringData);
@@ -146,18 +117,6 @@ namespace SmartNet.UnitTest
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
             Assert.AreEqual(classGraph.Vertices.Length, classData.Count);
             Assert.AreEqual(classGraph.Edges.Length, 0);
-        }
-
-        [Test]
-        public void ConstructorArrayVertexDataIntegerGraph()
-        {
-            var array = intData.ToArray();
-            intGraph = new Graph<int>(array[0], array[1], array[2], array[3], array[4]);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, array.Length);
-            Assert.AreEqual(intGraph.NumberOfEdges, 0);
-            Assert.AreEqual(intGraph.Vertices.Length, array.Length);
-            Assert.AreEqual(intGraph.Edges.Length, 0);
         }
 
         [Test]
@@ -189,17 +148,6 @@ namespace SmartNet.UnitTest
         # region Graph constructors with edges data
 
         [Test]
-        public void ConstructorEnumerableEdgeDataIntegerGraph()
-        {
-            intGraph = new Graph<int>(intEdgeData);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, 4);
-            Assert.AreEqual(intGraph.NumberOfEdges, 3);
-            Assert.AreEqual(intGraph.Vertices.Length, 4);
-            Assert.AreEqual(intGraph.Edges.Length, 3);
-        }
-
-        [Test]
         public void ConstructorEnumerableEdgeDataStringGraph()
         {
             stringGraph = new Graph<string>(stringEdgeData);
@@ -219,18 +167,6 @@ namespace SmartNet.UnitTest
             Assert.AreEqual(classGraph.NumberOfEdges, 3);
             Assert.AreEqual(classGraph.Vertices.Length, 6);
             Assert.AreEqual(classGraph.Edges.Length, 3);
-        }
-
-        [Test]
-        public void ConstructorArrayEdgeDataIntegerGraph()
-        {
-            var array = intEdgeData.ToArray();
-            intGraph = new Graph<int>(array[0], array[1], array[2]);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, 4);
-            Assert.AreEqual(intGraph.NumberOfEdges, 3);
-            Assert.AreEqual(intGraph.Vertices.Length, 4);
-            Assert.AreEqual(intGraph.Edges.Length, 3);
         }
 
         [Test]
@@ -262,15 +198,6 @@ namespace SmartNet.UnitTest
         # region Adding vertex
 
         [Test]
-        public void AddVertexIntegerGraph()
-        {
-            intGraph.AddVertex(1);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, 1);
-            Assert.AreEqual(intGraph.Vertices.Length, 1);
-        }
-
-        [Test]
         public void AddVertexStringGraph()
         {
             stringGraph.AddVertex("hello");
@@ -292,20 +219,6 @@ namespace SmartNet.UnitTest
         # endregion
 
         # region Adding edge for existent nodes
-
-        [Test]
-        public void AddEdgeIntegerGraph()
-        {
-            intGraph.AddVertex(1);
-            intGraph.AddVertex(2);
-            Assert.AreEqual(intGraph.NumberOfVertices, 2);
-            
-            intGraph.AddEdge(1, 2);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, 2);
-            Assert.AreEqual(intGraph.NumberOfEdges, 1);
-            Assert.AreEqual(intGraph.Edges.Length, 1);
-        }
 
         [Test]
         public void AddEdgeStringGraph()
@@ -341,15 +254,6 @@ namespace SmartNet.UnitTest
         # endregion
 
         # region Adding edge without nodes
-
-        [Test]
-        public void AddEdgeWithoutVerticesIntegerGraph()
-        {
-            intGraph.AddEdge(1, 2);
-
-            Assert.AreEqual(intGraph.NumberOfVertices, 2);
-            Assert.AreEqual(intGraph.NumberOfEdges, 1);
-        }
 
         [Test]
         public void AddEdgeWithoutVerticesStringGraph()

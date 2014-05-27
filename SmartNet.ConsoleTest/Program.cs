@@ -23,12 +23,6 @@ namespace SmartNet.ConsoleTest
             intGraph.AddEdge(5, 10);
             intGraph.AddEdge(10, 6);
 
-            //foreach (var num in intGraph.VerticesIterator)
-            //{
-            //    Console.Write(num + " ");
-            //}
-
-            //Console.WriteLine();
 
             Edge<int>[] check = new Edge<int>[arrayEdge.Length + 1];
 
