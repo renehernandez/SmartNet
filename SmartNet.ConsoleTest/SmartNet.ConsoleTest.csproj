@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{883028C4-3235-449E-8607-7E1468E32E46}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{5D70C3C5-0F9A-4AA8-8567-96B7F3EC937E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartNet</RootNamespace>
-    <AssemblyName>SmartNet</AssemblyName>
+    <RootNamespace>SmartNet.ConsoleTest</RootNamespace>
+    <AssemblyName>SmartNet.ConsoleTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,27 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\Traversal\DFS.cs" />
-    <Compile Include="BaseContainer.cs" />
-    <Compile Include="Edge.cs" />
-    <Compile Include="Exceptions\BaseException.cs" />
-    <Compile Include="Exceptions\DuplicatedEdgeException.cs" />
-    <Compile Include="Exceptions\EdgeNotFoundException.cs" />
-    <Compile Include="Exceptions\VertexNotFoundException.cs" />
-    <Compile Include="Exceptions\DuplicatedVertexException.cs" />
-    <Compile Include="Graph.cs" />
-    <Compile Include="Interfaces\IContainer.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Algorithms\Centrality\" />
-    <Folder Include="Algorithms\Communities\" />
-    <Folder Include="Algorithms\Components\" />
-    <Folder Include="Algorithms\Flows\" />
-    <Folder Include="Algorithms\Operations\" />
-    <Folder Include="Algorithms\ShortestPaths\" />
-    <Folder Include="Algorithms\SpanningTrees\" />
-    <Folder Include="Utilities\" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartNet\SmartNet.csproj">
+      <Project>{883028c4-3235-449e-8607-7e1468e32e46}</Project>
+      <Name>SmartNet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
