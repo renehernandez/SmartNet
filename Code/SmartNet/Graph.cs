@@ -235,7 +235,7 @@ namespace SmartNet
             }
         }
 
-        public void AddPath(T[] vertices)
+        public void AddPath(params T[] vertices)
         {
             AddPath(vertices.AsEnumerable());
         }
