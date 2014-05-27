@@ -27,7 +27,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void DFSForPathGraph()
+        public void EdgesDFSForPathGraph()
         {
             intGraph.AddPath(new int[] { 1, 2, 3, 4, 5, 6 });
 
@@ -39,7 +39,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void DFSForTreeGraph()
+        public void EdgesDFSForTreeGraph()
         {
             intGraph.AddEdges(arrayEdge);
             intGraph.AddEdge(7, 8);
@@ -60,7 +60,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void DFSForNonTreeGraph()
+        public void EdgesDFSForNonTreeGraph()
         {
             intGraph.AddEdge(10, 3);
             intGraph.AddEdges(arrayEdge);
