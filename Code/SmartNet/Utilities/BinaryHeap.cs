@@ -13,7 +13,7 @@ namespace SmartNet.Utilities
 
         # region Private Fields
 
-        IComparer<T> comparer;
+        Func<T, T, int> comparer;
 
         # endregion
 
@@ -21,11 +21,12 @@ namespace SmartNet.Utilities
 
         public BinaryHeap()
         {
+            comparer = (x, y) => x.CompareTo(y);
         }
 
         public BinaryHeap(IComparer<T> comparer)
         {
-            this.comparer = comparer;
+            this.comparer = comparer.Compare;
         }
 
         # endregion
@@ -33,7 +34,7 @@ namespace SmartNet.Utilities
         # region Public Methods
         public void BuildMinHeap(List<T> list)
         {
-            for (int i = list.Count / 2; i > 0; i--)
+            for (int i = list.Count / 2 - 1; i >= 0; i--)
             {
                 MinHeapify(list, i);
             }
@@ -41,7 +42,7 @@ namespace SmartNet.Utilities
 
         public void BuildMaxHeap(List<T> list)
         {
-            for (int i = list.Count / 2; i > 0; i--)
+            for (int i = list.Count / 2 - 1; i >= 0; i--)
             {
                 MaxHeapify(list, i);
             }
@@ -49,15 +50,14 @@ namespace SmartNet.Utilities
 
         public void HeapDecreaseKey(List<T> list, int index, T item)
         {
-            if (comparer != null && comparer.Compare(item, list[index]) > 0 || item.CompareTo(list[index]) > 0)
+            if (comparer != null && comparer(item, list[index]) > 0)
                 throw new InvalidItemComparisonForHeapException("New item is bigger than current item");
 
             list[index] = item;
 
             int parent = Parent(index);
 
-            while (index > 0 && (comparer != null && comparer.Compare(list[parent], list[index]) > 0
-                || list[parent].CompareTo(list[index]) > 0))
+            while (index > 0 && comparer(list[parent], list[index]) > 0)
             {
                 T temp = list[parent];
                 list[parent] = list[index];
@@ -69,15 +69,14 @@ namespace SmartNet.Utilities
 
         public void HeapIncreaseKey(List<T> list, int index, T item)
         {
-            if (comparer != null && comparer.Compare(item, list[index]) < 0 || item.CompareTo(list[index]) < 0)
+            if (comparer != null && comparer(item, list[index]) < 0)
                 throw new InvalidItemComparisonForHeapException("New item is smaller than current item");
 
             list[index] = item;
             
             int parent = Parent(index);
 
-            while (index > 0 && (comparer != null && comparer.Compare(list[parent], list[index]) < 0 
-                || list[parent].CompareTo(list[index]) < 0 ))
+            while (index > 0 && comparer(list[parent], list[index]) < 0)
             {
                 T temp = list[parent];
                 list[parent] = list[index];
@@ -100,10 +99,10 @@ namespace SmartNet.Utilities
 
             int min = index;
 
-            if (left < count && (comparer != null && comparer.Compare(list[left], list[min]) < 0 || list[left].CompareTo(list[min]) < 0))
+            if (left < count && comparer(list[left], list[min]) < 0)
                 min = left;
 
-            if (right < count && (comparer != null && comparer.Compare(list[right], list[min]) < 0 || list[right].CompareTo(list[min]) < 0))
+            if (right < count && comparer(list[right], list[min]) < 0)
                 min = right;
 
             if (min != index)
@@ -111,7 +110,7 @@ namespace SmartNet.Utilities
                 T temp = list[index];
                 list[index] = list[min];
                 list[min] = temp;
-                MinHeapify(list, min);
+                MinHeapify(list, min, count);
             }
         }
 
@@ -127,10 +126,10 @@ namespace SmartNet.Utilities
 
             int max = index;
 
-            if (left < count && (comparer != null && comparer.Compare(list[left], list[max]) > 0 || list[left].CompareTo(list[max]) > 0))
+            if (left < count && comparer(list[left], list[max]) > 0)
                 max = left;
 
-            if (right < count && (comparer != null && comparer.Compare(list[right], list[max]) > 0 || list[right].CompareTo(list[max]) > 0))
+            if (right < count && comparer(list[right], list[max]) > 0)
                 max = right;
 
             if (max != index)
@@ -160,7 +159,7 @@ namespace SmartNet.Utilities
         {
             return 2 * index + 2;
         }
-
+        
         # endregion
 
     }
