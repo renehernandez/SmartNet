@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet", "SmartNet\SmartN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet.UnitTest", "SmartNet.UnitTest\SmartNet.UnitTest.csproj", "{53964C7D-168E-47BB-BF28-44E662DE42F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNet.ConsoleTest", "SmartNet.ConsoleTest\SmartNet.ConsoleTest.csproj", "{C3C6AD47-270D-425F-953C-7E29B4FD9D84}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{53964C7D-168E-47BB-BF28-44E662DE42F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53964C7D-168E-47BB-BF28-44E662DE42F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53964C7D-168E-47BB-BF28-44E662DE42F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3C6AD47-270D-425F-953C-7E29B4FD9D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3C6AD47-270D-425F-953C-7E29B4FD9D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3C6AD47-270D-425F-953C-7E29B4FD9D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3C6AD47-270D-425F-953C-7E29B4FD9D84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
