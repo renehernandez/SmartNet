@@ -219,6 +219,14 @@ namespace SmartNet.UnitTest
             queue.Enqueue(klass);
         }
 
+        [Test]
+        public void MaximumValueAfterEnqueue()
+        {
+            queue.Enqueue(classData[3], classData[1], classData[4]);
+
+            Assert.AreEqual(queue.Peek().Index, classData[1].Index);
+        }
+
         # endregion
 
         # region Dequeue Tests
@@ -246,6 +254,14 @@ namespace SmartNet.UnitTest
             queue.Enqueue(classData);
 
             queue.Dequeue(-20);
+        }
+
+        [Test]
+        public void DequeueMaximumValue()
+        {
+            queue.Enqueue(classData[1], classData[2], classData[3], classData[0]);
+
+            Assert.AreEqual(queue.Dequeue().Index, classData[0].Index);
         }
 
         # endregion
@@ -276,6 +292,15 @@ namespace SmartNet.UnitTest
             var top = queue.Peek();
 
             Assert.AreEqual(top.Index, 78356);
+        }
+
+        [Test]
+        public void PeekMaximumValueAfterDequeue()
+        {
+            queue.Enqueue(classData);
+            queue.Dequeue();
+
+            Assert.AreEqual(queue.Peek().Index, classData[1].Index);
         }
 
         # endregion
