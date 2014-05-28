@@ -116,7 +116,6 @@ namespace SmartNet.Utilities
 
         public void Clear()
         {
-            list.Clear();
             Count = 0;
         }
 

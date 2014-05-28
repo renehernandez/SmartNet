@@ -153,7 +153,31 @@ namespace SmartNet.UnitTest
 
         # endregion
 
-        # region Enqueue Test
+        # region Clear Tests
+
+        [Test]
+        public void ClearEmptyQueue()
+        {
+            queue.Clear();
+
+            Assert.AreEqual(queue.Count, 0);
+            Assert.True(queue.IsEmpty());
+        }
+
+        [Test]
+        public void ClearNonEmptyQueue()
+        {
+            queue.Enqueue(classData);
+
+            queue.Clear();
+
+            Assert.AreEqual(queue.Count, 0);
+            Assert.True(queue.IsEmpty());
+        }
+
+        # endregion
+
+        # region Enqueue Tests
 
         [Test]
         public void QueueIsNotEmptyAfterEnquee()
@@ -171,9 +195,29 @@ namespace SmartNet.UnitTest
             Assert.AreEqual(queue.Count, 1);
         }
 
+        [Test]
+        public void CountEnumerableEnqueue()
+        {
+            queue.Enqueue(classData);
+
+            Assert.AreEqual(queue.Count, classData.Count);
+        }
+
+        [Test]
+        public void CountParamsArrayEnqueue()
+        {
+            queue.Enqueue(classData[2], classData[1], classData[0]);
+
+            Assert.AreEqual(queue.Count, 3);
+        }
+
         # endregion
 
-        # region Peek Test
+        # region Dequeue Tests
+
+        # endregion
+
+        # region Peek Tests
 
         [Test]
         public void CountIsTheSameAfterPeek()
@@ -192,9 +236,14 @@ namespace SmartNet.UnitTest
             queue.Peek();
         }
 
-        # endregion
+        [Test]
+        public void PeekIsGreater()
+        {
+            queue.Enqueue(classData);
+            var top = queue.Peek();
 
-        # region Dequeue Test
+            Assert.AreEqual(top.Index, 78356);
+        }
 
         # endregion
 
