@@ -31,7 +31,7 @@ namespace SmartNet.Utilities
         {
             list = new List<T>();
             heap = new BinaryHeap<T>();
-
+            Count = 0;
         }
 
         public PriorityQueue(IComparer<T> comparer)
@@ -144,6 +144,9 @@ namespace SmartNet.Utilities
 
         public T Peek()
         {
+            if(IsEmpty())
+                throw new PriorityQueueEmptyException("Priority Queue has not remaining elements");
+
             return list[0];
         }
 
