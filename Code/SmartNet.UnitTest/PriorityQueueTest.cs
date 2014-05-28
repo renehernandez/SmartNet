@@ -231,10 +231,21 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        [ExpectedException(typeof(PriorityQueueEmptyException))]
-        public void DequeueQuantityEmptyQueue()
+        [ExpectedException(typeof(QuantityNotStoredQueueException))]
+        public void DequeueQuantityNotAvailable()
         {
+            queue.Enqueue(classData[0]);
+
             queue.Dequeue(10);
+        }
+
+        [Test]
+        [ExpectedException(typeof(DequeueNonPositiveQuantityException))]
+        public void DequeueNonPositiveQuantity()
+        {
+            queue.Enqueue(classData);
+
+            queue.Dequeue(-20);
         }
 
         # endregion

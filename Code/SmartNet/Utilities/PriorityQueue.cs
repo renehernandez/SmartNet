@@ -144,6 +144,11 @@ namespace SmartNet.Utilities
                 throw new QuantityNotStoredQueueException("There {2} not {0} element{1} available", 
                     count, (count == 1 ? "" : "s"), (count == 1 ? "is" : "are"));
 
+            return InnerDequeue(count);
+        }
+
+        private IEnumerable<T> InnerDequeue(int count)
+        {
             for (int i = count; i > 0; i--)
                 yield return Dequeue();
         }
