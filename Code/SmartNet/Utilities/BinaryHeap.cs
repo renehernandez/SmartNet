@@ -52,7 +52,7 @@ namespace SmartNet.Utilities
         public void HeapDecreaseKey(List<T> list, int index, T item)
         {
             if (comparer != null && comparer(item, list[index]) > 0)
-                throw new InvalidItemComparisonForHeapException("New item is bigger than current item");
+                throw new InvalidItemComparisonHeapException("New item is bigger than current item");
 
             list[index] = item;
 
@@ -71,7 +71,7 @@ namespace SmartNet.Utilities
         public void HeapIncreaseKey(List<T> list, int index, T item)
         {
             if (comparer != null && comparer(item, list[index]) < 0)
-                throw new InvalidItemComparisonForHeapException("New item is smaller than current item");
+                throw new InvalidItemComparisonHeapException("New item is smaller than current item");
 
             list[index] = item;
             

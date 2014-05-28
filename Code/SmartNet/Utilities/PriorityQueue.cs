@@ -122,7 +122,7 @@ namespace SmartNet.Utilities
         public T Dequeue()
         {
             if (IsEmpty())
-                throw new PriorityQueueEmptyException("Priority Queue has not remaining elements");
+                throw new PriorityQueueEmptyException("PriorityQueue is empty");
 
             T max = list[0];
             list[0] = list[Count - 1];
@@ -134,12 +134,25 @@ namespace SmartNet.Utilities
 
         public IEnumerable<T> Dequeue(int count)
         {
+            if (count <= 0)
+                throw new DequeueNonPositiveQuantityException("Cannot be extracted zero or less elements");
+ 
+            if (IsEmpty())
+                throw new PriorityQueueEmptyException("PriorityQueue is empty");
+
+            if(count > Count)
+                throw new QuantityNotStoredQueueException("There {2} not {0} element{1} available", 
+                    count, (count == 1 ? "" : "s"), (count == 1 ? "is" : "are"));
+
             for (int i = count; i > 0; i--)
                 yield return Dequeue();
         }
 
         public void Enqueue(T item)
         {
+            if (item == null)
+                throw new NullElementEnqueueException("Element cannot be null due to operations in PriorityQueue class");
+
             if (Count < list.Count)
                 list[Count] = item;
             else

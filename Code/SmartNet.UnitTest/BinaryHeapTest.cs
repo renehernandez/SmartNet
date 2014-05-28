@@ -70,7 +70,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        [ExpectedException(typeof(InvalidItemComparisonHeapException))]
         public void HeapIncreaseKeyException()
         {
             heap.BuildMaxHeap(classData);
@@ -91,7 +91,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        [ExpectedException(typeof(InvalidItemComparisonHeapException))]
         public void HeapIncreaseKeyComparerException()
         {
             heap = new BinaryHeap<ClassTest>(testComparer);
@@ -116,7 +116,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        [ExpectedException(typeof(InvalidItemComparisonHeapException))]
         public void HeapDecreaseKeyException()
         {
             heap.BuildMinHeap(classData);
@@ -136,7 +136,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        [ExpectedException(typeof(InvalidItemComparisonHeapException))]
         public void HeapDecreaseKeyComparerException()
         {
             heap = new BinaryHeap<ClassTest>(testComparer);

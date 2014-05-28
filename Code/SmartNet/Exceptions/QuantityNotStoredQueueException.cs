@@ -6,25 +6,27 @@ using System.Threading.Tasks;
 
 namespace SmartNet.Exceptions
 {
-    public class InvalidItemComparisonForHeapException : BaseException
+    public class QuantityNotStoredQueueException: BaseException
     {
+
         # region Constructors
 
-        public InvalidItemComparisonForHeapException()
+        public QuantityNotStoredQueueException()
             : base()
         {
         }
 
-        public InvalidItemComparisonForHeapException(string message)
+        public QuantityNotStoredQueueException(string message)
             : base(message)
         {
         }
 
-        public InvalidItemComparisonForHeapException(string message, params object[] args)
+        public QuantityNotStoredQueueException(string message, params object[] args)
             : base(message, args)
         {
         }
 
         # endregion
+
     }
 }

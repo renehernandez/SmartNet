@@ -211,9 +211,31 @@ namespace SmartNet.UnitTest
             Assert.AreEqual(queue.Count, 3);
         }
 
+        [Test]
+        [ExpectedException(typeof(NullElementEnqueueException))]
+        public void EnqueueNullElement()
+        {
+            ClassTest klass = null;
+            queue.Enqueue(klass);
+        }
+
         # endregion
 
         # region Dequeue Tests
+
+        [Test]
+        [ExpectedException(typeof(PriorityQueueEmptyException))]
+        public void DequeueEmptyQueue()
+        {
+            queue.Dequeue();
+        }
+
+        [Test]
+        [ExpectedException(typeof(PriorityQueueEmptyException))]
+        public void DequeueQuantityEmptyQueue()
+        {
+            queue.Dequeue(10);
+        }
 
         # endregion
 
@@ -231,7 +253,7 @@ namespace SmartNet.UnitTest
 
         [Test]
         [ExpectedException(typeof(PriorityQueueEmptyException))]
-        public void QueueIsEmptyWhenPeek()
+        public void PeekEmptyQueue()
         {
             queue.Peek();
         }
