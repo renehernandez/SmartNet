@@ -32,6 +32,7 @@ namespace SmartNet.Utilities
         # endregion
 
         # region Public Methods
+
         public void BuildMinHeap(List<T> list)
         {
             for (int i = list.Count / 2 - 1; i >= 0; i--)
@@ -61,7 +62,7 @@ namespace SmartNet.Utilities
             {
                 T temp = list[parent];
                 list[parent] = list[index];
-                list[index] = list[parent];
+                list[index] = temp;
                 index = parent;
                 parent = Parent(index);
             }
@@ -80,12 +81,11 @@ namespace SmartNet.Utilities
             {
                 T temp = list[parent];
                 list[parent] = list[index];
-                list[index] = list[parent];
+                list[index] = temp;
                 index = parent;
                 parent = Parent(index);
             }
         }
-
 
         public void MinHeapify(List<T> list, int index)
         {
@@ -147,7 +147,7 @@ namespace SmartNet.Utilities
 
         private int Parent(int index)
         {
-            return index / 2;
+            return (index - 1) / 2;
         }
 
         private int Left(int index)
@@ -159,7 +159,7 @@ namespace SmartNet.Utilities
         {
             return 2 * index + 2;
         }
-        
+
         # endregion
 
     }

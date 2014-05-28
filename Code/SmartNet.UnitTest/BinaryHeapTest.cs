@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SmartNet.Exceptions;
 using SmartNet.Interfaces;
 using SmartNet.Utilities;
 using System;
@@ -16,9 +17,9 @@ namespace SmartNet.UnitTest
 
         IBinaryHeap<ClassTest> heap;
 
-        List<ClassTest> list;
+        List<ClassTest> classData;
 
-        ClassComparer classComparer;
+        MaxClassComparer maxClassComparer;
         
         TestComparer testComparer;
         
@@ -30,40 +31,150 @@ namespace SmartNet.UnitTest
         public void Init()
         {
             heap = new BinaryHeap<ClassTest>();
-            classComparer = new ClassComparer();
+            maxClassComparer = new MaxClassComparer();
             testComparer = new TestComparer();
             intComparer = new IntComparer();
 
-            list = new List<ClassTest>() { new ClassTest(1, "1"), new ClassTest(10, "new"),
+            classData = new List<ClassTest>() { new ClassTest(1, "1"), new ClassTest(10, "new"),
             new ClassTest(-3524, "reag"), new ClassTest(-4579, "436q6"), new ClassTest(84756, "uhehg")};
         }
+
+        # region Constructors Tests
+
+        [Test]
+        public void StateEmptyConstructor()
+        {
+            Assert.IsNotNull(heap);
+        }
+
+        [Test]
+        public void StateComparerConstructor()
+        {
+            heap = new BinaryHeap<ClassTest>(testComparer);
+
+            Assert.IsNotNull(heap);
+        }
+
+        # endregion
+
+        # region HeapIncreaseKey Tests
+
+        [Test]
+        public void HeapIncreaseKey()
+        {
+            heap.BuildMaxHeap(classData);
+            heap.HeapIncreaseKey(classData, 4, new ClassTest(11, "24"));
+
+            Assert.AreEqual(classData[1].Index, 11);
+            Assert.AreEqual(classData[4].Index, 10);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        public void HeapIncreaseKeyException()
+        {
+            heap.BuildMaxHeap(classData);
+
+            heap.HeapIncreaseKey(classData, 4, new ClassTest(-78453542, "hello"));
+        }
+
+        [Test]
+        public void HeapIncreaseKeyComparer()
+        {
+            heap = new BinaryHeap<ClassTest>(testComparer);
+            heap.BuildMaxHeap(classData);
+            heap.HeapIncreaseKey(classData, 3, new ClassTest(-848342, "zaoidvaibv"));
+
+            Assert.AreEqual(classData[3].Name, "new");
+            Assert.AreEqual(classData[1].Name, "uhehg");
+            Assert.AreEqual(classData[0].Name, "zaoidvaibv");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        public void HeapIncreaseKeyComparerException()
+        {
+            heap = new BinaryHeap<ClassTest>(testComparer);
+            heap.BuildMaxHeap(classData);
+
+            heap.HeapIncreaseKey(classData, 2, new ClassTest(-848342, "raag"));
+        }
+
+        # endregion
+
+        # region HeapDecreaseKey Tests
+
+        [Test]
+        public void HeapDecreaseKey()
+        {
+            heap.BuildMinHeap(classData);
+            heap.HeapDecreaseKey(classData, 3, new ClassTest(-4579, "oaiubfoi"));
+
+            Assert.AreEqual(classData[0].Name, "436q6");
+            Assert.AreEqual(classData[1].Name, "oaiubfoi");
+            Assert.AreEqual(classData[3].Index, 1);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        public void HeapDecreaseKeyException()
+        {
+            heap.BuildMinHeap(classData);
+            heap.HeapDecreaseKey(classData, 3, new ClassTest(9845, "oaiubfoi"));
+        }
+
+        [Test]
+        public void HeapDecreaseKeyComparer()
+        {
+            heap = new BinaryHeap<ClassTest>(testComparer);
+            heap.BuildMinHeap(classData);
+            heap.HeapDecreaseKey(classData, 4, new ClassTest(98245, "008349ADBA"));
+
+            Assert.AreEqual(classData[0].Name, "008349ADBA");
+            Assert.AreEqual(classData[1].Name, "1");
+            Assert.AreEqual(classData[4].Name, "436q6");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidItemComparisonForHeapException))]
+        public void HeapDecreaseKeyComparerException()
+        {
+            heap = new BinaryHeap<ClassTest>(testComparer);
+            heap.BuildMinHeap(classData);
+
+            heap.HeapDecreaseKey(classData, 1, new ClassTest(-98245, "baola;bdv"));
+        }
+
+        # endregion
+
+        # region BuildHeap Tests
 
         [Test]
         public void BuildMaxHeap()
         {
-            heap.BuildMaxHeap(list);
+            heap.BuildMaxHeap(classData);
 
-            Assert.AreEqual(list[0].Index, 84756);
-            Assert.True(list[0].CompareTo(list[1]) >= 0);
+            Assert.AreEqual(classData[0].Index, 84756);
+            Assert.True(classData[0].CompareTo(classData[1]) >= 0);
         }
 
         [Test]
         public void BuildMinHeap()
         {
-            heap.BuildMinHeap(list);
+            heap.BuildMinHeap(classData);
 
-            Assert.AreEqual(list[0].Index, -4579);
-            Assert.True(list[0].CompareTo(list[1]) <= 0);
+            Assert.AreEqual(classData[0].Index, -4579);
+            Assert.True(classData[0].CompareTo(classData[1]) <= 0);
         }
         
         [Test]
         public void BuildMaxHeapComparer()
         {
             heap = new BinaryHeap<ClassTest>(testComparer);
-            heap.BuildMaxHeap(list);
+            heap.BuildMaxHeap(classData);
 
-            Assert.AreEqual(list[0].Name, "uhehg");
-            Assert.True(testComparer.Compare(list[0], list[1]) >= 0);
+            Assert.AreEqual(classData[0].Name, "uhehg");
+            Assert.True(testComparer.Compare(classData[0], classData[1]) >= 0);
         }
 
         [Test]
@@ -71,64 +182,60 @@ namespace SmartNet.UnitTest
         {
             heap = new BinaryHeap<ClassTest>(testComparer);
 
-            heap.BuildMinHeap(list);
+            heap.BuildMinHeap(classData);
 
-            Assert.AreEqual(list[0].Name, "1");
-            Assert.True(testComparer.Compare(list[0], list[1]) <= 0);
+            Assert.AreEqual(classData[0].Name, "1");
+            Assert.True(testComparer.Compare(classData[0], classData[1]) <= 0);
         }
+
+        # endregion
+
+        # region Sort Tests
 
         [Test]
         public void MaxHeapSort()
         {
-            ClassTest[] array = new ClassTest[list.Count];
-            for (int i = 0; i < list.Count; i++)
-            {
-                array[i] = list[i];
-            }
+            ClassTest[] array = classData.ToArray();
 
-            heap.BuildMinHeap(list);
+            heap.BuildMinHeap(classData);
             
-            int count = list.Count;
+            int count = classData.Count;
 
-            for (int i = list.Count - 1; i > 0; i--)
+            for (int i = classData.Count - 1; i > 0; i--)
             {
-                var temp = list[i];
-                list[i] = list[0];
-                list[0] = temp;
+                var temp = classData[i];
+                classData[i] = classData[0];
+                classData[0] = temp;
                 count--;
-                heap.MinHeapify(list, 0, count);
+                heap.MinHeapify(classData, 0, count);
             }
 
-            Array.Sort(array, classComparer);
+            Array.Sort(array, maxClassComparer);
 
-            CheckValues(array, list.ToArray());
+            CheckValues(array, classData.ToArray());
         }
 
         [Test]
         public void MinHeapSort()
         {
-            ClassTest[] array = new ClassTest[list.Count];
-            for (int i = 0; i < list.Count; i++)
+            ClassTest[] array = classData.ToArray();
+
+            heap.BuildMaxHeap(classData);
+
+            int count = classData.Count;
+
+            for (int i = classData.Count - 1; i > 0; i--)
             {
-                array[i] = list[i];
-            }
-
-            heap.BuildMaxHeap(list);
-
-            int count = list.Count;
-
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                var temp = list[i];
-                list[i] = list[0];
-                list[0] = temp;
+                var temp = classData[i];
+                classData[i] = classData[0];
+                classData[0] = temp;
                 count--;
-                heap.MaxHeapify(list, 0, count);
+                heap.MaxHeapify(classData, 0, count);
             }
 
             Array.Sort(array);
 
-            CheckValues(array, list.ToArray());
+            CheckValues(array, classData.ToArray());
         }
 
         [Test]
@@ -185,6 +292,8 @@ namespace SmartNet.UnitTest
 
         }
 
+        # endregion
+
         # region Private Class
 
         private class IntComparer : IComparer<int>
@@ -196,7 +305,7 @@ namespace SmartNet.UnitTest
             }
         }
 
-        private class ClassComparer : IComparer<ClassTest>
+        private class MaxClassComparer : IComparer<ClassTest>
         {
 
             public int Compare(ClassTest x, ClassTest y)
