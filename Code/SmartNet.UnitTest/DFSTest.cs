@@ -88,7 +88,7 @@ namespace SmartNet.UnitTest
 
             for (int i = 0; i < array1.Length; i++)
             {
-                Assert.AreEqual(array1[i], array1[i]);
+                Assert.AreEqual(array1[i], array2[i]);
             }
         }
 
