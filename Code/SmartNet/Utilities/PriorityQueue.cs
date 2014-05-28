@@ -41,6 +41,13 @@ namespace SmartNet.Utilities
             heap = new BinaryHeap<T>(comparer);
         }
 
+        public PriorityQueue(IBinaryHeap<T> heap)
+        {
+            list = new List<T>();
+            Count = 0;
+            this.heap = heap;
+        }
+
         public PriorityQueue(int capacity)
         {
             list = new List<T>(capacity);
@@ -53,6 +60,13 @@ namespace SmartNet.Utilities
             list = new List<T>(capacity);
             Count = 0;
             heap = new BinaryHeap<T>(comparer);
+        }
+
+        public PriorityQueue(IBinaryHeap<T> heap, int capacity)
+        {
+            list = new List<T>(capacity);
+            Count = 0;
+            this.heap = heap;
         }
 
         public PriorityQueue(IEnumerable<T> items)
@@ -80,6 +94,19 @@ namespace SmartNet.Utilities
 
         public PriorityQueue(IComparer<T> comparer, params T[] items)
             : this(comparer, items.AsEnumerable())
+        {
+        }
+
+        public PriorityQueue(IBinaryHeap<T> heap, IEnumerable<T> items)
+        {
+            list = new List<T>(items);
+            this.heap = heap;
+            Count = list.Count;
+
+            this.heap.BuildMaxHeap(list);
+        }
+
+        public PriorityQueue(IBinaryHeap<T> heap, params T[] items):this(heap, items.AsEnumerable())
         {
         }
 

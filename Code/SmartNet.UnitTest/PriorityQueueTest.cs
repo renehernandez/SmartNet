@@ -34,7 +34,7 @@ namespace SmartNet.UnitTest
         # region Constructors Tests
 
         [Test]
-        public void StateInQueueEmptyConstruction()
+        public void StateQueueEmptyConstructor()
         {
             Assert.IsNotNull(queue);
             Assert.AreEqual(queue.Count, 0);
@@ -42,7 +42,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueComparerConstruction()
+        public void StateQueueComparerConstructor()
         {
             queue = new PriorityQueue<ClassTest>(new TestComparer());
 
@@ -52,7 +52,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueCapacityConstruction()
+        public void StateQueueCapacityConstructor()
         {
             queue = new PriorityQueue<ClassTest>(1000);
 
@@ -62,7 +62,17 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueComparerCapacityConstruction()
+        public void StateQueueBinaryHeapConstructor()
+        {
+            queue = new PriorityQueue<ClassTest>(new BinaryHeap<ClassTest>());
+
+            Assert.IsNotNull(queue);
+            Assert.AreEqual(queue.Count, 0);
+            Assert.True(queue.IsEmpty());
+        }
+
+        [Test]
+        public void StateQueueComparerCapacityConstructor()
         {
             queue = new PriorityQueue<ClassTest>(new TestComparer(), 1000);
 
@@ -72,7 +82,17 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueEnumarebleConstruction()
+        public void StateQueueBinaryHeapCapacityConstructor()
+        {
+            queue = new PriorityQueue<ClassTest>(new BinaryHeap<ClassTest>(new TestComparer()), 4456);
+
+            Assert.IsNotNull(queue);
+            Assert.AreEqual(queue.Count, 0);
+            Assert.True(queue.IsEmpty());
+        }
+
+        [Test]
+        public void StateQueueEnumarebleConstructor()
         {
             queue = new PriorityQueue<ClassTest>(classData);
 
@@ -82,7 +102,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueParamsCollectionConstruction()
+        public void StateQueueParamsCollectionConstructor()
         {
             queue = new PriorityQueue<ClassTest>(classData[0], classData[2], classData[3]);
 
@@ -92,7 +112,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueComparerEnumerableConstruction()
+        public void StateQueueComparerEnumerableConstructor()
         {
             queue = new PriorityQueue<ClassTest>(new TestComparer(), classData);
 
@@ -102,12 +122,32 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void StateInQueueComparerParamsCollectionConstruction()
+        public void StateQueueComparerParamsArrayConstructor()
         {
             queue = new PriorityQueue<ClassTest>(new TestComparer(), classData[1], classData[2], classData[0], classData[1]);
 
             Assert.IsNotNull(queue);
             Assert.AreEqual(queue.Count, 4);
+            Assert.False(queue.IsEmpty());
+        }
+
+        [Test]
+        public void StateQueueBinaryHeapEnumerableConstructor()
+        {
+            queue = new PriorityQueue<ClassTest>(new BinaryHeap<ClassTest>(), classData);
+
+            Assert.IsNotNull(queue);
+            Assert.AreEqual(queue.Count, classData.Count);
+            Assert.False(queue.IsEmpty());
+        }
+
+        [Test]
+        public void StateQueueBinaryHeapParamsArrayConstructor()
+        {
+            queue = new PriorityQueue<ClassTest>(new BinaryHeap<ClassTest>(), classData[4], classData[1]);
+
+            Assert.IsNotNull(queue);
+            Assert.AreEqual(queue.Count, 2);
             Assert.False(queue.IsEmpty());
         }
 
