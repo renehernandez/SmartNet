@@ -44,13 +44,22 @@
     <Compile Include="BaseContainer.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
+    <Compile Include="Exceptions\DequeueNonPositiveQuantityException.cs" />
     <Compile Include="Exceptions\DuplicatedEdgeException.cs" />
     <Compile Include="Exceptions\EdgeNotFoundException.cs" />
+    <Compile Include="Exceptions\InvalidItemComparisonHeapException.cs" />
+    <Compile Include="Exceptions\NullElementEnqueueException.cs" />
+    <Compile Include="Exceptions\PriorityQueueEmptyException.cs" />
+    <Compile Include="Exceptions\QuantityNotStoredQueueException.cs" />
     <Compile Include="Exceptions\VertexNotFoundException.cs" />
     <Compile Include="Exceptions\DuplicatedVertexException.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="Interfaces\IBinaryHeap.cs" />
     <Compile Include="Interfaces\IContainer.cs" />
+    <Compile Include="Interfaces\IPriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\BinaryHeap.cs" />
+    <Compile Include="Utilities\PriorityQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Algorithms\Centrality\" />
@@ -60,7 +69,6 @@
     <Folder Include="Algorithms\Operations\" />
     <Folder Include="Algorithms\ShortestPaths\" />
     <Folder Include="Algorithms\SpanningTrees\" />
-    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
