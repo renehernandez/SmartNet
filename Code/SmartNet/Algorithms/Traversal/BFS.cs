@@ -28,7 +28,27 @@ namespace SmartNet.Algorithms.Traversal
                     queue.Enqueue(neighbor);
                 }
             }
-        }  
+        }
+
+        public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        {
+            var mark = new HashSet<T>(){vertex};
+            var queue = new Queue<T>();
+            queue.Enqueue(vertex);
+
+            T current;
+            while (queue.Count != 0)
+            {
+                current = queue.Dequeue();
+
+                foreach (var adj in graph[current].Where(adj => !mark.Contains(adj.Key)))
+                {
+                    yield return adj.Value;
+                    mark.Add(adj.Key);
+                    queue.Enqueue(adj.Key);
+                }
+            }
+        } 
 
     }
 }

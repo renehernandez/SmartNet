@@ -24,7 +24,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void FromEndOfPathGraph()
+        public void BFSForPathGraph()
         {
             graph.AddPath(stringData);
 
@@ -32,6 +32,30 @@ namespace SmartNet.UnitTest
 
             CheckValues(expectedVertices, BFS.Vertices(graph, "watchout").ToArray());
 
+        }
+
+        [Test]
+        public void BFSForCycleGraph()
+        {
+            graph.AddCycle(stringData);
+
+            var expectedVertices = new string[] { "maroon 5", "game of thrones", "hello", "watchout", "black" };
+
+            CheckValues(expectedVertices, BFS.Vertices(graph, "maroon 5").ToArray());
+        }
+
+        [Test]
+        public void EdgeBFSForPathGraph()
+        {
+            graph.AddPath(stringData[1], stringData[3], stringData[0]);
+
+            var expectedEdges = new Edge<string>[]
+            {
+                new Edge<string>(stringData[3], stringData[1]),
+                new Edge<string>(stringData[3], stringData[0]),
+            };
+
+            CheckValues(expectedEdges, BFS.Edges(graph, stringData[3]).ToArray());
         }
 
         # region Private Methods
