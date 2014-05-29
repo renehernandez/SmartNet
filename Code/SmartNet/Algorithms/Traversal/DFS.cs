@@ -16,22 +16,18 @@ namespace SmartNet.Algorithms.Traversal
 
         public static IEnumerable<T> Vertices<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
         {
-            var mark = new Dictionary<T, bool>();
+            var mark = new HashSet<T> {vertex};
 
-            foreach (var w in graph.VerticesIterator)
-                mark[w] = false;
-
-            mark[vertex] = true;
 
             foreach (var w in VerticesVisit(graph, vertex, mark))
                 yield return w;
 
             foreach (var w in graph.VerticesIterator)
             {
-                if (mark[w])
+                if (mark.Contains(w))
                     continue;
 
-                mark[w] = true;
+                mark.Add(w);
 
                 foreach (var v in VerticesVisit(graph, w, mark))
                     yield return v;
@@ -39,14 +35,14 @@ namespace SmartNet.Algorithms.Traversal
 
         }
 
-        private static IEnumerable<T> VerticesVisit<T>(Graph<T> graph, T vertex, Dictionary<T, bool> mark) where T : IEquatable<T>
+        private static IEnumerable<T> VerticesVisit<T>(Graph<T> graph, T vertex, HashSet<T> mark) where T : IEquatable<T>
         {
             foreach (var w in graph.NeighborsIterator(vertex))
             {
-                if (mark[w])
+                if (mark.Contains(w))
                     continue;
 
-                mark[w] = true;
+                mark.Add(w);
                 yield return w;
 
                 foreach (var v in VerticesVisit(graph, w, mark))
@@ -61,37 +57,32 @@ namespace SmartNet.Algorithms.Traversal
 
         public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph, T vertex) where T: IEquatable<T>
         {
-            var mark = new Dictionary<T, bool>(graph.NumberOfVertices);
-
-            foreach (var v in graph.VerticesIterator)
-                mark[v] = false;
-
-            mark[vertex] = true;
+            var mark = new HashSet<T> {vertex};
 
             foreach (var edge in EdgesVisit(graph, vertex, mark))
                 yield return edge;
 
             foreach(var w in graph.VerticesIterator)
             {
-                if (mark[w])
+                if (mark.Contains(w))
                     continue;
 
-                mark[w] = true;
+                mark.Add(w);
                 foreach (var edge in EdgesVisit(graph, w, mark))
                     yield return edge;
             }
             
         }
 
-        private static IEnumerable<Edge<T>> EdgesVisit<T>(Graph<T> graph, T v, Dictionary<T, bool> mark) 
+        private static IEnumerable<Edge<T>> EdgesVisit<T>(Graph<T> graph, T v, HashSet<T> mark) 
             where T: IEquatable<T>
         {
             foreach (var keyValue in graph[v])
             {
-                if (mark[keyValue.Key])
+                if (mark.Contains(keyValue.Key))
                     continue;
 
-                mark[keyValue.Key] = true;
+                mark.Add(keyValue.Key);
                 yield return keyValue.Value;
 
                 foreach (var edge in EdgesVisit(graph, keyValue.Key, mark))
