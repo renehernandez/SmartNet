@@ -333,7 +333,29 @@ namespace SmartNet
 
             # endregion
 
-            # region Deletions
+            # region Subgraphs
+
+        public Graph<T> Subgraph(IEnumerable<T> vertices)
+        {
+            var subgraph = new Graph<T>(vertices);
+
+            subgraph.AddEdges(
+                vertices.SelectMany(vertex => adj[vertex].Values.Where(
+                    edge => subgraph.HasVertex(edge.Second) && !subgraph.HasEdge(vertex, edge.Second))
+                )
+                );
+
+            return subgraph;
+        }
+
+        public Graph<T> Subgraph(params T[] vertices)
+        {
+            return Subgraph(vertices.AsEnumerable());
+        }
+
+        # endregion
+
+        # region Deletions
 
         public void Clear()
         {
@@ -350,12 +372,9 @@ namespace SmartNet
 
             adj.Remove(v);
 
-            foreach (var w in adj.Keys)
+            foreach (var w in adj.Keys.Where(w => adj[w].ContainsKey(v)))
             {
-                if (adj[w].ContainsKey(v))
-                {
-                    adj[w].Remove(v);
-                }
+                adj[w].Remove(v);
             }
 
             NumberOfVertices--;

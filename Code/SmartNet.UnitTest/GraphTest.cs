@@ -476,6 +476,31 @@ namespace SmartNet.UnitTest
 
         # endregion
 
+        # region Subgraph Test
+
+        [Test]
+        public void SubgraphForPathStringGraph()
+        {
+            stringGraph.AddPath(stringData);
+
+            var subgraph = stringGraph.Subgraph(stringData.Take(4));
+
+            var expectedEdges = new[]
+            {
+                new Edge<string>("newer", "blackbox"),
+                new Edge<string>("blackbox", "frickels"),
+                new Edge<string>("frickels", "average")
+            };
+
+            Assert.AreEqual(subgraph.NumberOfVertices, 4);
+            Assert.AreEqual(subgraph.NumberOfEdges, 3);
+
+           CheckValues(subgraph.Edges, expectedEdges);
+
+        }
+
+        # endregion
+
         # region Private Methods
 
         private void CheckValues<T>(T[] array1, T[] array2)
