@@ -32,7 +32,7 @@ namespace SmartNet.Algorithms.Traversal
 
         public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
         {
-            var mark = new HashSet<T>(){vertex};
+            var mark = new HashSet<T>() {vertex};
             var queue = new Queue<T>();
             queue.Enqueue(vertex);
 

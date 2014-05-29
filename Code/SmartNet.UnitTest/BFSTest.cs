@@ -58,6 +58,22 @@ namespace SmartNet.UnitTest
             CheckValues(expectedEdges, BFS.Edges(graph, stringData[3]).ToArray());
         }
 
+        [Test]
+        public void EdgeBFSForCycleGraph()
+        {
+            graph.AddCycle(stringData);
+
+            var expectedEdges = new[]
+            {
+                new Edge<string>(stringData[1], stringData[0]),
+                new Edge<string>(stringData[1], stringData[2]),
+                new Edge<string>(stringData[0], stringData[4]),
+                new Edge<string>(stringData[2], stringData[3]) 
+            };
+
+            CheckValues(expectedEdges, BFS.Edges(graph, "black").ToArray());
+        }
+
         # region Private Methods
 
         private void CheckValues<T>(T[] array1, T[] array2)
