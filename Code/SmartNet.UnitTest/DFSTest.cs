@@ -96,6 +96,20 @@ namespace SmartNet.UnitTest
             Assert.AreEqual(treeGraph.NumberOfEdges, 5);
         }
 
+        [Test]
+        public void DFSTreeFromVertex()
+        {
+            intGraph.AddPath(1,2,3,4,5,6,7);
+
+            intGraph.AddEdge(0, 9);
+            intGraph.AddEdge(0, 14);
+
+            var treeGraph = DFS.Tree(intGraph, 9);
+            
+            Assert.AreEqual(treeGraph.NumberOfVertices, 3);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 2);
+        }
+
         # region Private Methods
 
         private void CheckValues<T>(T[] array1, T[] array2)
