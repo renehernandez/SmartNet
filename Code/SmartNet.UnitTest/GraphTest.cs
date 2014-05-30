@@ -476,7 +476,16 @@ namespace SmartNet.UnitTest
 
         # endregion
 
-        # region Subgraph Test
+        # region Subgraph Tests
+
+        [Test]
+        public void SubgraphForEmptyStringGraph()
+        {
+            var subgraph = stringGraph.Subgraph();
+
+            Assert.AreEqual(subgraph.NumberOfVertices, 0);
+            Assert.AreEqual(subgraph.NumberOfEdges, 0);
+        }
 
         [Test]
         public void SubgraphForPathStringGraph()
@@ -497,6 +506,46 @@ namespace SmartNet.UnitTest
 
            CheckValues(subgraph.Edges, expectedEdges);
 
+        }
+
+        [Test]
+        public void SubgraphForCycleStringGraph()
+        {
+            stringGraph.AddCycle(stringData);
+
+            var subgraph = stringGraph.Subgraph(stringData);
+
+            Assert.AreEqual(subgraph.NumberOfVertices, stringData.Count);
+            Assert.AreEqual(subgraph.NumberOfEdges, stringData.Count);
+
+            CheckValues(subgraph.Edges, stringGraph.Edges);
+        }
+
+        # endregion
+
+        # region AdjacencyList Tests
+
+        [Test]
+        public void AdjacencyListForEmptyStringGraph()
+        {
+            var adj = stringGraph.AdjacencyList();
+
+            Assert.AreEqual(adj.Length, 0);
+        }
+
+        [Test]
+        public void AdjacencyListForVertexStringGraph()
+        {
+            stringGraph.AddVertices(stringData);
+
+            var adj = stringGraph.AdjacencyList();
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, adj.Length);
+
+            foreach (var array in adj)
+            {
+                Assert.AreEqual(array.Length, 0);
+            }
         }
 
         # endregion
