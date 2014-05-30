@@ -355,6 +355,21 @@ namespace SmartNet
 
         # endregion
 
+        # region Adjacency List
+
+        public IEnumerable<IEnumerable<T>> AdjacencyListIterator()
+        {
+            return adj.Select(pair => pair.Value.Keys);
+        }
+
+        public T[][] AdjacencyList()
+        {
+            return adj.Select(pair => pair.Value.Keys.ToArray()).ToArray();
+        }
+
+        # endregion
+
+
         # region Deletions
 
         public void Clear()
