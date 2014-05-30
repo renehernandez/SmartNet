@@ -94,5 +94,26 @@ namespace SmartNet.Algorithms.Traversal
                     yield return edge;
             }
         }
+
+        public static Graph<T> Tree<T>(Graph<T> graph) where T : IEquatable<T>
+        {
+            return Tree(graph, graph.VerticesIterator.First(), true);
+        }
+
+        public static Graph<T> Tree<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        {
+            return Tree(graph, vertex, false);
+        }
+
+        private static Graph<T> Tree<T>(Graph<T> graph, T vertex, bool complete) where T : IEquatable<T>
+        {
+            var treeGraph = new Graph<T>();
+
+            treeGraph.AddEdges(Edges(graph, vertex, complete));
+
+            return treeGraph;
+        }
+
     }
+
 }
