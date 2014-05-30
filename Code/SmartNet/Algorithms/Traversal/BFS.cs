@@ -48,7 +48,16 @@ namespace SmartNet.Algorithms.Traversal
                     queue.Enqueue(adj.Key);
                 }
             }
-        } 
+        }
+
+        public static Graph<T> Tree<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        {
+            var treeGraph = new Graph<T>();
+
+            treeGraph.AddEdges(BFS.Edges(graph, vertex));
+
+            return treeGraph;
+        }  
 
     }
 }
