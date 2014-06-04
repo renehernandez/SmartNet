@@ -27,7 +27,19 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void DFSForTreeGraph()
+        public void EdgesDFSForPathGraph()
+        {
+            intGraph.AddPath(new int[] { 1, 2, 3, 4, 5, 6 });
+
+            var check = new Edge<int>[] { new Edge<int>(3, 2), new Edge<int>(2, 1), 
+                new Edge<int>(3, 4), new Edge<int>(4, 5), new Edge<int>(5, 6) };
+
+            CheckValues(DFS.Edges(intGraph, 3).ToArray(), check);
+
+        }
+
+        [Test]
+        public void EdgesDFSForTreeGraph()
         {
             intGraph.AddEdges(arrayEdge);
             intGraph.AddEdge(7, 8);
@@ -48,7 +60,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void DFSForNonTreeGraph()
+        public void EdgesDFSForNonTreeGraph()
         {
             intGraph.AddEdge(10, 3);
             intGraph.AddEdges(arrayEdge);
@@ -70,6 +82,36 @@ namespace SmartNet.UnitTest
             CheckValues(resul, check);
         }
 
+
+        [Test]
+        public void DFSTreeFromGraph()
+        {
+            intGraph.AddEdges(arrayEdge);
+            intGraph.AddEdge(new Edge<int>(6, 1));
+            intGraph.AddEdge(new Edge<int>(5, 2));
+
+            var treeGraph = DFS.Tree(intGraph);
+
+            Assert.AreEqual(treeGraph.NumberOfVertices, intGraph.NumberOfVertices);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 5);
+        }
+
+        [Test]
+        public void DFSTreeFromVertex()
+        {
+            intGraph.AddPath(1,2,3,4,5,6,7);
+
+            intGraph.AddEdge(0, 9);
+            intGraph.AddEdge(0, 14);
+
+            var treeGraph = DFS.Tree(intGraph, 9);
+            
+            Assert.AreEqual(treeGraph.NumberOfVertices, 3);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 2);
+        }
+
+        # region Private Methods
+
         private void CheckValues<T>(T[] array1, T[] array2)
         {
             Assert.AreEqual(array1.Length, array2.Length);
@@ -79,6 +121,8 @@ namespace SmartNet.UnitTest
                 Assert.AreEqual(array1[i], array2[i]);
             }
         }
+
+        # endregion
 
     }
 }
