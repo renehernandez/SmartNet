@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.AccessControl;
 using SmartNet.Exceptions;
+using SmartNet.Factories;
 using SmartNet.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,7 @@ namespace SmartNet
 
         private Dictionary<TVertex, Dictionary<TVertex, TEdge>> adj;
 
-        private delegate TEdge EdgeActivator(TVertex source, TVertex target);
-
-        private EdgeActivator edgeActivator;
+        private EdgeFactory<TVertex, TEdge> edgeFactory;
 
         # endregion
 
@@ -88,7 +87,7 @@ namespace SmartNet
             NumberOfVertices = 0;
             adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>();
 
-            edgeActivator = GetActivator();
+            edgeFactory = GetFactory();
         }
 
         public Graph(IEnumerable<TVertex> vertices): this()
@@ -183,14 +182,14 @@ namespace SmartNet
             Activator.CreateInstance(typeof (TEdge), edge.Source, edge.Target);
 
             adj[edge.Source].Add(edge.Target, edge);
-            adj[edge.Target].Add(edge.Source, edgeActivator(edge.Target, edge.Source));
+            adj[edge.Target].Add(edge.Source, edgeFactory(edge.Target, edge.Source));
 
             NumberOfEdges++;
         }
 
         public void AddEdge(TVertex v, TVertex w)
         {
-            var edge = edgeActivator(v, w);
+            var edge = edgeFactory(v, w);
             AddEdge(edge);
         }
 
@@ -451,7 +450,7 @@ namespace SmartNet
 
         # region Private Methods
 
-        private static EdgeActivator GetActivator()
+        private static EdgeFactory<TVertex, TEdge> GetFactory()
         {
             var type = typeof (TEdge);
 
@@ -469,26 +468,10 @@ namespace SmartNet
             argsExp[0] = Expression.Convert(paramFirst, typeof (TVertex));
             argsExp[1] = Expression.Convert(paramSecond, typeof(TVertex));
 
-            //pick each arg from the params array 
-            //and create a typed expression of them
-            //for (int i = 0; i < paramsInfo.Length; i++)
-            //{
-            //    Expression index = Expression.Constant(i);
-            //    Type paramType = paramsInfo[i].ParameterType;
-
-            //    Expression paramAccessorExp =
-            //        Expression.ArrayIndex(param, index);
-
-            //    Expression paramCastExp =
-            //        Expression.Convert(paramAccessorExp, paramType);
-
-            //    argsExp[i] = paramCastExp;
-            //}
-
             NewExpression newExp = Expression.New(ctor, argsExp);
-            LambdaExpression lambda = Expression.Lambda(typeof(EdgeActivator), newExp, paramFirst, paramSecond);
+            LambdaExpression lambda = Expression.Lambda(typeof(EdgeFactory<TVertex, TEdge>), newExp, paramFirst, paramSecond);
 
-            return lambda.Compile() as EdgeActivator;
+            return lambda.Compile() as EdgeFactory<TVertex, TEdge>;
         }
 
         # endregion

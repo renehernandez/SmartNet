@@ -53,6 +53,8 @@
     <Compile Include="Exceptions\QuantityNotStoredQueueException.cs" />
     <Compile Include="Exceptions\VertexNotFoundException.cs" />
     <Compile Include="Exceptions\DuplicatedVertexException.cs" />
+    <Compile Include="Factories\EdgeFactory.cs" />
+    <Compile Include="Factories\VertexFactory.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="Interfaces\IBinaryHeap.cs" />
     <Compile Include="Interfaces\IContainer.cs" />
