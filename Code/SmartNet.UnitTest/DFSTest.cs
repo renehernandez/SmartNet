@@ -12,7 +12,7 @@ namespace SmartNet.UnitTest
     public class DFSTest
     {
 
-        Graph<int, Edge<int>> intGraph;
+        BaseGraph<int, Edge<int>> intGraph;
         Edge<int>[] arrayEdge;
 
         [SetUp]
