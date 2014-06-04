@@ -82,6 +82,36 @@ namespace SmartNet.UnitTest
             CheckValues(resul, check);
         }
 
+
+        [Test]
+        public void DFSTreeFromGraph()
+        {
+            intGraph.AddEdges(arrayEdge);
+            intGraph.AddEdge(new Edge<int>(6, 1));
+            intGraph.AddEdge(new Edge<int>(5, 2));
+
+            var treeGraph = DFS.Tree(intGraph);
+
+            Assert.AreEqual(treeGraph.NumberOfVertices, intGraph.NumberOfVertices);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 5);
+        }
+
+        [Test]
+        public void DFSTreeFromVertex()
+        {
+            intGraph.AddPath(1,2,3,4,5,6,7);
+
+            intGraph.AddEdge(0, 9);
+            intGraph.AddEdge(0, 14);
+
+            var treeGraph = DFS.Tree(intGraph, 9);
+            
+            Assert.AreEqual(treeGraph.NumberOfVertices, 3);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 2);
+        }
+
+        # region Private Methods
+
         private void CheckValues<T>(T[] array1, T[] array2)
         {
             Assert.AreEqual(array1.Length, array2.Length);
@@ -91,6 +121,8 @@ namespace SmartNet.UnitTest
                 Assert.AreEqual(array1[i], array2[i]);
             }
         }
+
+        # endregion
 
     }
 }
