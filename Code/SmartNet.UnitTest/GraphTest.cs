@@ -35,8 +35,8 @@ namespace SmartNet.UnitTest
 
         }
 
-        Graph<string> stringGraph;
-        Graph<ClassTest> classGraph;
+        Graph<string, Edge<string>> stringGraph;
+        Graph<ClassTest, Edge<ClassTest>> classGraph;
 
         List<string> stringData;
         List<ClassTest> classData;
@@ -47,8 +47,8 @@ namespace SmartNet.UnitTest
         [SetUp]
         public void Init()
         {
-            stringGraph = new Graph<string>();
-            classGraph = new Graph<ClassTest>();
+            stringGraph = new Graph<string, Edge<string>>();
+            classGraph = new Graph<ClassTest, Edge<ClassTest>>();
 
             stringData = new List<string>() { "newer", "blackbox", "frickels", "average", "resume" };
 
@@ -100,7 +100,7 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableVertexDataStringGraph()
         {
-            stringGraph = new Graph<string>(stringData);
+            stringGraph = new Graph<string, Edge<string>>(stringData);
 
             Assert.AreEqual(stringGraph.NumberOfVertices, stringData.Count);
             Assert.AreEqual(stringGraph.NumberOfEdges, 0);
@@ -111,7 +111,7 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableVertexDataClassGraph()
         {
-            classGraph = new Graph<ClassTest>(classData);
+            classGraph = new Graph<ClassTest, Edge<ClassTest>>(classData);
 
             Assert.AreEqual(classGraph.NumberOfVertices, classData.Count);
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
@@ -123,7 +123,7 @@ namespace SmartNet.UnitTest
         public void ConstructorArrayVertexDataStringGraph()
         {
             var array = stringData.ToArray();
-            stringGraph = new Graph<string>(array[0], array[1], array[2], array[3], array[4]);
+            stringGraph = new Graph<string, Edge<string>>(array[0], array[1], array[2], array[3], array[4]);
 
             Assert.AreEqual(stringGraph.NumberOfVertices, array.Length);
             Assert.AreEqual(stringGraph.NumberOfEdges, 0);
@@ -135,7 +135,7 @@ namespace SmartNet.UnitTest
         public void ConstructorArrayVertexDataClassGraph()
         {
             var array = classData.ToArray();
-            classGraph = new Graph<ClassTest>(array[0], array[1], array[2], array[3], array[4]);
+            classGraph = new Graph<ClassTest, Edge<ClassTest>>(array[0], array[1], array[2], array[3], array[4]);
 
             Assert.AreEqual(classGraph.NumberOfVertices, array.Length);
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
@@ -150,7 +150,7 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableEdgeDataStringGraph()
         {
-            stringGraph = new Graph<string>(stringEdgeData);
+            stringGraph = new Graph<string, Edge<string>>(stringEdgeData);
 
             Assert.AreEqual(stringGraph.NumberOfVertices, 5);
             Assert.AreEqual(stringGraph.NumberOfEdges, 3);
@@ -161,7 +161,7 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableEdgeDataClassGraph()
         {
-            classGraph = new Graph<ClassTest>(classEdgeData);
+            classGraph = new Graph<ClassTest, Edge<ClassTest>>(classEdgeData);
 
             Assert.AreEqual(classGraph.NumberOfVertices, 6);
             Assert.AreEqual(classGraph.NumberOfEdges, 3);
@@ -173,7 +173,7 @@ namespace SmartNet.UnitTest
         public void ConstructorArrayEdgeDataStringGraph()
         {
             var array = stringEdgeData.ToArray();
-            stringGraph = new Graph<string>(array[0], array[1], array[2]);
+            stringGraph = new Graph<string, Edge<string>>(array[0], array[1], array[2]);
 
             Assert.AreEqual(stringGraph.NumberOfVertices, 5);
             Assert.AreEqual(stringGraph.NumberOfEdges, 3);
@@ -185,7 +185,7 @@ namespace SmartNet.UnitTest
         public void ConstructorArrayEdgeDataClassGraph()
         {
             var array = classEdgeData.ToArray();
-            classGraph = new Graph<ClassTest>(array[0], array[1], array[2]);
+            classGraph = new Graph<ClassTest, Edge<ClassTest>>(array[0], array[1], array[2]);
 
             Assert.AreEqual(classGraph.NumberOfVertices, 6);
             Assert.AreEqual(classGraph.NumberOfEdges, 3);
@@ -466,12 +466,86 @@ namespace SmartNet.UnitTest
         public void NeighborsForClassGraph()
         {
             classGraph.AddEdges(classEdgeData);
-            var neighbors = classGraph.Neighbors(classEdgeData[2].Second);
+            var neighbors = classGraph.Neighbors(classEdgeData[2].Target);
 
             Assert.AreEqual(neighbors.Length, 1);
 
-            CheckValues(neighbors, new[] { classEdgeData[2].First });
+            CheckValues(neighbors, new[] { classEdgeData[2].Source });
 
+        }
+
+        # endregion
+
+        # region Subgraph Tests
+
+        [Test]
+        public void SubgraphForEmptyStringGraph()
+        {
+            var subgraph = stringGraph.Subgraph();
+
+            Assert.AreEqual(subgraph.NumberOfVertices, 0);
+            Assert.AreEqual(subgraph.NumberOfEdges, 0);
+        }
+
+        [Test]
+        public void SubgraphForPathStringGraph()
+        {
+            stringGraph.AddPath(stringData);
+
+            var subgraph = stringGraph.Subgraph(stringData.Take(4));
+
+            var expectedEdges = new[]
+            {
+                new Edge<string>("newer", "blackbox"),
+                new Edge<string>("blackbox", "frickels"),
+                new Edge<string>("frickels", "average")
+            };
+
+            Assert.AreEqual(subgraph.NumberOfVertices, 4);
+            Assert.AreEqual(subgraph.NumberOfEdges, 3);
+
+           CheckValues(subgraph.Edges, expectedEdges);
+
+        }
+
+        [Test]
+        public void SubgraphForCycleStringGraph()
+        {
+            stringGraph.AddCycle(stringData);
+
+            var subgraph = stringGraph.Subgraph(stringData);
+
+            Assert.AreEqual(subgraph.NumberOfVertices, stringData.Count);
+            Assert.AreEqual(subgraph.NumberOfEdges, stringData.Count);
+
+            CheckValues(subgraph.Edges, stringGraph.Edges);
+        }
+
+        # endregion
+
+        # region AdjacencyList Tests
+
+        [Test]
+        public void AdjacencyListForEmptyStringGraph()
+        {
+            var adj = stringGraph.AdjacencyList();
+
+            Assert.AreEqual(adj.Length, 0);
+        }
+
+        [Test]
+        public void AdjacencyListForVertexStringGraph()
+        {
+            stringGraph.AddVertices(stringData);
+
+            var adj = stringGraph.AdjacencyList();
+
+            Assert.AreEqual(stringGraph.NumberOfVertices, adj.Length);
+
+            foreach (var array in adj)
+            {
+                Assert.AreEqual(array.Length, 0);
+            }
         }
 
         # endregion

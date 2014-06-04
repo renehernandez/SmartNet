@@ -7,7 +7,7 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<T> : IEquatable<Edge<T>> where T : IEquatable<T> 
+    public class Edge<T> : IEdge<T> where T: IEquatable<T>
     {
 
         # region Private Fields
@@ -16,11 +16,11 @@ namespace SmartNet
 
         # region Public Properties
 
-        public T First { get; private set; }
+        public T Source { get; private set; }
 
-        public T Second { get; private set; }
+        public T Target { get; private set; }
 
-        public IContainer Data { get; set; }
+        public double Weight { get; set; }
 
         public T this[int index]
         {
@@ -28,7 +28,7 @@ namespace SmartNet
             {
                 if (index < 0 || index > 1)
                     throw new IndexOutOfRangeException("Invalid index for edge object");
-                return index == 0 ? First : Second;
+                return index == 0 ? Source : Target;
             }
             set
             {
@@ -36,9 +36,9 @@ namespace SmartNet
                     throw new IndexOutOfRangeException("Invalid index for edge object");
 
                 if (index == 0)
-                    First = value;
+                    Source = value;
                 else
-                    Second = value;
+                    Target = value;
             }
         }
 
@@ -47,13 +47,9 @@ namespace SmartNet
         # region Constructors
 
         public Edge(T left, T right){
-            First = left;
-            Second = right;
-            Data = new BaseContainer();
-        }
-
-        public Edge(T left, T right, IContainer data): this(left, right) {
-            Data = data;
+            Source = left;
+            Target = right;
+            Weight = 1.0;
         }
 
         public Edge(Tuple<T, T> tuple)
@@ -65,14 +61,9 @@ namespace SmartNet
 
         # region Public Methods
 
-        public Edge<T> Reverse()
-        {
-            return new Edge<T>(this.Second, this.First, this.Data);
-        }
-
         public override string ToString()
         {
-            return string.Format("({0}, {1})", First, Second);
+            return string.Format("{0} <-> {1}", Source, Target);
         }
 
         public override bool Equals(object obj)
@@ -82,23 +73,31 @@ namespace SmartNet
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() + Second.GetHashCode();
+            return Source.GetHashCode() + Target.GetHashCode();
         }
 
-        public bool Equals(Edge<T> other)
+        public bool Equals(IEdge<T> other)
         {
-            if (Object.ReferenceEquals(other, null))
+            if (ReferenceEquals(other, null))
             {
                 return false;
             }
 
-            if (Object.ReferenceEquals(this, other))
+            if (ReferenceEquals(this, other))
             {
                 return true;
             }
 
-            return (First.Equals(other.First) && Second.Equals(other.Second)) || (
-                First.Equals(other.Second) && Second.Equals(other.First));
+            var edge = other as Edge<T>;
+
+            if (ReferenceEquals(edge, null))
+            {
+                return false;
+            }
+
+
+            return (Source.Equals(edge.Source) && Target.Equals(edge.Target)) || (
+                Source.Equals(edge.Target) && Target.Equals(edge.Source));
         }
 
         public static bool operator ==(Edge<T> left, Edge<T> right)
