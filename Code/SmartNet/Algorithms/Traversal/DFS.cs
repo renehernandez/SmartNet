@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartNet.Interfaces;
 
 namespace SmartNet.Algorithms.Traversal
 {
     public static class DFS
     {
 
-        public static IEnumerable<T> Vertices<T>(Graph<T> graph) where T : IEquatable<T>
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge>(Graph<TVertex, TEdge> graph) 
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
             return Vertices(graph, graph.VerticesIterator.First());
         }
 
-        public static IEnumerable<T> Vertices<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex vertex) 
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
-            var mark = new Dictionary<T, bool>();
+            var mark = new Dictionary<TVertex, bool>();
 
             foreach (var w in graph.VerticesIterator)
                 mark[w] = false;
@@ -39,7 +44,9 @@ namespace SmartNet.Algorithms.Traversal
 
         }
 
-        private static IEnumerable<T> VerticesVisit<T>(Graph<T> graph, T vertex, Dictionary<T, bool> mark) where T : IEquatable<T>
+        private static IEnumerable<TVertex> VerticesVisit<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex vertex, Dictionary<TVertex, bool> mark) 
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
             foreach (var w in graph.NeighborsIterator(vertex))
             {
@@ -54,14 +61,18 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph) where T: IEquatable<T>
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge>(Graph<TVertex, TEdge> graph)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
             return Edges(graph, graph.VerticesIterator.First());
         }
 
-        public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph, T vertex) where T: IEquatable<T>
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
-            var mark = new Dictionary<T, bool>(graph.NumberOfVertices);
+            var mark = new Dictionary<TVertex, bool>(graph.NumberOfVertices);
 
             foreach (var v in graph.VerticesIterator)
                 mark[v] = false;
@@ -83,8 +94,9 @@ namespace SmartNet.Algorithms.Traversal
             
         }
 
-        private static IEnumerable<Edge<T>> EdgesVisit<T>(Graph<T> graph, T v, Dictionary<T, bool> mark) 
-            where T: IEquatable<T>
+        private static IEnumerable<TEdge> EdgesVisit<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex v, Dictionary<TVertex, bool> mark)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
             foreach (var keyValue in graph[v])
             {

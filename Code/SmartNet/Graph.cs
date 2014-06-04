@@ -1,4 +1,8 @@
-﻿using SmartNet.Exceptions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Security.AccessControl;
+using SmartNet.Exceptions;
 using SmartNet.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,12 +12,18 @@ using System.Threading.Tasks;
 
 namespace SmartNet
 {
-    public class Graph<T> where T : IEquatable<T>
+    public class Graph<TVertex, TEdge> 
+        where TVertex : IEquatable<TVertex>
+        where TEdge : IEdge<TVertex>
     {
 
         # region Private Fields
 
-        private Dictionary<T, Dictionary<T, Edge<T>>> adj;
+        private Dictionary<TVertex, Dictionary<TVertex, TEdge>> adj;
+
+        private delegate TEdge EdgeActivator(TVertex source, TVertex target);
+
+        private EdgeActivator edgeActivator;
 
         # endregion
 
@@ -23,27 +33,27 @@ namespace SmartNet
 
         public int NumberOfEdges { get; private set; }
 
-        public T[] Vertices
+        public TVertex[] Vertices
         {
             get { return VerticesIterator.ToArray(); }
         }
 
-        public IEnumerable<T> VerticesIterator
+        public IEnumerable<TVertex> VerticesIterator
         {
             get { return adj.Keys.AsEnumerable(); }
         }
 
-        public Edge<T>[] Edges 
+        public TEdge[] Edges 
         {
             get { return EdgesIterator.ToArray(); }
         }
 
-        public IEnumerable<Edge<T>> EdgesIterator
+        public IEnumerable<TEdge> EdgesIterator
         {
             get { return adj.Values.SelectMany(x => x.Values).Distinct(); }
         }
        
-        public Dictionary<T, Edge<T>> this[T v]
+        public Dictionary<TVertex, TEdge> this[TVertex v]
         {
             get 
             {
@@ -53,7 +63,7 @@ namespace SmartNet
             }
         }
 
-        public Edge<T> this[T v, T w] 
+        public TEdge this[TVertex v, TVertex w] 
         {
             get 
             {
@@ -76,10 +86,12 @@ namespace SmartNet
         {
             NumberOfEdges = 0;
             NumberOfVertices = 0;
-            adj = new Dictionary<T, Dictionary<T, Edge<T>>>();
+            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>();
+
+            edgeActivator = GetActivator();
         }
 
-        public Graph(IEnumerable<T> vertices): this()
+        public Graph(IEnumerable<TVertex> vertices): this()
         {
             foreach (var vertex in vertices)
             {
@@ -87,11 +99,11 @@ namespace SmartNet
             }
         }
 
-        public Graph(params T[] vertices):this(vertices.AsEnumerable())
+        public Graph(params TVertex[] vertices):this(vertices.AsEnumerable())
         {
         }
 
-        public Graph(IEnumerable<Edge<T>> edges):this()
+        public Graph(IEnumerable<TEdge> edges):this()
         {
             foreach (var edge in edges)
             {
@@ -99,34 +111,32 @@ namespace SmartNet
             }
         }
 
-        public Graph(params Edge<T>[] edges):this(edges.AsEnumerable())
+        public Graph(params TEdge[] edges):this(edges.AsEnumerable())
         {
         }
         
-        public Graph(IEqualityComparer<T> comparer)
+        public Graph(IEqualityComparer<TVertex> comparer):this()
         {
-            NumberOfEdges = 0;
-            NumberOfVertices = 0;
-            adj = new Dictionary<T, Dictionary<T, Edge<T>>>(comparer);
+            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
         }
 
-        public Graph(IEqualityComparer<T> comparer, IEnumerable<T> vertices)
+        public Graph(IEqualityComparer<TVertex> comparer, IEnumerable<TVertex> vertices)
             : this(vertices)
         {
-            adj = new Dictionary<T, Dictionary<T, Edge<T>>>(comparer);
+            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
         }
 
-        public Graph(IEqualityComparer<T> comparer, params T[] vertices)
+        public Graph(IEqualityComparer<TVertex> comparer, params TVertex[] vertices)
             : this(comparer, vertices.AsEnumerable())
         {
         }
 
-        public Graph(IEqualityComparer<T> comparer, IEnumerable<Edge<T>> edges): this(edges)
+        public Graph(IEqualityComparer<TVertex> comparer, IEnumerable<TEdge> edges): this(edges)
         {
-            adj = new Dictionary<T, Dictionary<T, Edge<T>>>(comparer);
+            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
         }
 
-        public Graph(IEqualityComparer<T> comparer, params Edge<T>[] edges)
+        public Graph(IEqualityComparer<TVertex> comparer, params TEdge[] edges)
             : this(comparer, edges.AsEnumerable())
         {
         }
@@ -137,17 +147,17 @@ namespace SmartNet
 
             # region Additions
 
-        public void AddVertex(T v)
+        public void AddVertex(TVertex v)
         {
             if (adj.ContainsKey(v))
                 throw new DuplicatedVertexException("Vertex {0} already found in graph", v);
 
-            adj[v] = new Dictionary<T, Edge<T>>();
+            adj[v] = new Dictionary<TVertex, TEdge>();
             
             NumberOfVertices++;
         }
 
-        public void AddVertices(IEnumerable<T> vertexList)
+        public void AddVertices(IEnumerable<TVertex> vertexList)
         {
             foreach (var vertex in vertexList)
             {
@@ -155,50 +165,41 @@ namespace SmartNet
             }
         }
 
-        public void AddVertices(params T[] vertices)
+        public void AddVertices(params TVertex[] vertices)
         {
             AddVertices(vertices.AsEnumerable());
         }
 
-        public void AddEdge(Edge<T> edge)
+        public void AddEdge(TEdge edge)
         {
-            if (!adj.ContainsKey(edge.First))
-                AddVertex(edge.First);
-            if(!adj.ContainsKey(edge.Second))
-                AddVertex(edge.Second);
+            if (!adj.ContainsKey(edge.Source))
+                AddVertex(edge.Source);
+            if(!adj.ContainsKey(edge.Target))
+                AddVertex(edge.Target);
 
-            if (adj[edge.First].ContainsKey(edge.Second))
+            if (adj[edge.Source].ContainsKey(edge.Target))
                 throw new DuplicatedEdgeException("Edge {0} already present in graph", edge);
 
-            adj[edge.First].Add(edge.Second, edge);
-            adj[edge.Second].Add(edge.First, edge.Reverse());
+            Activator.CreateInstance(typeof (TEdge), edge.Source, edge.Target);
+
+            adj[edge.Source].Add(edge.Target, edge);
+            adj[edge.Target].Add(edge.Source, edgeActivator(edge.Target, edge.Source));
 
             NumberOfEdges++;
         }
 
-        public void AddEdge(T v, T w)
+        public void AddEdge(TVertex v, TVertex w)
         {
-            var edge = new Edge<T>(v, w);
+            var edge = edgeActivator(v, w);
             AddEdge(edge);
         }
 
-        public void AddEdge(T v, T w, IContainer data)
-        {
-            var edge = new Edge<T>(v, w, data);
-            AddEdge(edge);
-        }
-
-        public void AddEdge(Tuple<T, T> tuple)
+        public void AddEdge(Tuple<TVertex, TVertex> tuple)
         {
             AddEdge(tuple.Item1, tuple.Item2);
         }
 
-        public void AddEdge(Tuple<T, T> tuple, IContainer data)
-        {
-            AddEdge(tuple.Item1, tuple.Item2, data);
-        }
-
-        public void AddEdges(IEnumerable<Edge<T>> edges)
+        public void AddEdges(IEnumerable<TEdge> edges)
         {
             foreach (var edge in edges)
             {
@@ -206,12 +207,12 @@ namespace SmartNet
             }
         }
 
-        public void AddEdges(params Edge<T>[] edges)
+        public void AddEdges(params TEdge[] edges)
         {
             AddEdges(edges.AsEnumerable());
         }
 
-        public void AddEdges(IEnumerable<Tuple<T, T>> edges)
+        public void AddEdges(IEnumerable<Tuple<TVertex, TVertex>> edges)
         {
             foreach (var tuple in edges)
             {
@@ -219,14 +220,14 @@ namespace SmartNet
             }
         }
 
-        public void AddEdges(params Tuple<T, T>[] edges)
+        public void AddEdges(params Tuple<TVertex, TVertex>[] edges)
         {
             AddEdges(edges.AsEnumerable());
         }
 
-        public void AddPath(IEnumerable<T> vertices)
+        public void AddPath(IEnumerable<TVertex> vertices)
         {
-            T first = vertices.First();
+            TVertex first = vertices.First();
 
             foreach (var second in vertices.Skip(1))
             {
@@ -235,15 +236,15 @@ namespace SmartNet
             }
         }
 
-        public void AddPath(params T[] vertices)
+        public void AddPath(params TVertex[] vertices)
         {
             AddPath(vertices.AsEnumerable());
         }
 
-        public void AddCycle(IEnumerable<T> vertices)
+        public void AddCycle(IEnumerable<TVertex> vertices)
         {
-            T first = vertices.First();
-            T current = first;
+            TVertex first = vertices.First();
+            TVertex current = first;
 
             foreach (var next in vertices.Skip(1))
             {
@@ -253,7 +254,7 @@ namespace SmartNet
             AddEdge(current, first);
         }
 
-        public void AddCycle(params T[] vertices)
+        public void AddCycle(params TVertex[] vertices)
         {
             AddCycle(vertices.AsEnumerable());
         }
@@ -262,7 +263,7 @@ namespace SmartNet
 
             # region Degree Information
 
-        public int Degree(T vertex)
+        public int Degree(TVertex vertex)
         {
             if (!HasVertex(vertex))
             {
@@ -272,22 +273,22 @@ namespace SmartNet
             return adj[vertex].Count;
         }
 
-        public IEnumerable<int> DegreesIterator(IEnumerable<T> vertices)
+        public IEnumerable<int> DegreesIterator(IEnumerable<TVertex> vertices)
         {
-            return vertices.Select(v => Degree(v));
+            return vertices.Select(Degree);
         }
 
-        public IEnumerable<int> DegreesIterator(params T[] vertices)
+        public IEnumerable<int> DegreesIterator(params TVertex[] vertices)
         {
             return DegreesIterator(vertices.AsEnumerable());
         }
 
-        public int[] Degrees(IEnumerable<T> vertices)
+        public int[] Degrees(IEnumerable<TVertex> vertices)
         {
             return DegreesIterator(vertices).ToArray();
         }
 
-        public int[] Degrees(params T[] vertices)
+        public int[] Degrees(params TVertex[] vertices)
         {
             return DegreesIterator(vertices).ToArray();
         }
@@ -296,12 +297,12 @@ namespace SmartNet
 
             # region Contains-like Information
 
-        public bool HasVertex(T v)
+        public bool HasVertex(TVertex v)
         {
             return adj.ContainsKey(v);
         }
 
-        public bool HasEdge(T v, T w)
+        public bool HasEdge(TVertex v, TVertex w)
         {
             if (!HasVertex(v))
                 return false;
@@ -309,16 +310,16 @@ namespace SmartNet
             return adj[v].ContainsKey(w);
         }
 
-        public bool HasEdge(Edge<T> edge)
+        public bool HasEdge(TEdge edge)
         {
-            return HasEdge(edge.First, edge.Second);
+            return HasEdge(edge.Source, edge.Target);
         }
 
             # endregion
 
             # region Neighbors Search
 
-        public IEnumerable<T> NeighborsIterator(T vertex)
+        public IEnumerable<TVertex> NeighborsIterator(TVertex vertex)
         {
             if (!HasVertex(vertex))
                 throw new VertexNotFoundException("Vertex {0} not found in graph", vertex);
@@ -326,7 +327,7 @@ namespace SmartNet
             return adj[vertex].Keys.AsEnumerable();
         }
 
-        public T[] Neighbors(T vertex)
+        public TVertex[] Neighbors(TVertex vertex)
         {
             return NeighborsIterator(vertex).ToArray();
         }
@@ -335,20 +336,21 @@ namespace SmartNet
 
             # region Subgraphs
 
-        public Graph<T> Subgraph(IEnumerable<T> vertices)
+        public Graph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices)
         {
-            var subgraph = new Graph<T>(vertices);
+            var listVertices = vertices.ToList();
+            var subgraph = new Graph<TVertex, TEdge>(listVertices);
 
             subgraph.AddEdges(
-                vertices.SelectMany(vertex => adj[vertex].Values.Where(
-                    edge => subgraph.HasVertex(edge.Second) && !subgraph.HasEdge(vertex, edge.Second))
+                listVertices.SelectMany(vertex => adj[vertex].Values.Where(
+                    edge => subgraph.HasVertex(edge.Target) && !subgraph.HasEdge(vertex, edge.Target))
                 )
                 );
 
             return subgraph;
         }
 
-        public Graph<T> Subgraph(params T[] vertices)
+        public Graph<TVertex, TEdge> Subgraph(params TVertex[] vertices)
         {
             return Subgraph(vertices.AsEnumerable());
         }
@@ -357,12 +359,12 @@ namespace SmartNet
 
         # region Adjacency List
 
-        public IEnumerable<IEnumerable<T>> AdjacencyListIterator()
+        public IEnumerable<IEnumerable<TVertex>> AdjacencyListIterator()
         {
             return adj.Select(pair => pair.Value.Keys);
         }
 
-        public T[][] AdjacencyList()
+        public TVertex[][] AdjacencyList()
         {
             return adj.Select(pair => pair.Value.Keys.ToArray()).ToArray();
         }
@@ -380,7 +382,7 @@ namespace SmartNet
             NumberOfEdges = 0;
         }
 
-        public void RemoveVertex(T v)
+        public void RemoveVertex(TVertex v)
         {
             if (!adj.ContainsKey(v))
                 throw new VertexNotFoundException("Vertex {0} not found in graph", v);
@@ -395,7 +397,7 @@ namespace SmartNet
             NumberOfVertices--;
         }
 
-        public void RemoveVertices(IEnumerable<T> vertices)
+        public void RemoveVertices(IEnumerable<TVertex> vertices)
         {
             foreach (var vertex in vertices)
             {
@@ -403,12 +405,12 @@ namespace SmartNet
             }
         }
 
-        public void RemoveVertices(params T[] vertices)
+        public void RemoveVertices(params TVertex[] vertices)
         {
             RemoveVertices(vertices.AsEnumerable());
         }
 
-        public void RemoveEdge(T v, T w)
+        public void RemoveEdge(TVertex v, TVertex w)
         {
             if (!adj.ContainsKey(v))
                 throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge ({1}, {2})", v, v, w);
@@ -425,12 +427,12 @@ namespace SmartNet
             NumberOfEdges--;
         }
 
-        public void RemoveEdge(Edge<T> edge)
+        public void RemoveEdge(TEdge edge)
         {
-            RemoveEdge(edge.First, edge.Second);
+            RemoveEdge(edge.Source, edge.Target);
         }
 
-        public void RemoveEdges(IEnumerable<Edge<T>> edges)
+        public void RemoveEdges(IEnumerable<TEdge> edges)
         {
             foreach (var edge in edges)
             {
@@ -438,7 +440,7 @@ namespace SmartNet
             }
         }
 
-        public void RemoveEdges(params Edge<T>[] edges)
+        public void RemoveEdges(params TEdge[] edges)
         {
             RemoveEdges(edges.AsEnumerable());
         }
@@ -448,6 +450,46 @@ namespace SmartNet
         # endregion
 
         # region Private Methods
+
+        private static EdgeActivator GetActivator()
+        {
+            var type = typeof (TEdge);
+
+            var ctor = type.GetConstructor(new [] {typeof (TVertex), typeof (TVertex)});
+
+            ParameterInfo[] paramsInfo = ctor.GetParameters();
+
+            //create a single param of type object[]
+            ParameterExpression paramFirst = Expression.Parameter(typeof(TVertex));
+
+            ParameterExpression paramSecond = Expression.Parameter(typeof (TVertex));
+
+            Expression[] argsExp = new Expression[paramsInfo.Length];
+
+            argsExp[0] = Expression.Convert(paramFirst, typeof (TVertex));
+            argsExp[1] = Expression.Convert(paramSecond, typeof(TVertex));
+
+            //pick each arg from the params array 
+            //and create a typed expression of them
+            //for (int i = 0; i < paramsInfo.Length; i++)
+            //{
+            //    Expression index = Expression.Constant(i);
+            //    Type paramType = paramsInfo[i].ParameterType;
+
+            //    Expression paramAccessorExp =
+            //        Expression.ArrayIndex(param, index);
+
+            //    Expression paramCastExp =
+            //        Expression.Convert(paramAccessorExp, paramType);
+
+            //    argsExp[i] = paramCastExp;
+            //}
+
+            NewExpression newExp = Expression.New(ctor, argsExp);
+            LambdaExpression lambda = Expression.Lambda(typeof(EdgeActivator), newExp, paramFirst, paramSecond);
+
+            return lambda.Compile() as EdgeActivator;
+        }
 
         # endregion
 
