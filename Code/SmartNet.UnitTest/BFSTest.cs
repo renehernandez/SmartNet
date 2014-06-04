@@ -12,7 +12,7 @@ namespace SmartNet.UnitTest
     public class BFSTest
     {
 
-        private BaseGraph<string, Edge<string>> graph;
+        private Graph<string, Edge<string>> graph;
 
         private List<string> stringData;
 
