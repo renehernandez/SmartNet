@@ -12,14 +12,14 @@ namespace SmartNet.UnitTest
     public class BFSTest
     {
 
-        private Graph<string> graph;
+        private Graph<string, Edge<string>> graph;
 
         private List<string> stringData;
 
         [SetUp]
         public void Init()
         {
-            graph = new Graph<string>();
+            graph = new Graph<string, Edge<string>>();
             stringData = new List<string> {"hello", "black", "watchout", "game of thrones", "maroon 5"};
         }
 

@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartNet.Interfaces;
 
 namespace SmartNet.Algorithms.Traversal
 {
     public static class BFS
     {
 
-        public static IEnumerable<T> Vertices<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
-            var mark = new HashSet<T>() {vertex};
-            var queue = new Queue<T>();
+            var mark = new HashSet<TVertex>() {vertex};
+            var queue = new Queue<TVertex>();
 
-            T current;
+            TVertex current;
             queue.Enqueue(vertex);
 
             while (queue.Count != 0)
@@ -30,13 +33,15 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static IEnumerable<Edge<T>> Edges<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
-            var mark = new HashSet<T>() {vertex};
-            var queue = new Queue<T>();
+            var mark = new HashSet<TVertex>() {vertex};
+            var queue = new Queue<TVertex>();
             queue.Enqueue(vertex);
 
-            T current;
+            TVertex current;
             while (queue.Count != 0)
             {
                 current = queue.Dequeue();
@@ -50,11 +55,13 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static Graph<T> Tree<T>(Graph<T> graph, T vertex) where T : IEquatable<T>
+        public static Graph<TVertex, TEdge> Tree<TVertex, TEdge>(Graph<TVertex, TEdge> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : IEdge<TVertex>
         {
-            var treeGraph = new Graph<T>();
+            var treeGraph = new Graph<TVertex, TEdge>();
 
-            treeGraph.AddEdges(BFS.Edges(graph, vertex));
+            treeGraph.AddEdges(Edges(graph, vertex));
 
             return treeGraph;
         }  
