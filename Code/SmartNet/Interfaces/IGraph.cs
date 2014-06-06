@@ -59,7 +59,7 @@ namespace SmartNet
         void AddCycle(params TVertex[] vertices);
 
         bool HasVertex(TVertex vertex);
-
+        
         bool HasEdge(TEdge edge);
 
         IEnumerable<TVertex> NeighborsIterator(TVertex vertex);
