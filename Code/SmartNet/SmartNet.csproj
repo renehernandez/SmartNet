@@ -56,7 +56,7 @@
     <Compile Include="Factories\VertexFactory.cs" />
     <Compile Include="BaseGraph.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="IGraph.cs" />
+    <Compile Include="Interfaces\IGraph.cs" />
     <Compile Include="Interfaces\IBinaryHeap.cs" />
     <Compile Include="Interfaces\IContainer.cs" />
     <Compile Include="Interfaces\IEdge.cs" />
