@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="Algorithms\Traversal\BFS.cs" />
     <Compile Include="Algorithms\Traversal\DFS.cs" />
-    <Compile Include="BaseContainer.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
     <Compile Include="Exceptions\DequeueNonPositiveQuantityException.cs" />
@@ -53,7 +52,11 @@
     <Compile Include="Exceptions\QuantityNotStoredQueueException.cs" />
     <Compile Include="Exceptions\VertexNotFoundException.cs" />
     <Compile Include="Exceptions\DuplicatedVertexException.cs" />
+    <Compile Include="Factories\EdgeFactory.cs" />
+    <Compile Include="Factories\VertexFactory.cs" />
+    <Compile Include="BaseGraph.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="Interfaces\IGraph.cs" />
     <Compile Include="Interfaces\IBinaryHeap.cs" />
     <Compile Include="Interfaces\IContainer.cs" />
     <Compile Include="Interfaces\IEdge.cs" />
