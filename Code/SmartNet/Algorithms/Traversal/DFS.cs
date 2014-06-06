@@ -130,7 +130,7 @@ namespace SmartNet.Algorithms.Traversal
 
             treeGraph.AddEdges(Edges(graph, vertex, complete));
 
-            return treeGraph;
+            return (BaseGraph<TVertex, TEdge>)treeGraph;
         }
 
     }

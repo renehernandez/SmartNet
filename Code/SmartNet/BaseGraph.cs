@@ -315,13 +315,13 @@ namespace SmartNet
             return NeighborsIterator(vertex).ToArray();
         }
 
-            # endregion
+        public abstract IGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices);
+
+        # endregion
 
             # region Subgraphs
 
-        public abstract BaseGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices);
-
-        public BaseGraph<TVertex, TEdge> Subgraph(params TVertex[] vertices)
+        public IGraph<TVertex, TEdge> Subgraph(params TVertex[] vertices)
         {
             return Subgraph(vertices.AsEnumerable());
         }

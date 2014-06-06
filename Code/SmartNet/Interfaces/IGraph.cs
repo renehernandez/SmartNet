@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SmartNet.Interfaces;
 
-namespace SmartNet
+namespace SmartNet.Interfaces
 {
     public interface IGraph<TVertex, TEdge>
         where TVertex : IEquatable<TVertex>
@@ -65,6 +61,28 @@ namespace SmartNet
         IEnumerable<TVertex> NeighborsIterator(TVertex vertex);
 
         TVertex[] Neighbors(TVertex vertex);
+
+        IGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices);
+
+        IGraph<TVertex, TEdge> Subgraph(TVertex[] vertices);
+
+        IEnumerable<IEnumerable<TVertex>> AdjacencyListIterator();
+
+        TVertex[][] AdjacencyList();
+
+        void Clear();
+
+        void RemoveVertex(TVertex vertex);
+
+        void RemoveVertices(IEnumerable<TVertex> vertices);
+
+        void RemoveVertices(TVertex[] vertices);
+
+        void RemoveEdge(TEdge edge);
+
+        void RemoveEdges(IEnumerable<TEdge> edges);
+
+        void RemoveEdges(TEdge[] edges);
 
         # endregion
 
