@@ -84,7 +84,7 @@ namespace SmartNet
             NumberOfEdges++;
         }
 
-        public override BaseGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices)
+        public override IGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices)
         {
             var listVertices = vertices.ToList();
             var subgraph = new Graph<TVertex, TEdge>(listVertices);
