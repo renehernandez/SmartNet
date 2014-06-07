@@ -10,21 +10,24 @@ namespace SmartNet.Algorithms.Traversal
     public static class DFS
     {
 
-        public static IEnumerable<TVertex> Vertices<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph) 
+        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph)
+            where TGraph: IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
-            return Vertices(graph, graph.VerticesIterator.First(), true);
+            return VerticesSolver(graph, graph.VerticesIterator.First(), true);
         }
 
-        public static IEnumerable<TVertex> Vertices<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex) 
+        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
+            where TGraph : IGraph<TGraph, TVertex, TEdge>
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
-            return Vertices(graph, vertex, false);
+            return VerticesSolver(graph, vertex, false);
         }
 
-        private static IEnumerable<TVertex> Vertices<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex, bool complete)
+        private static IEnumerable<TVertex> VerticesSolver<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex, bool complete)
+            where TGraph : IGraph<TGraph, TVertex, TEdge>
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
@@ -45,7 +48,8 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        private static IEnumerable<TVertex> VerticesVisit<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex, HashSet<TVertex> mark) 
+        private static IEnumerable<TVertex> VerticesVisit<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex, HashSet<TVertex> mark)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
@@ -59,21 +63,24 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static IEnumerable<TEdge> Edges<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph)
+        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
             return Edges(graph, graph.VerticesIterator.First(), true);
         }
 
-        public static IEnumerable<TEdge> Edges<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex)
+        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
             return Edges(graph, vertex, false);
-        } 
+        }
 
-        private static IEnumerable<TEdge> Edges<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex, bool complete)
+        private static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex, bool complete)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
@@ -94,35 +101,39 @@ namespace SmartNet.Algorithms.Traversal
             
         }
 
-        private static IEnumerable<TEdge> EdgesVisit<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex v, HashSet<TVertex> mark)
+        private static IEnumerable<TEdge> EdgesVisit<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex, HashSet<TVertex> mark)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
-            foreach (var keyValue in graph[v].Where(keyValue => !mark.Contains(keyValue.Key)))
+            foreach (var neighborEdge in graph.NeighborsEdgesIterator(vertex).Where(edge => !mark.Contains(edge.Target)))
             {
-                mark.Add(keyValue.Key);
-                yield return keyValue.Value;
+                mark.Add(neighborEdge.Target);
+                yield return neighborEdge;
 
-                foreach (var edge in EdgesVisit(graph, keyValue.Key, mark))
+                foreach (var edge in EdgesVisit(graph, neighborEdge.Target, mark))
                     yield return edge;
             }
         }
 
-        public static BaseGraph<TVertex, TEdge> Tree<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph)
+        public static TGraph Tree<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
             return Tree(graph, graph.VerticesIterator.First(), true);
         }
 
-        public static BaseGraph<TVertex, TEdge> Tree<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex)
+        public static TGraph Tree<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
             return Tree(graph, vertex, false);
         }
 
-        private static BaseGraph<TVertex, TEdge> Tree<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex, bool complete)
+        private static TGraph Tree<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex, bool complete)
+            where TGraph : IGraph<TGraph, TVertex, TEdge> 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TVertex>
         {
@@ -130,7 +141,7 @@ namespace SmartNet.Algorithms.Traversal
 
             treeGraph.AddEdges(Edges(graph, vertex, complete));
 
-            return (BaseGraph<TVertex, TEdge>)treeGraph;
+            return treeGraph;
         }
 
     }

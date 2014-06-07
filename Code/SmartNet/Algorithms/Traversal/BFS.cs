@@ -10,9 +10,10 @@ namespace SmartNet.Algorithms.Traversal
     public static class BFS
     {
 
-        public static IEnumerable<TVertex> Vertices<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex)
+        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TVertex>
+            where TEdge : IEdge<TVertex> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge>
         {
             var mark = new HashSet<TVertex>() {vertex};
             var queue = new Queue<TVertex>();
@@ -33,9 +34,10 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static IEnumerable<TEdge> Edges<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex)
+        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TVertex>
+            where TEdge : IEdge<TVertex> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge>
         {
             var mark = new HashSet<TVertex>() {vertex};
             var queue = new Queue<TVertex>();
@@ -46,24 +48,25 @@ namespace SmartNet.Algorithms.Traversal
             {
                 current = queue.Dequeue();
 
-                foreach (var adj in graph[current].Where(adj => !mark.Contains(adj.Key)))
+                foreach (var neighborEdge in graph.NeighborsEdgesIterator(current).Where(edge => !mark.Contains(edge.Target)))
                 {
-                    yield return adj.Value;
-                    mark.Add(adj.Key);
-                    queue.Enqueue(adj.Key);
+                    yield return neighborEdge;
+                    mark.Add(neighborEdge.Target);
+                    queue.Enqueue(neighborEdge.Target);
                 }
             }
         }
 
-        public static BaseGraph<TVertex, TEdge> Tree<TVertex, TEdge>(BaseGraph<TVertex, TEdge> graph, TVertex vertex)
+        public static TGraph Tree<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TVertex>
+            where TEdge : IEdge<TVertex> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge>
         {
             var treeGraph = graph.Subgraph();
 
             treeGraph.AddEdges(Edges(graph, vertex));
 
-            return (BaseGraph<TVertex, TEdge>)treeGraph;
+            return treeGraph;
         }  
 
     }
