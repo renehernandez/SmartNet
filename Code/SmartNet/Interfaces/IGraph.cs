@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace SmartNet.Interfaces
 {
-    public interface IGraph<TVertex, TEdge>
+    public interface IGraph<out TGraph, TVertex, TEdge>
+        where TGraph : IGraph<TGraph, TVertex, TEdge> 
         where TVertex : IEquatable<TVertex>
         where TEdge : IEdge<TVertex>
     {
@@ -55,16 +56,20 @@ namespace SmartNet.Interfaces
         void AddCycle(params TVertex[] vertices);
 
         bool HasVertex(TVertex vertex);
-
+        
         bool HasEdge(TEdge edge);
 
         IEnumerable<TVertex> NeighborsIterator(TVertex vertex);
 
         TVertex[] Neighbors(TVertex vertex);
 
-        IGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices);
+        IEnumerable<TEdge> NeighborsEdgesIterator(TVertex vertex);
 
-        IGraph<TVertex, TEdge> Subgraph(TVertex[] vertices);
+        TEdge[] NeighborsEdges(TVertex vertex);
+
+        TGraph Subgraph(IEnumerable<TVertex> vertices);
+
+        TGraph Subgraph(params TVertex[] vertices);
 
         IEnumerable<IEnumerable<TVertex>> AdjacencyListIterator();
 
@@ -76,13 +81,13 @@ namespace SmartNet.Interfaces
 
         void RemoveVertices(IEnumerable<TVertex> vertices);
 
-        void RemoveVertices(TVertex[] vertices);
+        void RemoveVertices(params TVertex[] vertices);
 
         void RemoveEdge(TEdge edge);
 
         void RemoveEdges(IEnumerable<TEdge> edges);
 
-        void RemoveEdges(TEdge[] edges);
+        void RemoveEdges(params TEdge[] edges);
 
         # endregion
 

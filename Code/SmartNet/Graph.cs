@@ -9,7 +9,7 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Graph<TVertex, TEdge> : BaseGraph<TVertex, TEdge> 
+    public class Graph<TVertex, TEdge> : BaseGraph<TVertex, TEdge>, IGraph<Graph<TVertex, TEdge>, TVertex, TEdge>
         where TVertex : IEquatable<TVertex>
         where TEdge : IEdge<TVertex>
     {
@@ -84,7 +84,7 @@ namespace SmartNet
             NumberOfEdges++;
         }
 
-        public override IGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices)
+        public Graph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices)
         {
             var listVertices = vertices.ToList();
             var subgraph = new Graph<TVertex, TEdge>(listVertices);
@@ -96,6 +96,11 @@ namespace SmartNet
                 );
 
             return subgraph;
+        }
+
+        public Graph<TVertex, TEdge> Subgraph(params TVertex[] vertices)
+        {
+            return Subgraph(vertices.AsEnumerable());
         }
 
         public override void RemoveEdge(TVertex source, TVertex target)
