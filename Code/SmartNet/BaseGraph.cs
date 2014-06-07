@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SmartNet
 {
-    public abstract class BaseGraph<TVertex, TEdge> : IGraph<TVertex, TEdge>
+    public abstract class BaseGraph<TVertex, TEdge>
         where TVertex : IEquatable<TVertex>
         where TEdge : IEdge<TVertex>
     {
@@ -315,20 +315,25 @@ namespace SmartNet
             return NeighborsIterator(vertex).ToArray();
         }
 
-        public abstract IGraph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices);
+        public IEnumerable<TEdge> NeighborsEdgesIterator(TVertex vertex)
+        {
+            return adj[vertex].Values;
+        }
+
+        public TEdge[] NeighborsEdges(TVertex vertex)
+        {
+            return NeighborsEdgesIterator(vertex).ToArray();
+        }
 
         # endregion
 
             # region Subgraphs
 
-        public IGraph<TVertex, TEdge> Subgraph(params TVertex[] vertices)
-        {
-            return Subgraph(vertices.AsEnumerable());
-        }
+            // This is done by implementing IGraph interface in BasaGraph derivates classes
 
         # endregion
 
-        # region Adjacency List
+            # region Adjacency List
 
         public IEnumerable<IEnumerable<TVertex>> AdjacencyListIterator()
         {
@@ -341,7 +346,6 @@ namespace SmartNet
         }
 
         # endregion
-
 
         # region Deletions
 
