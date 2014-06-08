@@ -11,7 +11,7 @@ namespace SmartNet
 {
     public class Graph<TVertex, TEdge> : BaseGraph<TVertex, TEdge>, IGraph<Graph<TVertex, TEdge>, TVertex, TEdge>
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TVertex>
+        where TEdge : IEdge<TEdge, TVertex>
     {
 
         # region Public Properties

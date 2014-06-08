@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SmartNet.Interfaces
 {
-    public interface IEdge<TVertex> : IEquatable<IEdge<TVertex>> 
+    public interface IEdge<TEdge, out TVertex> : IEquatable<TEdge> 
+        where TEdge : IEdge<TEdge, TVertex> 
         where TVertex: IEquatable<TVertex>
     {
 

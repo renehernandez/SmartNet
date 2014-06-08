@@ -6,7 +6,7 @@ namespace SmartNet.Interfaces
     public interface IGraph<out TGraph, TVertex, TEdge>
         where TGraph : IGraph<TGraph, TVertex, TEdge> 
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TVertex>
+        where TEdge : IEdge<TEdge, TVertex>
     {
 
         # region Public Properties

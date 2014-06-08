@@ -12,7 +12,7 @@ namespace SmartNet.Algorithms.Traversal
 
         public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TVertex> 
+            where TEdge : IEdge<TEdge, TVertex> 
             where TGraph : IGraph<TGraph, TVertex, TEdge>
         {
             var mark = new HashSet<TVertex>() {vertex};
@@ -36,7 +36,7 @@ namespace SmartNet.Algorithms.Traversal
 
         public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TVertex> 
+            where TEdge : IEdge<TEdge, TVertex> 
             where TGraph : IGraph<TGraph, TVertex, TEdge>
         {
             var mark = new HashSet<TVertex>() {vertex};
@@ -59,7 +59,7 @@ namespace SmartNet.Algorithms.Traversal
 
         public static TGraph Tree<TGraph, TVertex, TEdge>(IGraph<TGraph, TVertex, TEdge> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TVertex> 
+            where TEdge : IEdge<TEdge, TVertex> 
             where TGraph : IGraph<TGraph, TVertex, TEdge>
         {
             var treeGraph = graph.Subgraph();

@@ -9,5 +9,5 @@ namespace SmartNet.Factories
 {
     public delegate TEdge EdgeFactory<in TVertex, out TEdge>(TVertex source, TVertex target)
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TVertex>;
+        where TEdge : IEdge<TEdge, TVertex>;
 }

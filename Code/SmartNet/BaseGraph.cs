@@ -15,7 +15,7 @@ namespace SmartNet
 {
     public abstract class BaseGraph<TVertex, TEdge>
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TVertex>
+        where TEdge : IEdge<TEdge, TVertex>
     {
 
         # region Private Fields

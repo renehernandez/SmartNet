@@ -7,7 +7,7 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<TVertex> : IEdge<TVertex> 
+    public class Edge<TVertex> : IEdge<Edge<TVertex>, TVertex> 
         where TVertex: IEquatable<TVertex>
     {
 
@@ -40,7 +40,7 @@ namespace SmartNet
         public Edge(TVertex source, TVertex target, double weight)
         {
             Source = source;
-            target = target;
+            Target = target;
             Weight = weight;
         }
 
@@ -77,7 +77,7 @@ namespace SmartNet
             return Source.GetHashCode() + Target.GetHashCode();
         }
 
-        public bool Equals(IEdge<TVertex> other)
+        public bool Equals(Edge<TVertex> other)
         {
             if (ReferenceEquals(other, null))
             {
@@ -89,21 +89,13 @@ namespace SmartNet
                 return true;
             }
 
-            var edge = other as Edge<TVertex>;
-
-            if (ReferenceEquals(edge, null))
-            {
-                return false;
-            }
-
-
-            return (Source.Equals(edge.Source) && Target.Equals(edge.Target)) || (
-                Source.Equals(edge.Target) && Target.Equals(edge.Source));
+            return (Source.Equals(other.Source) && Target.Equals(other.Target)) || (
+                Source.Equals(other.Target) && Target.Equals(other.Source));
         }
 
         public static bool operator ==(Edge<TVertex> left, Edge<TVertex> right)
         {
-            return Object.Equals(left, right);
+            return Equals(left, right);
         }
 
         public static bool operator !=(Edge<TVertex> left, Edge<TVertex> right)

@@ -9,7 +9,7 @@ using SmartNet.Interfaces;
 namespace SmartNet
 {
     public class DiGraph<TVertex, TEdge> : BaseGraph<TVertex, TEdge>, IGraph<DiGraph<TVertex, TEdge>, TVertex, TEdge> 
-        where TEdge : IEdge<TVertex> 
+        where TEdge : IEdge<TEdge, TVertex> 
         where TVertex : IEquatable<TVertex>
     {
 
