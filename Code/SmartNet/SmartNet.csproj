@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Traversal\BFS.cs" />
     <Compile Include="Algorithms\Traversal\DFS.cs" />
+    <Compile Include="DiEdge.cs" />
     <Compile Include="DiGraph.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Exceptions\BaseException.cs" />

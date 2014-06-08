@@ -106,10 +106,10 @@ namespace SmartNet
         public override void RemoveEdge(TVertex source, TVertex target)
         {
             if (!adj.ContainsKey(source))
-                throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge ({1}, {2})", source, source, target);
+                throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge {1} <-> {2}", source, source, target);
 
             if (!adj.ContainsKey(target))
-                throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge ({1}, {2})", source, source, target);
+                throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge {1} <-> {2}", source, source, target);
 
             if (!adj[source].ContainsKey(target))
                 throw new EdgeNotFoundException("Edge {0} <-> {1} not found in graph", source, target);

@@ -7,7 +7,8 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<T> : IEdge<T> where T: IEquatable<T>
+    public class Edge<TVertex> : IEdge<TVertex> 
+        where TVertex: IEquatable<TVertex>
     {
 
         # region Private Fields
@@ -16,13 +17,13 @@ namespace SmartNet
 
         # region Public Properties
 
-        public T Source { get; private set; }
+        public TVertex Source { get; private set; }
 
-        public T Target { get; private set; }
+        public TVertex Target { get; private set; }
 
         public double Weight { get; set; }
 
-        public T this[int index]
+        public TVertex this[int index]
         {
             get
             {
@@ -30,30 +31,30 @@ namespace SmartNet
                     throw new IndexOutOfRangeException("Invalid index for edge object");
                 return index == 0 ? Source : Target;
             }
-            set
-            {
-                if (index < 0 || index > 1)
-                    throw new IndexOutOfRangeException("Invalid index for edge object");
-
-                if (index == 0)
-                    Source = value;
-                else
-                    Target = value;
-            }
         }
 
         # endregion
 
         # region Constructors
 
-        public Edge(T left, T right){
-            Source = left;
-            Target = right;
-            Weight = 1.0;
+        public Edge(TVertex source, TVertex target, double weight)
+        {
+            Source = source;
+            target = target;
+            Weight = weight;
         }
 
-        public Edge(Tuple<T, T> tuple)
-            : this(tuple.Item1, tuple.Item2)
+        public Edge(Tuple<TVertex, TVertex> tuple, double weight) : this(tuple.Item1, tuple.Item2, weight)
+        {
+            
+        }
+
+        public Edge(TVertex source, TVertex target): this(source, target, 1.0)
+        {
+        }
+
+        public Edge(Tuple<TVertex, TVertex> tuple)
+            : this(tuple.Item1, tuple.Item2, 1.0)
         {
         }
 
@@ -68,7 +69,7 @@ namespace SmartNet
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Edge<T>);
+            return Equals(obj as Edge<TVertex>);
         }
 
         public override int GetHashCode()
@@ -76,7 +77,7 @@ namespace SmartNet
             return Source.GetHashCode() + Target.GetHashCode();
         }
 
-        public bool Equals(IEdge<T> other)
+        public bool Equals(IEdge<TVertex> other)
         {
             if (ReferenceEquals(other, null))
             {
@@ -88,7 +89,7 @@ namespace SmartNet
                 return true;
             }
 
-            var edge = other as Edge<T>;
+            var edge = other as Edge<TVertex>;
 
             if (ReferenceEquals(edge, null))
             {
@@ -100,12 +101,12 @@ namespace SmartNet
                 Source.Equals(edge.Target) && Target.Equals(edge.Source));
         }
 
-        public static bool operator ==(Edge<T> left, Edge<T> right)
+        public static bool operator ==(Edge<TVertex> left, Edge<TVertex> right)
         {
             return Object.Equals(left, right);
         }
 
-        public static bool operator !=(Edge<T> left, Edge<T> right)
+        public static bool operator !=(Edge<TVertex> left, Edge<TVertex> right)
         {
             return !(left == right);
         }

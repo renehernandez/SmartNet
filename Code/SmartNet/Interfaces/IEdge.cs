@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace SmartNet.Interfaces
 {
-    public interface IEdge<T> : IEquatable<IEdge<T>> where T: IEquatable<T>
+    public interface IEdge<TVertex> : IEquatable<IEdge<TVertex>> 
+        where TVertex: IEquatable<TVertex>
     {
 
-        T Source { get; }
+        TVertex Source { get; }
 
-        T Target { get; }
+        TVertex Target { get; }
 
         double Weight { get; set; }
+
+        TVertex this[int index] { get; }
 
     }
 }
