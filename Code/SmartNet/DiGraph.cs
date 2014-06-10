@@ -15,7 +15,7 @@ namespace SmartNet
         where TData : IData, new()
     {
 
-           # region Constructors
+        # region Constructors
 
         public DiGraph() :base()
         {

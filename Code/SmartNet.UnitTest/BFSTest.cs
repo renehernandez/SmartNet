@@ -12,14 +12,14 @@ namespace SmartNet.UnitTest
     public class BFSTest
     {
 
-        private Graph<string, Edge<string>> graph;
+        private SGraph<string> graph;
 
         private List<string> stringData;
 
         [SetUp]
         public void Init()
         {
-            graph = new Graph<string, Edge<string>>();
+            graph = new SGraph<string>();
             stringData = new List<string> {"hello", "black", "watchout", "game of thrones", "maroon 5"};
         }
 
@@ -49,10 +49,10 @@ namespace SmartNet.UnitTest
         {
             graph.AddPath(stringData[1], stringData[3], stringData[0]);
 
-            var expectedEdges = new Edge<string>[]
+            var expectedEdges = new SEdge<string>[]
             {
-                new Edge<string>(stringData[3], stringData[1]),
-                new Edge<string>(stringData[3], stringData[0]),
+                new SEdge<string>(stringData[3], stringData[1]),
+                new SEdge<string>(stringData[3], stringData[0]),
             };
 
             CheckValues(expectedEdges, BFS.Edges(graph, stringData[3]).ToArray());
@@ -65,10 +65,10 @@ namespace SmartNet.UnitTest
 
             var expectedEdges = new[]
             {
-                new Edge<string>(stringData[1], stringData[0]),
-                new Edge<string>(stringData[1], stringData[2]),
-                new Edge<string>(stringData[0], stringData[4]),
-                new Edge<string>(stringData[2], stringData[3]) 
+                new SEdge<string>(stringData[1], stringData[0]),
+                new SEdge<string>(stringData[1], stringData[2]),
+                new SEdge<string>(stringData[0], stringData[4]),
+                new SEdge<string>(stringData[2], stringData[3]) 
             };
 
             CheckValues(expectedEdges, BFS.Edges(graph, "black").ToArray());
