@@ -7,8 +7,9 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<TVertex> : IEdge<Edge<TVertex>, TVertex> 
+    public class Edge<TVertex, TData> : IEdge<Edge<TVertex, TData>, TVertex, TData> 
         where TVertex: IEquatable<TVertex>
+        where TData: IData, new()
     {
 
         # region Private Fields
@@ -21,7 +22,7 @@ namespace SmartNet
 
         public TVertex Target { get; private set; }
 
-        public double Weight { get; set; }
+        public TData Data { get; private set; }
 
         public TVertex this[int index]
         {
@@ -37,19 +38,23 @@ namespace SmartNet
 
         # region Constructors
 
-        public Edge(TVertex source, TVertex target, double weight)
+        public Edge(TVertex source, TVertex target, TData data)
         {
             Source = source;
             Target = target;
-            Weight = weight;
+            Data = data;
         }
+
+        public Edge(TVertex source, TVertex target, double weight)
+            : this(source, target, new TData() { Weight = weight})
+        {
+        }
+
+        public Edge(TVertex source, TVertex target) : this(source, target, 1.0)
+        {
+        } 
 
         public Edge(Tuple<TVertex, TVertex> tuple, double weight) : this(tuple.Item1, tuple.Item2, weight)
-        {
-            
-        }
-
-        public Edge(TVertex source, TVertex target): this(source, target, 1.0)
         {
         }
 
@@ -64,12 +69,12 @@ namespace SmartNet
 
         public override string ToString()
         {
-            return string.Format("{0} <-> {1}", Source, Target);
+            return string.Format("{0} <-> {1}, Data: {2}", Source, Target, Data);
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Edge<TVertex>);
+            return Equals(obj as Edge<TVertex, TData>);
         }
 
         public override int GetHashCode()
@@ -77,7 +82,7 @@ namespace SmartNet
             return Source.GetHashCode() + Target.GetHashCode();
         }
 
-        public bool Equals(Edge<TVertex> other)
+        public bool Equals(Edge<TVertex, TData> other)
         {
             if (ReferenceEquals(other, null))
             {
@@ -93,12 +98,12 @@ namespace SmartNet
                 Source.Equals(other.Target) && Target.Equals(other.Source));
         }
 
-        public static bool operator ==(Edge<TVertex> left, Edge<TVertex> right)
+        public static bool operator ==(Edge<TVertex, TData> left, Edge<TVertex, TData> right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(Edge<TVertex> left, Edge<TVertex> right)
+        public static bool operator !=(Edge<TVertex, TData> left, Edge<TVertex, TData> right)
         {
             return !(left == right);
         }

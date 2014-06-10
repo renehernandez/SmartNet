@@ -7,8 +7,9 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class DiEdge<TVertex> : IEdge<DiEdge<TVertex>, TVertex> 
-        where TVertex : IEquatable<TVertex>
+    public class DiEdge<TVertex, TData> : IEdge<DiEdge<TVertex, TData>, TVertex, TData> 
+        where TVertex : IEquatable<TVertex> 
+        where TData : IData, new()
     {
 
         # region Public Properties
@@ -17,7 +18,7 @@ namespace SmartNet
 
         public TVertex Target { get; private set; }
 
-        public double Weight { get; set; }
+        public TData Data { get; private set; }
 
         public TVertex this[int index]
         {
@@ -33,18 +34,23 @@ namespace SmartNet
 
         # region Constructors
 
-        public DiEdge(TVertex source, TVertex target, double weight)
+        public DiEdge(TVertex source, TVertex target, TData data)
         {
             Source = source;
             Target = target;
-            Weight = weight;
+            Data = data;
         }
 
-        public DiEdge(Tuple<TVertex, TVertex> tuple, double weight) : this(tuple.Item1, tuple.Item2, weight)
+        public DiEdge(TVertex source, TVertex target, double weight)
+            : this(source, target, new TData() { Weight = weight})
         {
         }
 
-        public DiEdge(TVertex source, TVertex target): this(source, target, 1.0)
+        public DiEdge(TVertex source, TVertex target) : this(source, target, 1.0)
+        {
+        } 
+
+        public DiEdge(Tuple<TVertex, TVertex> tuple, double weight) : this(tuple.Item1, tuple.Item2, weight)
         {
         }
 
@@ -58,7 +64,7 @@ namespace SmartNet
 
         # region Public Methods
 
-        public bool Equals(DiEdge<TVertex> other)
+        public bool Equals(DiEdge<TVertex, TData> other)
         {
             if (ReferenceEquals(other, null))
                 return false;
@@ -71,7 +77,7 @@ namespace SmartNet
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as DiEdge<TVertex>);
+            return Equals(obj as DiEdge<TVertex, TData>);
         }
 
         public override int GetHashCode()
@@ -84,12 +90,12 @@ namespace SmartNet
             return string.Format("{0} -> {1}", Source, Target);
         }
 
-        public static bool operator ==(DiEdge<TVertex> first, DiEdge<TVertex> second)
+        public static bool operator ==(DiEdge<TVertex, TData> first, DiEdge<TVertex, TData> second)
         {
             return Equals(first, second);
         }
 
-        public static bool operator !=(DiEdge<TVertex> first, DiEdge<TVertex> second)
+        public static bool operator !=(DiEdge<TVertex, TData> first, DiEdge<TVertex, TData> second)
         {
             return !(first == second);
         }

@@ -9,9 +9,10 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Graph<TVertex, TEdge> : BaseGraph<TVertex, TEdge>, IGraph<Graph<TVertex, TEdge>, TVertex, TEdge>
+    public class Graph<TVertex, TEdge, TData> : BaseGraph<TVertex, TEdge, TData>, IGraph<Graph<TVertex, TEdge, TData>, TVertex, TEdge, TData>
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TEdge, TVertex>
+        where TEdge : IEdge<TEdge, TVertex, TData> 
+        where TData : IData, new()
     {
 
         # region Public Properties
@@ -70,27 +71,27 @@ namespace SmartNet
 
         public override void AddEdge(TEdge edge)
         {
-            if (!adj.ContainsKey(edge.Source))
+            if (!Adj.ContainsKey(edge.Source))
                 AddVertex(edge.Source);
-            if (!adj.ContainsKey(edge.Target))
+            if (!Adj.ContainsKey(edge.Target))
                 AddVertex(edge.Target);
 
-            if (adj[edge.Source].ContainsKey(edge.Target))
+            if (Adj[edge.Source].ContainsKey(edge.Target))
                 throw new DuplicatedEdgeException("Edge {0} already present in graph", edge);
 
-            adj[edge.Source].Add(edge.Target, edge);
-            adj[edge.Target].Add(edge.Source, edgeFactory(edge.Target, edge.Source));
+            Adj[edge.Source].Add(edge.Target, edge);
+            Adj[edge.Target].Add(edge.Source, EdgeVerticesFactory(edge.Target, edge.Source));
 
             NumberOfEdges++;
         }
 
-        public Graph<TVertex, TEdge> Subgraph(IEnumerable<TVertex> vertices)
+        public Graph<TVertex, TEdge, TData> Subgraph(IEnumerable<TVertex> vertices)
         {
             var listVertices = vertices.ToList();
-            var subgraph = new Graph<TVertex, TEdge>(listVertices);
+            var subgraph = new Graph<TVertex, TEdge, TData>(listVertices);
 
             subgraph.AddEdges(
-                listVertices.SelectMany(vertex => adj[vertex].Values.Where(
+                listVertices.SelectMany(vertex => Adj[vertex].Values.Where(
                     edge => subgraph.HasVertex(edge.Target) && !subgraph.HasEdge(vertex, edge.Target))
                 )
                 );
@@ -98,24 +99,24 @@ namespace SmartNet
             return subgraph;
         }
 
-        public Graph<TVertex, TEdge> Subgraph(params TVertex[] vertices)
+        public Graph<TVertex, TEdge, TData> Subgraph(params TVertex[] vertices)
         {
             return Subgraph(vertices.AsEnumerable());
         }
 
         public override void RemoveEdge(TVertex source, TVertex target)
         {
-            if (!adj.ContainsKey(source))
+            if (!Adj.ContainsKey(source))
                 throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge {1} <-> {2}", source, source, target);
 
-            if (!adj.ContainsKey(target))
+            if (!Adj.ContainsKey(target))
                 throw new VertexNotFoundException("Vertex {0} not found in graph for removing edge {1} <-> {2}", source, source, target);
 
-            if (!adj[source].ContainsKey(target))
+            if (!Adj[source].ContainsKey(target))
                 throw new EdgeNotFoundException("Edge {0} <-> {1} not found in graph", source, target);
 
-            adj[source].Remove(target);
-            adj[target].Remove(source);
+            Adj[source].Remove(target);
+            Adj[target].Remove(source);
 
             NumberOfEdges--;
         }
