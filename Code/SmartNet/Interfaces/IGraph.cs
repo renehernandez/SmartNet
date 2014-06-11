@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 namespace SmartNet.Interfaces
 {
-    public interface IGraph<out TGraph, TVertex, TEdge>
-        where TGraph : IGraph<TGraph, TVertex, TEdge> 
+    public interface IGraph<out TGraph, TVertex, TEdge, TData>
+        where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TVertex>
+        where TEdge : IEdge<TEdge, TVertex, TData> 
+        where TData : IData, new()
     {
 
         # region Public Properties
@@ -71,9 +72,9 @@ namespace SmartNet.Interfaces
 
         TGraph Subgraph(params TVertex[] vertices);
 
-        IEnumerable<IEnumerable<TVertex>> AdjacencyListIterator();
+        IEnumerable<KeyValuePair<TVertex, Dictionary<TVertex, TEdge>>> AdjacencyIterator();
 
-        TVertex[][] AdjacencyList();
+        KeyValuePair<TVertex, Dictionary<TVertex, TEdge>>[] AdjacencyList();
 
         void Clear();
 

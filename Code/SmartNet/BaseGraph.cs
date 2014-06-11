@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -13,16 +14,19 @@ using System.Threading.Tasks;
 
 namespace SmartNet
 {
-    public abstract class BaseGraph<TVertex, TEdge>
-        where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TVertex>
+    public abstract class BaseGraph<TVertex, TEdge, TData>
+        where TEdge : IEdge<TEdge, TVertex, TData>
+        where TVertex : IEquatable<TVertex> 
+        where TData : IData, new()
     {
 
         # region Private Fields
 
-        protected Dictionary<TVertex, Dictionary<TVertex, TEdge>> adj;
+        protected Dictionary<TVertex, Dictionary<TVertex, TEdge>> Adj;
 
-        protected EdgeFactory<TVertex, TEdge> edgeFactory;
+        protected EdgeFromVerticesFactory<TVertex, TEdge, TData> EdgeVerticesFactory;
+
+        protected ReverseEdgeFactory<TVertex, TEdge, TData> ReverseEdgeFactory;
 
         # endregion
 
@@ -39,7 +43,7 @@ namespace SmartNet
 
         public IEnumerable<TVertex> VerticesIterator
         {
-            get { return adj.Keys.AsEnumerable(); }
+            get { return Adj.Keys.AsEnumerable(); }
         }
 
         public TEdge[] Edges 
@@ -49,7 +53,7 @@ namespace SmartNet
 
         public IEnumerable<TEdge> EdgesIterator
         {
-            get { return adj.Values.SelectMany(x => x.Values).Distinct(); }
+            get { return Adj.Values.SelectMany(x => x.Values).Distinct(); }
         }
        
         public Dictionary<TVertex, TEdge> this[TVertex v]
@@ -58,7 +62,7 @@ namespace SmartNet
             {
                 if (!HasVertex(v))
                     throw new VertexNotFoundException("Vertex {0} not found in graph", v);
-                return adj[v]; 
+                return Adj[v]; 
             }
         }
 
@@ -70,10 +74,10 @@ namespace SmartNet
                     throw new EdgeNotFoundException("Vertex {0} not found in graph when looking for edge ({1}, {2}) ", source, source, target);
                 if (!HasVertex(target))
                     throw new EdgeNotFoundException("Vertex {0} not found in graph when looking for edge ({1}, {2}) ", source, source, target);
-                if(!adj[source].ContainsKey(target))
+                if(!Adj[source].ContainsKey(target))
                     throw new EdgeNotFoundException("Edge ({0}, {1}) not found in graph", source, target);
                 
-                return adj[source][target]; 
+                return Adj[source][target]; 
             }
         }
 
@@ -85,9 +89,10 @@ namespace SmartNet
         {
             NumberOfEdges = 0;
             NumberOfVertices = 0;
-            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>();
+            Adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>();
 
-            edgeFactory = GetFactory();
+            ReverseEdgeFactory = EdgeCreationFactory.GetReverseEdge<TVertex, TEdge, TData>();
+            EdgeVerticesFactory = EdgeCreationFactory.GetEdgeFromVertices<TVertex, TEdge, TData>();
         }
 
         protected BaseGraph(IEnumerable<TVertex> vertices): this()
@@ -116,13 +121,13 @@ namespace SmartNet
 
         protected BaseGraph(IEqualityComparer<TVertex> comparer):this()
         {
-            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
+            Adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
         }
 
         protected BaseGraph(IEqualityComparer<TVertex> comparer, IEnumerable<TVertex> vertices)
             : this(vertices)
         {
-            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
+            Adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
         }
 
         protected BaseGraph(IEqualityComparer<TVertex> comparer, params TVertex[] vertices)
@@ -132,7 +137,7 @@ namespace SmartNet
 
         protected BaseGraph(IEqualityComparer<TVertex> comparer, IEnumerable<TEdge> edges): this(edges)
         {
-            adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
+            Adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>(comparer);
         }
 
         protected BaseGraph(IEqualityComparer<TVertex> comparer, params TEdge[] edges)
@@ -148,10 +153,10 @@ namespace SmartNet
 
         public void AddVertex(TVertex v)
         {
-            if (adj.ContainsKey(v))
+            if (Adj.ContainsKey(v))
                 throw new DuplicatedVertexException("Vertex {0} already found in graph", v);
 
-            adj[v] = new Dictionary<TVertex, TEdge>();
+            Adj[v] = new Dictionary<TVertex, TEdge>();
             
             NumberOfVertices++;
         }
@@ -173,7 +178,7 @@ namespace SmartNet
 
         public void AddEdge(TVertex source, TVertex target)
         {
-            var edge = edgeFactory(source, target);
+            var edge = EdgeVerticesFactory(source, target);
             AddEdge(edge);
         }
 
@@ -253,7 +258,7 @@ namespace SmartNet
                 throw new VertexNotFoundException("Vertex {0} not found", vertex);
             }
 
-            return adj[vertex].Count;
+            return Adj[vertex].Count;
         }
 
         public IEnumerable<int> DegreesIterator(IEnumerable<TVertex> vertices)
@@ -282,7 +287,7 @@ namespace SmartNet
 
         public bool HasVertex(TVertex v)
         {
-            return adj.ContainsKey(v);
+            return Adj.ContainsKey(v);
         }
 
         public bool HasEdge(TVertex source, TVertex target)
@@ -290,7 +295,7 @@ namespace SmartNet
             if (!HasVertex(source))
                 return false;
 
-            return adj[source].ContainsKey(target);
+            return Adj[source].ContainsKey(target);
         }
 
         public bool HasEdge(TEdge edge)
@@ -307,7 +312,7 @@ namespace SmartNet
             if (!HasVertex(vertex))
                 throw new VertexNotFoundException("Vertex {0} not found in graph", vertex);
 
-            return adj[vertex].Keys.AsEnumerable();
+            return Adj[vertex].Keys.AsEnumerable();
         }
 
         public TVertex[] Neighbors(TVertex vertex)
@@ -317,7 +322,7 @@ namespace SmartNet
 
         public IEnumerable<TEdge> NeighborsEdgesIterator(TVertex vertex)
         {
-            return adj[vertex].Values;
+            return Adj[vertex].Values;
         }
 
         public TEdge[] NeighborsEdges(TVertex vertex)
@@ -335,14 +340,14 @@ namespace SmartNet
 
             # region Adjacency List
 
-        public IEnumerable<IEnumerable<TVertex>> AdjacencyListIterator()
+        public IEnumerable<KeyValuePair<TVertex, Dictionary<TVertex, TEdge>>> AdjacencyIterator()
         {
-            return adj.Select(pair => pair.Value.Keys);
+            return Adj.Select(pair => pair);
         }
 
-        public TVertex[][] AdjacencyList()
+        public KeyValuePair<TVertex, Dictionary<TVertex, TEdge>>[] AdjacencyList()
         {
-            return adj.Select(pair => pair.Value.Keys.ToArray()).ToArray();
+            return AdjacencyIterator().ToArray();
         }
 
         # endregion
@@ -351,7 +356,7 @@ namespace SmartNet
 
         public void Clear()
         {
-            adj.Clear();
+            Adj.Clear();
 
             NumberOfVertices = 0;
             NumberOfEdges = 0;
@@ -359,14 +364,14 @@ namespace SmartNet
 
         public void RemoveVertex(TVertex v)
         {
-            if (!adj.ContainsKey(v))
+            if (!Adj.ContainsKey(v))
                 throw new VertexNotFoundException("Vertex {0} not found in graph", v);
 
-            adj.Remove(v);
+            Adj.Remove(v);
 
-            foreach (var w in adj.Keys.Where(w => adj[w].ContainsKey(v)))
+            foreach (var w in Adj.Keys.Where(w => Adj[w].ContainsKey(v)))
             {
-                adj[w].Remove(v);
+                Adj[w].Remove(v);
             }
 
             NumberOfVertices--;
@@ -410,30 +415,6 @@ namespace SmartNet
         # endregion
 
         # region Private Methods
-
-        private static EdgeFactory<TVertex, TEdge> GetFactory()
-        {
-            var type = typeof (TEdge);
-
-            var ctor = type.GetConstructor(new [] {typeof (TVertex), typeof (TVertex)});
-
-            ParameterInfo[] paramsInfo = ctor.GetParameters();
-
-            //create a single param of type object[]
-            ParameterExpression paramFirst = Expression.Parameter(typeof(TVertex));
-
-            ParameterExpression paramSecond = Expression.Parameter(typeof (TVertex));
-
-            Expression[] argsExp = new Expression[paramsInfo.Length];
-
-            argsExp[0] = Expression.Convert(paramFirst, typeof (TVertex));
-            argsExp[1] = Expression.Convert(paramSecond, typeof(TVertex));
-
-            NewExpression newExp = Expression.New(ctor, argsExp);
-            LambdaExpression lambda = Expression.Lambda(typeof(EdgeFactory<TVertex, TEdge>), newExp, paramFirst, paramSecond);
-
-            return lambda.Compile() as EdgeFactory<TVertex, TEdge>;
-        }
 
         # endregion
 

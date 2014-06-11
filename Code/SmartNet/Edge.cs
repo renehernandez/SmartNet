@@ -7,7 +7,9 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<T> : IEdge<T> where T: IEquatable<T>
+    public class Edge<TVertex, TData> : IEdge<Edge<TVertex, TData>, TVertex, TData> 
+        where TVertex: IEquatable<TVertex>
+        where TData: IData, new()
     {
 
         # region Private Fields
@@ -16,13 +18,13 @@ namespace SmartNet
 
         # region Public Properties
 
-        public T Source { get; private set; }
+        public TVertex Source { get; private set; }
 
-        public T Target { get; private set; }
+        public TVertex Target { get; private set; }
 
-        public double Weight { get; set; }
+        public TData Data { get; private set; }
 
-        public T this[int index]
+        public TVertex this[int index]
         {
             get
             {
@@ -30,30 +32,34 @@ namespace SmartNet
                     throw new IndexOutOfRangeException("Invalid index for edge object");
                 return index == 0 ? Source : Target;
             }
-            set
-            {
-                if (index < 0 || index > 1)
-                    throw new IndexOutOfRangeException("Invalid index for edge object");
-
-                if (index == 0)
-                    Source = value;
-                else
-                    Target = value;
-            }
         }
 
         # endregion
 
         # region Constructors
 
-        public Edge(T left, T right){
-            Source = left;
-            Target = right;
-            Weight = 1.0;
+        public Edge(TVertex source, TVertex target, TData data)
+        {
+            Source = source;
+            Target = target;
+            Data = data;
         }
 
-        public Edge(Tuple<T, T> tuple)
-            : this(tuple.Item1, tuple.Item2)
+        public Edge(TVertex source, TVertex target, double weight)
+            : this(source, target, new TData() { Weight = weight})
+        {
+        }
+
+        public Edge(TVertex source, TVertex target) : this(source, target, 1.0)
+        {
+        } 
+
+        public Edge(Tuple<TVertex, TVertex> tuple, double weight) : this(tuple.Item1, tuple.Item2, weight)
+        {
+        }
+
+        public Edge(Tuple<TVertex, TVertex> tuple)
+            : this(tuple.Item1, tuple.Item2, 1.0)
         {
         }
 
@@ -63,12 +69,12 @@ namespace SmartNet
 
         public override string ToString()
         {
-            return string.Format("{0} <-> {1}", Source, Target);
+            return string.Format("{0} <-> {1}, Data: {2}", Source, Target, Data);
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Edge<T>);
+            return Equals(obj as Edge<TVertex, TData>);
         }
 
         public override int GetHashCode()
@@ -76,7 +82,7 @@ namespace SmartNet
             return Source.GetHashCode() + Target.GetHashCode();
         }
 
-        public bool Equals(IEdge<T> other)
+        public bool Equals(Edge<TVertex, TData> other)
         {
             if (ReferenceEquals(other, null))
             {
@@ -88,24 +94,16 @@ namespace SmartNet
                 return true;
             }
 
-            var edge = other as Edge<T>;
-
-            if (ReferenceEquals(edge, null))
-            {
-                return false;
-            }
-
-
-            return (Source.Equals(edge.Source) && Target.Equals(edge.Target)) || (
-                Source.Equals(edge.Target) && Target.Equals(edge.Source));
+            return (Source.Equals(other.Source) && Target.Equals(other.Target)) || (
+                Source.Equals(other.Target) && Target.Equals(other.Source));
         }
 
-        public static bool operator ==(Edge<T> left, Edge<T> right)
+        public static bool operator ==(Edge<TVertex, TData> left, Edge<TVertex, TData> right)
         {
-            return Object.Equals(left, right);
+            return Equals(left, right);
         }
 
-        public static bool operator !=(Edge<T> left, Edge<T> right)
+        public static bool operator !=(Edge<TVertex, TData> left, Edge<TVertex, TData> right)
         {
             return !(left == right);
         }
