@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SmartNet.Interfaces
 {
     public interface IGraph<out TGraph, TVertex, TEdge, TData>
-        where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+        where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new() 
         where TVertex : IEquatable<TVertex>
         where TEdge : IEdge<TEdge, TVertex, TData> 
         where TData : IData, new()

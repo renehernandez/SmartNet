@@ -11,7 +11,7 @@ namespace SmartNet.Algorithms.Traversal
     {
 
         public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph)
-            where TGraph: IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph: IGraph<TGraph, TVertex, TEdge, TData>, new() 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -20,7 +20,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -29,7 +29,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         private static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex, bool complete)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -52,7 +52,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         private static IEnumerable<TVertex> VerticesVisit<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex, HashSet<TVertex> mark)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new() 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -68,7 +68,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new() 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -77,7 +77,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -86,7 +86,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         private static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex, bool complete)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new() 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -109,7 +109,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         private static IEnumerable<TEdge> EdgesVisit<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex, HashSet<TVertex> mark)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new() 
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -125,7 +125,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         public static TGraph Tree<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -134,7 +134,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         public static TGraph Tree<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
@@ -143,7 +143,7 @@ namespace SmartNet.Algorithms.Traversal
         }
 
         private static TGraph Tree<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex, bool complete)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
             where TVertex : IEquatable<TVertex>
             where TEdge : IEdge<TEdge, TVertex, TData> 
             where TData : IData, new()
