@@ -21,5 +21,17 @@ namespace SmartNet.Models
             return graph;
         }
 
+        public static TGraph CompleteGraph<TGraph>(int n)
+            where TGraph : IGraph<TGraph, int, SEdge<int>, Data>, new()
+        {
+            var graph = EmptyGraph<TGraph, SEdge<int>, Data>(n);
+
+            graph.AddEdges(Enumerable.Range(0, n).SelectMany(
+                i => Enumerable.Range(i + 1, n).Select(j => new SEdge<int>(i, j))
+                ));
+
+            return graph;
+        }
+
     }
 }
