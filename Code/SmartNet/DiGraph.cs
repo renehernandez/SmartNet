@@ -154,9 +154,28 @@ namespace SmartNet
             return graph;
         } 
 
-        public DiGraph<TVertex, TEdge, TData> Reverse(bool copy = false)
+        public DiGraph<TVertex, TEdge, TData> Reverse(bool copy = true)
         {
-            return this;
+            var edges = Edges;
+            
+            DiGraph<TVertex, TEdge, TData> graph;
+
+            if (copy)
+            {
+                graph = new DiGraph<TVertex, TEdge, TData>();
+            }
+            else
+            {
+                graph = this;
+                graph.RemoveEdges(edges);
+            }
+
+            foreach (var edge in edges)
+            {
+                graph.AddEdge(ReverseEdgeFactory(edge));
+            }
+
+            return graph;
         } 
 
         # endregion
