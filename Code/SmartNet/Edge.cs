@@ -7,7 +7,9 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Edge<T> : IEquatable<Edge<T>> where T : IEquatable<T> 
+    public class Edge<TVertex, TData> : IEdge<Edge<TVertex, TData>, TVertex, TData> 
+        where TVertex: IEquatable<TVertex>
+        where TData: IData, new()
     {
 
         # region Private Fields
@@ -16,29 +18,19 @@ namespace SmartNet
 
         # region Public Properties
 
-        public T First { get; private set; }
+        public TVertex Source { get; private set; }
 
-        public T Second { get; private set; }
+        public TVertex Target { get; private set; }
 
-        public IContainer Data { get; set; }
+        public TData Data { get; private set; }
 
-        public T this[int index]
+        public TVertex this[int index]
         {
             get
             {
                 if (index < 0 || index > 1)
                     throw new IndexOutOfRangeException("Invalid index for edge object");
-                return index == 0 ? First : Second;
-            }
-            set
-            {
-                if (index < 0 || index > 1)
-                    throw new IndexOutOfRangeException("Invalid index for edge object");
-
-                if (index == 0)
-                    First = value;
-                else
-                    Second = value;
+                return index == 0 ? Source : Target;
             }
         }
 
@@ -46,18 +38,28 @@ namespace SmartNet
 
         # region Constructors
 
-        public Edge(T left, T right){
-            First = left;
-            Second = right;
-            Data = new BaseContainer();
-        }
-
-        public Edge(T left, T right, IContainer data): this(left, right) {
+        public Edge(TVertex source, TVertex target, TData data)
+        {
+            Source = source;
+            Target = target;
             Data = data;
         }
 
-        public Edge(Tuple<T, T> tuple)
-            : this(tuple.Item1, tuple.Item2)
+        public Edge(TVertex source, TVertex target, double weight)
+            : this(source, target, new TData() { Weight = weight})
+        {
+        }
+
+        public Edge(TVertex source, TVertex target) : this(source, target, 1.0)
+        {
+        } 
+
+        public Edge(Tuple<TVertex, TVertex> tuple, double weight) : this(tuple.Item1, tuple.Item2, weight)
+        {
+        }
+
+        public Edge(Tuple<TVertex, TVertex> tuple)
+            : this(tuple.Item1, tuple.Item2, 1.0)
         {
         }
 
@@ -65,48 +67,43 @@ namespace SmartNet
 
         # region Public Methods
 
-        public Edge<T> Reverse()
-        {
-            return new Edge<T>(this.Second, this.First, this.Data);
-        }
-
         public override string ToString()
         {
-            return string.Format("({0}, {1})", First, Second);
+            return string.Format("{0} <-> {1}, Data: {2}", Source, Target, Data);
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Edge<T>);
+            return Equals(obj as Edge<TVertex, TData>);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() + Second.GetHashCode();
+            return Source.GetHashCode() + Target.GetHashCode();
         }
 
-        public bool Equals(Edge<T> other)
+        public bool Equals(Edge<TVertex, TData> other)
         {
-            if (Object.ReferenceEquals(other, null))
+            if (ReferenceEquals(other, null))
             {
                 return false;
             }
 
-            if (Object.ReferenceEquals(this, other))
+            if (ReferenceEquals(this, other))
             {
                 return true;
             }
 
-            return (First.Equals(other.First) && Second.Equals(other.Second)) || (
-                First.Equals(other.Second) && Second.Equals(other.First));
+            return (Source.Equals(other.Source) && Target.Equals(other.Target)) || (
+                Source.Equals(other.Target) && Target.Equals(other.Source));
         }
 
-        public static bool operator ==(Edge<T> left, Edge<T> right)
+        public static bool operator ==(Edge<TVertex, TData> left, Edge<TVertex, TData> right)
         {
-            return Object.Equals(left, right);
+            return Equals(left, right);
         }
 
-        public static bool operator !=(Edge<T> left, Edge<T> right)
+        public static bool operator !=(Edge<TVertex, TData> left, Edge<TVertex, TData> right)
         {
             return !(left == right);
         }

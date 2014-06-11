@@ -12,35 +12,47 @@ namespace SmartNet.UnitTest
     public class DFSTest
     {
 
-        Graph<int> intGraph;
-        Edge<int>[] arrayEdge;
+        SGraph<int> intGraph;
+        SEdge<int>[] arrayEdge;
 
         [SetUp]
         public void Init()
         {
-            arrayEdge = new Edge<int>[]{
-                new Edge<int>(1, 2), new Edge<int>(2, 3), new Edge<int>(3, 4),
-                new Edge<int>(4, 5), new Edge<int>(5, 6)
+            arrayEdge = new SEdge<int>[]{
+                new SEdge<int>(1, 2), new SEdge<int>(2, 3), new SEdge<int>(3, 4),
+                new SEdge<int>(4, 5), new SEdge<int>(5, 6)
             };
 
-            intGraph = new Graph<int>();
+            intGraph = new SGraph<int>();
         }
 
         [Test]
-        public void DFSForTreeGraph()
+        public void EdgesDFSForPathGraph()
+        {
+            intGraph.AddPath(new int[] { 1, 2, 3, 4, 5, 6 });
+
+            var check = new SEdge<int>[] { new SEdge<int>(3, 2), new SEdge<int>(2, 1), 
+                new SEdge<int>(3, 4), new SEdge<int>(4, 5), new SEdge<int>(5, 6) };
+
+            CheckValues(DFS.Edges(intGraph, 3).ToArray(), check);
+
+        }
+
+        [Test]
+        public void EdgesDFSForTreeGraph()
         {
             intGraph.AddEdges(arrayEdge);
             intGraph.AddEdge(7, 8);
             intGraph.AddEdge(10, 4);
 
-            Edge<int>[] check = new Edge<int>[arrayEdge.Length + 2];
+            var check = new SEdge<int>[arrayEdge.Length + 2];
 
             for (int i = 0; i < arrayEdge.Length; i++)
 			{
 			    check[i] = arrayEdge[i];
 			}
-            check[arrayEdge.Length] = new Edge<int>(4, 10);
-            check[arrayEdge.Length + 1] = new Edge<int>(7, 8);
+            check[arrayEdge.Length] = new SEdge<int>(4, 10);
+            check[arrayEdge.Length + 1] = new SEdge<int>(7, 8);
 
             var resul = DFS.Edges(intGraph).ToArray();
 
@@ -48,7 +60,7 @@ namespace SmartNet.UnitTest
         }
 
         [Test]
-        public void DFSForNonTreeGraph()
+        public void EdgesDFSForNonTreeGraph()
         {
             intGraph.AddEdge(10, 3);
             intGraph.AddEdges(arrayEdge);
@@ -57,18 +69,48 @@ namespace SmartNet.UnitTest
             intGraph.AddEdge(10, 6);
 
 
-            Edge<int>[] check = new Edge<int>[arrayEdge.Length + 1];
+            var check = new SEdge<int>[arrayEdge.Length + 1];
 
-            check[0] = new Edge<int>(10, 3);
-            check[1] = new Edge<int>(3, 2);
-            check[2] = new Edge<int>(2, 1);
-            check[3] = new Edge<int>(3, 4);
-            check[4] = new Edge<int>(4, 5);
-            check[5] = new Edge<int>(5, 6);
+            check[0] = new SEdge<int>(10, 3);
+            check[1] = new SEdge<int>(3, 2);
+            check[2] = new SEdge<int>(2, 1);
+            check[3] = new SEdge<int>(3, 4);
+            check[4] = new SEdge<int>(4, 5);
+            check[5] = new SEdge<int>(5, 6);
 
             var resul = DFS.Edges(intGraph).ToArray();
             CheckValues(resul, check);
         }
+
+
+        [Test]
+        public void DFSTreeFromGraph()
+        {
+            intGraph.AddEdges(arrayEdge);
+            intGraph.AddEdge(new SEdge<int>(6, 1));
+            intGraph.AddEdge(new SEdge<int>(5, 2));
+
+            var treeGraph = DFS.Tree(intGraph);
+
+            Assert.AreEqual(treeGraph.NumberOfVertices, intGraph.NumberOfVertices);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 5);
+        }
+
+        [Test]
+        public void DFSTreeFromVertex()
+        {
+            intGraph.AddPath(1,2,3,4,5,6,7);
+
+            intGraph.AddEdge(0, 9);
+            intGraph.AddEdge(0, 14);
+
+            var treeGraph = DFS.Tree(intGraph, 9);
+            
+            Assert.AreEqual(treeGraph.NumberOfVertices, 3);
+            Assert.AreEqual(treeGraph.NumberOfEdges, 2);
+        }
+
+        # region Private Methods
 
         private void CheckValues<T>(T[] array1, T[] array2)
         {
@@ -79,6 +121,8 @@ namespace SmartNet.UnitTest
                 Assert.AreEqual(array1[i], array2[i]);
             }
         }
+
+        # endregion
 
     }
 }
