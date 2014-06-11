@@ -11,5 +11,9 @@ namespace SmartNet
     {
         public double Weight { get; set; }
 
+        public override string ToString()
+        {
+            return string.Format("{0}Weight: {1}{2}", "{", Weight, "}");
+        }
     }
 }

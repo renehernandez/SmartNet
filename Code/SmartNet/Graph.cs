@@ -80,7 +80,7 @@ namespace SmartNet
                 throw new DuplicatedEdgeException("Edge {0} already present in graph", edge);
 
             Adj[edge.Source].Add(edge.Target, edge);
-            Adj[edge.Target].Add(edge.Source, EdgeVerticesFactory(edge.Target, edge.Source));
+            Adj[edge.Target].Add(edge.Source, ReverseEdgeFactory(edge));
 
             NumberOfEdges++;
         }

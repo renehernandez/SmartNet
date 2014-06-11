@@ -91,7 +91,8 @@ namespace SmartNet
             NumberOfVertices = 0;
             Adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>();
 
-            EdgeVerticesFactory = GetEdgeFromVertices().Compile();
+            ReverseEdgeFactory = EdgeCreationFactory.GetReverseEdge<TVertex, TEdge, TData>();
+            EdgeVerticesFactory = EdgeCreationFactory.GetEdgeFromVertices<TVertex, TEdge, TData>();
         }
 
         protected BaseGraph(IEnumerable<TVertex> vertices): this()
@@ -414,98 +415,6 @@ namespace SmartNet
         # endregion
 
         # region Private Methods
-
-        private static Expression<EdgeFromVerticesFactory<TVertex, TEdge, TData>> GetEdgeFromVertices()
-        {
-            var type = typeof (TEdge);
-
-            var ctor = type.GetConstructor(new [] {typeof (TVertex), typeof (TVertex)});
-
-            ParameterInfo[] paramsInfo = ctor.GetParameters();
-
-            ParameterExpression paramFirst = Expression.Parameter(typeof(TVertex));
-
-            ParameterExpression paramSecond = Expression.Parameter(typeof (TVertex));
-
-            Expression[] argsExp = new Expression[paramsInfo.Length];
-
-            argsExp[0] = Expression.Convert(paramFirst, typeof (TVertex));
-            argsExp[1] = Expression.Convert(paramSecond, typeof(TVertex));
-
-            NewExpression newExp = Expression.New(ctor, argsExp);
-            var lambda = Expression.Lambda<EdgeFromVerticesFactory<TVertex, TEdge, TData>>(newExp, paramFirst, paramSecond);
-
-            return lambda;
-        }
-
-        public static ReverseEdgeFactory<TVertex, TEdge, TData> GetReverseEdge()
-        {
-            //var param = Expression.Parameter(typeof (TEdge));
-            //var source = Expression.Variable(typeof (TVertex));
-            //var target = Expression.Variable(typeof(TVertex));
-            //var result = Expression.Variable(typeof (TEdge));
-
-            //var properties = Expression.NewArrayInit(typeof (
-            //    PropertyInfo), typeof (TEdge).GetProperties().Select(
-            //        prop => Expression.Property(param, prop)));
-
-            //var edgeDelegate = GetEdgeFromVertices();
-
-            //var itemName = Expression.Variable(typeof (string));
-            //var item = Expression.Variable(typeof (TEdge));
-            //var ienumExpresion = Expression.Variable(typeof (IEnumerable<TEdge>));
-            //var moveNext = Expression.Call(ienumExpresion, typeof(IEnumerator).GetMethod("MoveNext"));
-
-            //var assign = Expression.Assign(ienumExpresion, Expression.Call(properties, typeof(IEnumerable<TEdge>).GetMethod("GetEnumerator")));
-
-            //var currentProp = Expression.Assign(item, Expression.Property(ienumExpresion, "Current"));
-
-            //var propertyName = Expression.Assign(itemName,
-            //    Expression.Call(currentProp, typeof (PropertyInfo).GetProperty("Name").GetGetMethod()));
-
-            //var @break = Expression.Label();
-
-            //var lambda = Expression.Lambda<ReverseEdgeFactory<TVertex, TEdge>>(
-            //    Expression.Block(
-            //        new[] {result, source, target}, 
-            //        Expression.Assign(
-            //            source,
-            //            Expression.Call(param, typeof(TEdge).GetProperty("Source").GetGetMethod())
-            //        ),
-            //        Expression.Assign(
-            //            target,
-            //            Expression.Call(param, typeof(TEdge).GetProperty("Target").GetGetMethod())
-            //        ),
-            //        Expression.Assign(
-            //            result,
-            //            Expression.Invoke(edgeDelegate, target, source)
-            //        ),
-            //        Expression.Block(
-            //            new ParameterExpression[] { item, ienumExpresion },
-            //            assign,
-            //            Expression.Loop(
-            //                Expression.IfThenElse(
-            //                    Expression.NotEqual(moveNext, Expression.Constant(false)),
-            //                    Expression.Block(
-            //                        currentProp,
-            //                        propertyName,
-            //                        Expression.Assign(
-            //                            Expression.Call(result, Expression.Call())
-            //                        )
-            //                    ),
-            //                Expression.Break(@break)
-            //                ), 
-            //        @break)
-            //        ),
-            //        result
-            //    ), 
-            //    param
-            //);
-
-            //return lambda.Compile();
-
-            return null;
-        }
 
         # endregion
 
