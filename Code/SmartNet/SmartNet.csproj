@@ -39,9 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractGraph.cs" />
     <Compile Include="Algorithms\Traversal\BFS.cs" />
     <Compile Include="Algorithms\Traversal\DFS.cs" />
-    <Compile Include="Data.cs" />
+    <Compile Include="EdgeData.cs" />
     <Compile Include="DiEdge.cs" />
     <Compile Include="DiGraph.cs" />
     <Compile Include="Edge.cs" />
@@ -58,9 +59,10 @@
     <Compile Include="Factories\EdgeCreationFactory.cs" />
     <Compile Include="Factories\EdgeFactory.cs" />
     <Compile Include="Factories\VertexFactory.cs" />
-    <Compile Include="BaseGraph.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="Interfaces\IData.cs" />
+    <Compile Include="GraphData.cs" />
+    <Compile Include="IGraphData.cs" />
+    <Compile Include="Interfaces\IEdgeData.cs" />
     <Compile Include="Interfaces\IGraph.cs" />
     <Compile Include="Interfaces\IBinaryHeap.cs" />
     <Compile Include="Interfaces\IContainer.cs" />

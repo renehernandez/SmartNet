@@ -9,7 +9,7 @@ namespace SmartNet
 {
     public class Edge<TVertex, TData> : IEdge<Edge<TVertex, TData>, TVertex, TData> 
         where TVertex: IEquatable<TVertex>
-        where TData: IData, new()
+        where TData: IEdgeData, new()
     {
 
         # region Private Fields

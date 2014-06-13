@@ -9,10 +9,12 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class DiGraph<TVertex, TEdge, TData> : BaseGraph<TVertex, TEdge, TData>, IGraph<DiGraph<TVertex, TEdge, TData>, TVertex, TEdge, TData> 
-        where TEdge : IEdge<TEdge, TVertex, TData> 
+    public class DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData> : AbstractGraph<TVertex, TDiEdge, TGraphData, TEdgeData>, 
+        IGraph<DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData>, TVertex, TDiEdge, TGraphData, TEdgeData>
+        where TGraphData : IGraphData, new()
+        where TDiEdge : DiEdge<TVertex, TEdgeData>, IEdge<TDiEdge, TVertex, TEdgeData> 
         where TVertex : IEquatable<TVertex> 
-        where TData : IData, new()
+        where TEdgeData : IEdgeData, new() 
     {
 
         # region Constructors
@@ -29,11 +31,11 @@ namespace SmartNet
         {
         }
 
-        public DiGraph(IEnumerable<TEdge> edges) : base(edges)
+        public DiGraph(IEnumerable<TDiEdge> edges) : base(edges)
         {
         }
 
-        public DiGraph(params TEdge[] edges) : base(edges)
+        public DiGraph(params TDiEdge[] edges) : base(edges)
         {
         }
 
@@ -51,12 +53,12 @@ namespace SmartNet
         {
         }
 
-        public DiGraph(IEqualityComparer<TVertex> comparer, IEnumerable<TEdge> edges)
+        public DiGraph(IEqualityComparer<TVertex> comparer, IEnumerable<TDiEdge> edges)
             : base(comparer, edges)
         {
         }
 
-        public DiGraph(IEqualityComparer<TVertex> comparer, params TEdge[] edges)
+        public DiGraph(IEqualityComparer<TVertex> comparer, params TDiEdge[] edges)
             : base(comparer, edges)
         {
         }
@@ -67,7 +69,7 @@ namespace SmartNet
 
             # region Addition Methods
 
-        public override void AddEdge(TEdge edge)
+        public override void AddEdge(TDiEdge edge)
         {
             if (!Adj.ContainsKey(edge.Source))
                 AddVertex(edge.Source);
@@ -86,10 +88,10 @@ namespace SmartNet
 
             # region Subgraph Methods
 
-        public DiGraph<TVertex, TEdge, TData> Subgraph(IEnumerable<TVertex> vertices)
+        public virtual DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData> Subgraph(IEnumerable<TVertex> vertices)
         {
             var listVertices = vertices.ToList();
-            var subgraph = new DiGraph<TVertex, TEdge, TData>(listVertices);
+            var subgraph = new DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData>(listVertices);
 
             subgraph.AddEdges(
                 listVertices.SelectMany(vertex => Adj[vertex].Values.Where(
@@ -100,7 +102,7 @@ namespace SmartNet
             return subgraph;
         }
 
-        public DiGraph<TVertex, TEdge, TData> Subgraph(params TVertex[] vertices)
+        public virtual DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData> Subgraph(params TVertex[] vertices)
         {
             return Subgraph(vertices.AsEnumerable());
         }
@@ -127,14 +129,19 @@ namespace SmartNet
 
             # endregion
 
-        public Graph<TVertex, TEdge, TData> ToUndirected(bool reciprocal = false)
+        public virtual Graph<TVertex, Edge<TVertex, TEdgeData>, TGraphData, TEdgeData> ToUndirected(bool reciprocal = false) 
         {
-            return ToUndirected((e1, e2) => e1.Data.Weight >= e2.Data.Weight ? e1 : e2, reciprocal);
+            return ToUndirected((e1, e2) =>
+            {
+                var edge = e1.Data.Weight >= e2.Data.Weight ? e1 : e2;
+                return new Edge<TVertex, TEdgeData>(edge.Source, edge.Target, edge.Data);
+            }, edge =>  new Edge<TVertex, TEdgeData>(edge.Source, edge.Target, edge.Data),reciprocal);
         }
 
-        public Graph<TVertex, TEdge, TData> ToUndirected(EdgeFromEdgesFactory<TVertex, TEdge, TData> factory, bool reciprocal = false)
+        public virtual Graph<TVertex, TEdge, TGraphData, TEdgeData> ToUndirected<TEdge>(EdgeFromDiEdgesFactory<TVertex, TDiEdge, TEdgeData, TEdge> fromDiEdges, EdgeFromDiEdgeFactory<TVertex, TDiEdge, TEdgeData, TEdge> edgeConverter,  bool reciprocal = false)
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData> 
         {
-            var graph = new Graph<TVertex, TEdge, TData>();
+            var graph = new Graph<TVertex, TEdge, TGraphData, TEdgeData>();
 
             foreach (var pair in AdjacencyIterator())
             {
@@ -142,27 +149,27 @@ namespace SmartNet
                 {
                     if (HasEdge(vertexEdge.Key, pair.Key))
                     {
-                        var edge = factory(this[vertexEdge.Key, pair.Key], vertexEdge.Value);
+                        var edge = fromDiEdges(this[vertexEdge.Key, pair.Key], vertexEdge.Value);
                         if(!graph.HasEdge(edge))
                             graph.AddEdge(edge);
                     }
                     else if(!reciprocal)
-                        graph.AddEdge(vertexEdge.Value);
+                        graph.AddEdge(edgeConverter(vertexEdge.Value));
                 }
             }
 
             return graph;
         } 
 
-        public DiGraph<TVertex, TEdge, TData> Reverse(bool copy = true)
+        public virtual DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData> Reverse(bool copy = true)
         {
             var edges = Edges;
             
-            DiGraph<TVertex, TEdge, TData> graph;
+            DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData> graph;
 
             if (copy)
             {
-                graph = new DiGraph<TVertex, TEdge, TData>();
+                graph = new DiGraph<TVertex, TDiEdge, TGraphData, TEdgeData>();
             }
             else
             {

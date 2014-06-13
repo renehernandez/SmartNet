@@ -9,7 +9,7 @@ namespace SmartNet
 {
     public class DiEdge<TVertex, TData> : IEdge<DiEdge<TVertex, TData>, TVertex, TData> 
         where TVertex : IEquatable<TVertex> 
-        where TData : IData, new()
+        where TData : IEdgeData, new()
     {
 
         # region Public Properties

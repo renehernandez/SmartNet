@@ -7,13 +7,13 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class SEdge<TVertex> : Edge<TVertex, Data>, IEdge<SEdge<TVertex>, TVertex, Data> 
+    public class SEdge<TVertex> : Edge<TVertex, EdgeData>, IEdge<SEdge<TVertex>, TVertex, EdgeData> 
         where TVertex : IEquatable<TVertex>
     {
 
           # region Constructors
 
-        public SEdge(TVertex source, TVertex target, Data data) : base(source, target, data)
+        public SEdge(TVertex source, TVertex target, EdgeData data) : base(source, target, data)
         {
         }
 
