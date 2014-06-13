@@ -3,14 +3,17 @@ using System.Collections.Generic;
 
 namespace SmartNet.Interfaces
 {
-    public interface IGraph<out TGraph, TVertex, TEdge, TData>
-        where TGraph : IGraph<TGraph, TVertex, TEdge, TData> 
+    public interface IGraph<out TGraph, TVertex, TEdge, out TGraphData, TEdgeData>
+        where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
+        where TGraphData : IGraphData, new()
         where TVertex : IEquatable<TVertex>
-        where TEdge : IEdge<TEdge, TVertex, TData> 
-        where TData : IData, new()
+        where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+        where TEdgeData : IEdgeData, new()
     {
 
         # region Public Properties
+
+        TGraphData Data { get; }
 
         int NumberOfVertices { get; }
 
@@ -91,7 +94,6 @@ namespace SmartNet.Interfaces
         void RemoveEdges(params TEdge[] edges);
 
         # endregion
-
 
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartNet
 {
-    public class SGraph<TVertex> : Graph<TVertex, SEdge<TVertex>, Data> 
+    public class SGraph<TVertex> : Graph<TVertex, SEdge<TVertex>, GraphData, EdgeData> 
         where TVertex : IEquatable<TVertex>
     {
 

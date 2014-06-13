@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartNet
 {
-    public class SDiGraph<TVertex> : DiGraph<TVertex, SDiEdge<TVertex>, Data> 
+    public class SDiGraph<TVertex> : DiGraph<TVertex, SDiEdge<TVertex>, GraphData, EdgeData> 
         where TVertex : IEquatable<TVertex>
     {
 

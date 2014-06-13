@@ -12,10 +12,10 @@ namespace SmartNet.Factories
     public static class EdgeCreationFactory
     {
 
-        public static EdgeFromVerticesFactory<TVertex, TEdge, TData> GetEdgeFromVertices<TVertex, TEdge, TData>() 
+        public static EdgeFromVerticesFactory<TVertex, TData, TEdge> GetEdgeFromVertices<TVertex, TEdge, TData>() 
             where TVertex : IEquatable<TVertex> 
             where TEdge : IEdge<TEdge, TVertex, TData> 
-            where TData : IData, new()
+            where TData : IEdgeData, new()
         {
             var type = typeof(TEdge);
 
@@ -33,15 +33,15 @@ namespace SmartNet.Factories
             argsExp[1] = Expression.Convert(target, typeof(TVertex));
 
             NewExpression newExp = Expression.New(ctor, argsExp);
-            var lambda = Expression.Lambda<EdgeFromVerticesFactory<TVertex, TEdge, TData>>(newExp, source, target);
+            var lambda = Expression.Lambda<EdgeFromVerticesFactory<TVertex, TData, TEdge>>(newExp, source, target);
 
             return lambda.Compile();
         }
 
-        public static ReverseEdgeFactory<TVertex, TEdge, TData> GetReverseEdge<TVertex, TEdge, TData>() 
+        public static ReverseEdgeFactory<TVertex, TData, TEdge> GetReverseEdge<TVertex, TEdge, TData>() 
             where TVertex : IEquatable<TVertex> 
             where TEdge : IEdge<TEdge, TVertex, TData> 
-            where TData : IData, new()
+            where TData : IEdgeData, new()
         {
             var edgeType = typeof (TEdge);
             var vertexType = typeof (TVertex);
@@ -64,7 +64,7 @@ namespace SmartNet.Factories
             argsExp[2] = Expression.Convert(data, typeof(TData));
 
             var newExp = Expression.New(ctor, argsExp);
-            var lambda = Expression.Lambda<ReverseEdgeFactory<TVertex, TEdge, TData>>(
+            var lambda = Expression.Lambda<ReverseEdgeFactory<TVertex, TData, TEdge>>(
                 Expression.Block(
                     new []{ source, target, data },
                     Expression.Assign(target, Expression.Call(edge, edgeType.GetProperty("Source").GetGetMethod())),

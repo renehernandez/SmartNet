@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class Data: IData
+    public class GraphData : IGraphData
     {
-        public double Weight { get; set; }
+        public string Name { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{0}Weight: {1}{2}", "{", Weight, "}");
+            return string.Format("Graph Data: {0}Name: {1}{2}", "{", Name, "}");
         }
     }
 }
