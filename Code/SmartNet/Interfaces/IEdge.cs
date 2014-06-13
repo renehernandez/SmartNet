@@ -9,7 +9,7 @@ namespace SmartNet.Interfaces
     public interface IEdge<TEdge, out TVertex, out TData> : IEquatable<TEdge> 
         where TEdge : IEdge<TEdge, TVertex, TData> 
         where TVertex: IEquatable<TVertex>
-        where TData : IData, new()
+        where TData : IEdgeData, new()
     {
 
         TVertex Source { get; }

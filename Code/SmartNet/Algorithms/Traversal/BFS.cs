@@ -10,11 +10,12 @@ namespace SmartNet.Algorithms.Traversal
     public static class BFS
     {
 
-        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
+        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TData> 
-            where TData : IData, new()
+            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
 
         {
             var mark = new HashSet<TVertex>() {vertex};
@@ -36,11 +37,12 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
+        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TData> 
-            where TData : IData, new()
+            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
 
         {
             var mark = new HashSet<TVertex>() {vertex};
@@ -61,12 +63,12 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static TGraph Tree<TGraph, TVertex, TEdge, TData>(IGraph<TGraph, TVertex, TEdge, TData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TData>, new()
+        public static TGraph Tree<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TData> 
-            where TData : IData, new()
-
+            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
         {
             var treeGraph = graph.Subgraph();
 
