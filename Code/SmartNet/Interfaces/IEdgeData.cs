@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartNet.Interfaces
 {
-    public interface IData
+    public interface IEdgeData
     {
 
         double Weight { get; set; }

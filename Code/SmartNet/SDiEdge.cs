@@ -7,13 +7,13 @@ using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class SDiEdge<TVertex> : DiEdge<TVertex, Data>, IEdge<SDiEdge<TVertex>, TVertex, Data> 
+    public class SDiEdge<TVertex> : DiEdge<TVertex, EdgeData>, IEdge<SDiEdge<TVertex>, TVertex, EdgeData> 
         where TVertex : IEquatable<TVertex>
     {
 
         # region Constructors
 
-        public SDiEdge(TVertex source, TVertex target, Data data) : base(source, target, data)
+        public SDiEdge(TVertex source, TVertex target, EdgeData data) : base(source, target, data)
         {
         }
 
