@@ -35,16 +35,16 @@ namespace SmartNet.UnitTest
 
         }
 
-        Graph<TestClass, Edge<TestClass, Data>, Data> classGraph;
+        Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData> classGraph;
 
         List<TestClass> testData;
 
-        List<Edge<TestClass, Data>> testEdgeData;
+        List<Edge<TestClass, EdgeData>> testEdgeData;
 
         [SetUp]
         public void Init()
         {
-            classGraph = new Graph<TestClass, Edge<TestClass, Data>, Data>();
+            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>();
 
             testData = new List<TestClass>() 
             { 
@@ -52,11 +52,11 @@ namespace SmartNet.UnitTest
                 new TestClass(0), new TestClass(-20) 
             };
 
-            testEdgeData = new List<Edge<TestClass, Data>>()
+            testEdgeData = new List<Edge<TestClass, EdgeData>>()
             {
-                new Edge<TestClass, Data>(new TestClass(24), new TestClass(-35)), 
-                new Edge<TestClass, Data>(new TestClass(2345), new TestClass(-8035)),
-                new Edge<TestClass, Data>(new TestClass(243), new TestClass(23))
+                new Edge<TestClass, EdgeData>(new TestClass(24), new TestClass(-35)), 
+                new Edge<TestClass, EdgeData>(new TestClass(2345), new TestClass(-8035)),
+                new Edge<TestClass, EdgeData>(new TestClass(243), new TestClass(23))
             };
         }
 
@@ -78,7 +78,7 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableVertexDataClassGraph()
         {
-            classGraph = new Graph<TestClass, Edge<TestClass, Data>, Data>(testData);
+            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(testData);
 
             Assert.AreEqual(classGraph.NumberOfVertices, testData.Count);
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
@@ -90,7 +90,7 @@ namespace SmartNet.UnitTest
         public void ConstructorArrayVertexDataClassGraph()
         {
             var array = testData.ToArray();
-            classGraph = new Graph<TestClass, Edge<TestClass, Data>, Data>(array[0], array[1], array[2], array[3], array[4]);
+            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(array[0], array[1], array[2], array[3], array[4]);
 
             Assert.AreEqual(classGraph.NumberOfVertices, array.Length);
             Assert.AreEqual(classGraph.NumberOfEdges, 0);
@@ -105,7 +105,7 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableEdgeDataClassGraph()
         {
-            classGraph = new Graph<TestClass, Edge<TestClass, Data>, Data>(testEdgeData);
+            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(testEdgeData);
 
             Assert.AreEqual(classGraph.NumberOfVertices, 6);
             Assert.AreEqual(classGraph.NumberOfEdges, 3);
@@ -117,7 +117,7 @@ namespace SmartNet.UnitTest
         public void ConstructorArrayEdgeDataClassGraph()
         {
             var array = testEdgeData.ToArray();
-            classGraph = new Graph<TestClass, Edge<TestClass, Data>, Data>(array[0], array[1], array[2]);
+            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(array[0], array[1], array[2]);
 
             Assert.AreEqual(classGraph.NumberOfVertices, 6);
             Assert.AreEqual(classGraph.NumberOfEdges, 3);
