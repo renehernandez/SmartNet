@@ -10,29 +10,44 @@ namespace SmartNet.Models
     public static class Classic
     {
 
-        public static TGraph EmptyGraph<TGraph, TEdge, TGraphData, TEdgeData>(int n)
-            where TGraph : IGraph<TGraph, int, TEdge, TGraphData, TEdgeData>, new()
-            where TEdge : IEdge<TEdge, int, TEdgeData>
-            where TEdgeData : IEdgeData, new() 
-            where TGraphData : IGraphData, new()
+        public static SGraph<int> CompleteGraph(int n)
         {
-            var graph = new TGraph();
-            if (n > 0)
-                graph.AddVertices(Enumerable.Range(0, n));
-            return graph;
+            return CompleteGraph<SGraph<int>, SEdge<int>, GraphData, EdgeData>(n);
         }
 
-        public static TGraph CompleteGraph<TGraph>(int n)
-            where TGraph : IGraph<TGraph, int, SEdge<int>, GraphData, EdgeData>, new()
+        public static TGraph CompleteGraph<TGraph, TEdge, TGraphData, TEdgeData>(int n)
+            where TGraph : Graph<int, TEdge, TGraphData, TEdgeData>,IGraph<TGraph, int, TEdge, TGraphData, TEdgeData>, new()
+            where TEdge : Edge<int, TEdgeData>, IEdge<TEdge, int, TEdgeData>
+            where TGraphData : IGraphData,new() 
+            where TEdgeData : IEdgeData, new()
         {
-            var graph = EmptyGraph<TGraph, SEdge<int>, GraphData, EdgeData>(n);
+            var graph = new TGraph();
 
             graph.AddEdges(Enumerable.Range(0, n).SelectMany(
-                i => Enumerable.Range(i + 1, n).Select(j => new SEdge<int>(i, j))
+                i => Enumerable.Range(i + 1, n - i - 1).Select(j => new Tuple<int, int>(i, j))
                 ));
 
             return graph;
         }
 
+        public static SDiGraph<int> CompleteDiGraph(int n)
+        {
+            return CompleteDiGraph<SDiGraph<int>, SDiEdge<int>, GraphData, EdgeData>(n);
+        }
+
+        public static TGraph CompleteDiGraph<TGraph, TEdge, TGraphData, TEdgeData>(int n)
+            where TGraph : DiGraph<int, TEdge, TGraphData, TEdgeData>, IGraph<TGraph, int, TEdge, TGraphData, TEdgeData>, new()
+            where TEdge : DiEdge<int, TEdgeData>, IEdge<TEdge, int, TEdgeData>
+            where TGraphData : IGraphData, new()
+            where TEdgeData : IEdgeData, new()
+        {
+            var graph = new TGraph();
+
+            graph.AddEdges(Enumerable.Range(0, n).SelectMany(
+                i => Enumerable.Range(0, n).Where(k => k != i).Select(j => new Tuple<int, int>(i, j))
+                ));
+
+            return graph;
+        }
     }
 }

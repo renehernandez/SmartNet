@@ -28,7 +28,7 @@ namespace SmartNet.UnitTest
         {
             graph.AddPath(stringData);
 
-            var expectedVertices = new string[] {"watchout", "black", "game of thrones", "hello", "maroon 5"};
+            var expectedVertices = new string[] { "watchout", "black", "game of thrones", "hello", "maroon 5" };
 
             CheckValues(expectedVertices, BFS.Vertices(graph, "watchout").ToArray());
 
