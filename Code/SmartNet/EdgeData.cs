@@ -13,7 +13,7 @@ namespace SmartNet
 
         public override string ToString()
         {
-            return string.Format("Edge Data: {0}Weight: {1}{2}", "{", Weight, "}");
+            return string.Format("{0}Weight: {1}{2}", "{", Weight, "}");
         }
     }
 }

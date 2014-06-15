@@ -87,7 +87,7 @@ namespace SmartNet
 
         public override string ToString()
         {
-            return string.Format("{0} -> {1}", Source, Target);
+            return string.Format("{0} -> {1}, Data: {2}", Source, Target, Data);
         }
 
         public static bool operator ==(DiEdge<TVertex, TData> first, DiEdge<TVertex, TData> second)

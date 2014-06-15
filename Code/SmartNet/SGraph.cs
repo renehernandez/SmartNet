@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartNet.Interfaces;
 
 namespace SmartNet
 {
-    public class SGraph<TVertex> : Graph<TVertex, SEdge<TVertex>, GraphData, EdgeData> 
+    public class SGraph<TVertex> : Graph<TVertex, SEdge<TVertex>, GraphData, EdgeData>, IGraph<SGraph<TVertex>, TVertex, SEdge<TVertex>, GraphData, EdgeData> 
         where TVertex : IEquatable<TVertex>
     {
 
@@ -58,5 +59,27 @@ namespace SmartNet
 
         # endregion
 
+        # region Public Methods
+
+        public new SGraph<TVertex> Subgraph(IEnumerable<TVertex> vertices)
+        {
+            var listVertices = vertices.ToList();
+            var subgraph = new SGraph<TVertex>(listVertices);
+
+            subgraph.AddEdges(
+                listVertices.SelectMany(vertex => Adj[vertex].Values.Where(
+                    edge => subgraph.HasVertex(edge.Target) && !subgraph.HasEdge(vertex, edge.Target))
+                )
+                );
+
+            return subgraph;
+        }
+
+        public new SGraph<TVertex> Subgraph(params TVertex[] vertices)
+        {
+            return Subgraph(vertices.AsEnumerable());
+        }
+
+        # endregion
     }
 }
