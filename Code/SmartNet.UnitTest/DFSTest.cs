@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartNet.Interfaces;
 
 namespace SmartNet.UnitTest
 {
@@ -31,8 +32,9 @@ namespace SmartNet.UnitTest
         {
             intGraph.AddPath(new int[] { 1, 2, 3, 4, 5, 6 });
 
-            var check = new SEdge<int>[] { new SEdge<int>(3, 2), new SEdge<int>(2, 1), 
+            var check = new [] { new SEdge<int>(3, 2), new SEdge<int>(2, 1), 
                 new SEdge<int>(3, 4), new SEdge<int>(4, 5), new SEdge<int>(5, 6) };
+
 
             CheckValues(DFS.Edges(intGraph, 3).ToArray(), check);
 
@@ -48,9 +50,9 @@ namespace SmartNet.UnitTest
             var check = new SEdge<int>[arrayEdge.Length + 2];
 
             for (int i = 0; i < arrayEdge.Length; i++)
-			{
-			    check[i] = arrayEdge[i];
-			}
+            {
+                check[i] = arrayEdge[i];
+            }
             check[arrayEdge.Length] = new SEdge<int>(4, 10);
             check[arrayEdge.Length + 1] = new SEdge<int>(7, 8);
 
@@ -99,13 +101,13 @@ namespace SmartNet.UnitTest
         [Test]
         public void DFSTreeFromVertex()
         {
-            intGraph.AddPath(1,2,3,4,5,6,7);
+            intGraph.AddPath(1, 2, 3, 4, 5, 6, 7);
 
             intGraph.AddEdge(0, 9);
             intGraph.AddEdge(0, 14);
 
             var treeGraph = DFS.Tree(intGraph, 9);
-            
+
             Assert.AreEqual(treeGraph.NumberOfVertices, 3);
             Assert.AreEqual(treeGraph.NumberOfEdges, 2);
         }

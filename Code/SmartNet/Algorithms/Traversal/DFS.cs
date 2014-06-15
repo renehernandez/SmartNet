@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,20 +10,39 @@ namespace SmartNet.Algorithms.Traversal
     public static class DFS
     {
 
-        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph)
-            where TGraph: IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new() 
+        # region Vertices Methods
+
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge, TGraphData, TEdgeData>(Graph<TVertex, TEdge, TGraphData, TEdgeData> graph)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TEdgeData> 
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData> 
             where TEdgeData : IEdgeData, new() 
             where TGraphData : IGraphData, new()
         {
             return Vertices(graph, graph.VerticesIterator.First(), true);
         }
 
-        public static IEnumerable<TVertex> Vertices<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge, TGraphData, TEdgeData>(DiGraph<TVertex, TEdge, TGraphData, TEdgeData> graph)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+            where TEdge : DiEdge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
+        {
+            return Vertices(graph, graph.VerticesIterator.First(), true);
+        }
+
+
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge, TGraphData, TEdgeData>(Graph<TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
+        {
+            return Vertices(graph, vertex, false);
+        }
+
+        public static IEnumerable<TVertex> Vertices<TVertex, TEdge, TGraphData, TEdgeData>(DiGraph<TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : DiEdge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
             where TEdgeData : IEdgeData, new()
             where TGraphData : IGraphData, new()
         {
@@ -71,20 +90,40 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
+        # endregion
+
+        # region Edges Methods
+
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge, TGraphData, TEdgeData>(Graph<TVertex, TEdge, TGraphData, TEdgeData> graph)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
             where TEdgeData : IEdgeData, new()
             where TGraphData : IGraphData, new()
         {
             return Edges(graph, graph.VerticesIterator.First(), true);
         }
 
-        public static IEnumerable<TEdge> Edges<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge, TGraphData, TEdgeData>(DiGraph<TVertex, TEdge, TGraphData, TEdgeData> graph)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
+            where TEdge : DiEdge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
+        {
+            return Edges(graph, graph.VerticesIterator.First(), true);
+        }
+
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge, TGraphData, TEdgeData>(DiGraph<TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : DiEdge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
+            where TGraphData : IGraphData, new()
+        {
+            return Edges(graph, vertex, false);
+        }
+
+        public static IEnumerable<TEdge> Edges<TVertex, TEdge, TGraphData, TEdgeData>(Graph<TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
             where TEdgeData : IEdgeData, new()
             where TGraphData : IGraphData, new()
         {
@@ -132,22 +171,42 @@ namespace SmartNet.Algorithms.Traversal
             }
         }
 
-        public static TGraph Tree<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
+        # endregion
+
+        # region Tree Methods
+
+        public static DiGraph<TVertex, TEdge, TGraphData, TEdgeData> Tree<TVertex, TEdge, TGraphData, TEdgeData>(DiGraph<TVertex, TEdge, TGraphData, TEdgeData> graph)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
-            where TEdgeData : IEdgeData, new()
             where TGraphData : IGraphData, new()
+            where TEdge : DiEdge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
+            where TEdgeData : IEdgeData, new()
         {
             return Tree(graph, graph.VerticesIterator.First(), true);
         }
 
-        public static TGraph Tree<TGraph, TVertex, TEdge, TGraphData, TEdgeData>(IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
-            where TGraph : IGraph<TGraph, TVertex, TEdge, TGraphData, TEdgeData>, new()
+        public static DiGraph<TVertex, TEdge, TGraphData, TEdgeData> Tree<TVertex, TEdge, TGraphData, TEdgeData>(DiGraph<TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
             where TVertex : IEquatable<TVertex>
-            where TEdge : IEdge<TEdge, TVertex, TEdgeData>
-            where TEdgeData : IEdgeData, new()
+            where TEdge : DiEdge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
             where TGraphData : IGraphData, new()
+            where TEdgeData : IEdgeData, new()
+        {
+            return Tree(graph, vertex, false);
+        }
+
+        public static Graph<TVertex, TEdge, TGraphData, TEdgeData> Tree<TVertex, TEdge, TGraphData, TEdgeData>(Graph<TVertex, TEdge, TGraphData, TEdgeData> graph)
+            where TVertex : IEquatable<TVertex>
+            where TGraphData : IGraphData, new() 
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData> 
+            where TEdgeData : IEdgeData, new()
+        {
+            return Tree(graph, graph.VerticesIterator.First(), true);
+        }
+
+        public static Graph<TVertex, TEdge, TGraphData, TEdgeData> Tree<TVertex, TEdge, TGraphData, TEdgeData>(Graph<TVertex, TEdge, TGraphData, TEdgeData> graph, TVertex vertex)
+            where TVertex : IEquatable<TVertex>
+            where TEdge : Edge<TVertex, TEdgeData>, IEdge<TEdge, TVertex, TEdgeData>
+            where TGraphData : IGraphData, new()
+            where TEdgeData : IEdgeData, new()
         {
             return Tree(graph, vertex, false);
         }
@@ -165,6 +224,7 @@ namespace SmartNet.Algorithms.Traversal
 
             return treeGraph;
         }
+        # endregion
 
     }
 
