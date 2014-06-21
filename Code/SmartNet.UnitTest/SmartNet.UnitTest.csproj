@@ -44,9 +44,11 @@
   <ItemGroup>
     <Compile Include="BFSTest.cs" />
     <Compile Include="BinaryHeapTest.cs" />
+    <Compile Include="ClassicTest.cs" />
     <Compile Include="DFSTest.cs" />
     <Compile Include="EdgeTest.cs" />
     <Compile Include="GraphTest.cs" />
+    <Compile Include="NamedTest.cs" />
     <Compile Include="PriorityQueueTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
