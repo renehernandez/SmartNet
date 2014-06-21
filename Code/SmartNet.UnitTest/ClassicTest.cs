@@ -18,6 +18,8 @@ namespace SmartNet.UnitTest
         {
         }
 
+        # region Complete Graph Tests
+
         [Test]
         public void K0GraphTest()
         {
@@ -84,6 +86,10 @@ namespace SmartNet.UnitTest
 
             Assert.IsTrue(graph.HasEdge(3, 4) && graph.HasEdge(4, 3));
         }
+
+        # endregion
+
+        # region Complete Bipartite Tests
 
         [Test]
         public void K00GraphTest()
@@ -180,6 +186,62 @@ namespace SmartNet.UnitTest
             Assert.IsTrue(graph.HasEdge(4, 8) && graph.HasEdge(8, 4));
             Assert.IsTrue(graph.HasEdge(4, 9) && graph.HasEdge(9, 4));
         }
+
+        # endregion
+
+        # region Star Graphs
+
+        [Test]
+        public void Star0GraphTest()
+        {
+            var graph = Classic.StarGraph(0);
+
+            Assert.AreEqual(1, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+        }
+
+
+        [Test]
+        public void Star5GraphTest()
+        {
+            var graph = Classic.StarGraph(5);
+
+            Assert.AreEqual(graph.NumberOfVertices, 6);
+            Assert.AreEqual(graph.NumberOfEdges, 5);
+
+            Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
+            Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
+            Assert.IsTrue(graph.HasEdge(0, 3) && graph.HasEdge(3, 0));
+            Assert.IsTrue(graph.HasEdge(0, 4) && graph.HasEdge(4, 0));
+            Assert.IsTrue(graph.HasEdge(0, 5) && graph.HasEdge(5, 0));
+        }
+
+        [Test]
+        public void Star0DiGraphTest()
+        {
+            var graph = Classic.StarDiGraph(0);
+
+            Assert.AreEqual(1, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+        }
+
+
+        [Test]
+        public void Star5DiGraphTest()
+        {
+            var graph = Classic.StarDiGraph(5);
+
+            Assert.AreEqual(graph.NumberOfVertices, 6);
+            Assert.AreEqual(graph.NumberOfEdges, 10);
+
+            Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
+            Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
+            Assert.IsTrue(graph.HasEdge(0, 3) && graph.HasEdge(3, 0));
+            Assert.IsTrue(graph.HasEdge(0, 4) && graph.HasEdge(4, 0));
+            Assert.IsTrue(graph.HasEdge(0, 5) && graph.HasEdge(5, 0));
+        }
+
+        # endregion
 
     }
 }
