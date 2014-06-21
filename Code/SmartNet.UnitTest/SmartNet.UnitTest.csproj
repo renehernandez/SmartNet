@@ -48,6 +48,7 @@
     <Compile Include="DFSTest.cs" />
     <Compile Include="EdgeTest.cs" />
     <Compile Include="GraphTest.cs" />
+    <Compile Include="NamedTest.cs" />
     <Compile Include="PriorityQueueTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
