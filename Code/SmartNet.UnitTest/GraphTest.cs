@@ -35,24 +35,24 @@ namespace SmartNet.UnitTest
 
         }
 
-        Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData> classGraph;
+        Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData> graph;
 
-        List<TestClass> testData;
+        List<TestClass> data;
 
-        List<Edge<TestClass, EdgeData>> testEdgeData;
+        List<Edge<TestClass, EdgeData>> edgeData;
 
         [SetUp]
         public void Init()
         {
-            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>();
+            graph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>();
 
-            testData = new List<TestClass>() 
+            data = new List<TestClass>() 
             { 
                 new TestClass(10), new TestClass(-1), new TestClass(20), 
                 new TestClass(0), new TestClass(-20) 
             };
 
-            testEdgeData = new List<Edge<TestClass, EdgeData>>()
+            edgeData = new List<Edge<TestClass, EdgeData>>()
             {
                 new Edge<TestClass, EdgeData>(new TestClass(24), new TestClass(-35)), 
                 new Edge<TestClass, EdgeData>(new TestClass(2345), new TestClass(-8035)),
@@ -65,10 +65,10 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEmptyClassGraph()
         {
-            Assert.AreEqual(classGraph.NumberOfVertices, 0);
-            Assert.AreEqual(classGraph.NumberOfEdges, 0);
-            Assert.AreEqual(classGraph.Vertices.Length, 0);
-            Assert.AreEqual(classGraph.Edges.Length, 0);
+            Assert.AreEqual(0, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+            Assert.AreEqual(0, graph.Vertices.Length);
+            Assert.AreEqual(0, graph.Edges.Length);
         }
 
         # endregion
@@ -78,24 +78,24 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableVertexDataClassGraph()
         {
-            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(testData);
+            graph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(data);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, testData.Count);
-            Assert.AreEqual(classGraph.NumberOfEdges, 0);
-            Assert.AreEqual(classGraph.Vertices.Length, testData.Count);
-            Assert.AreEqual(classGraph.Edges.Length, 0);
+            Assert.AreEqual(data.Count, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+            Assert.AreEqual(data.Count, graph.Vertices.Length);
+            Assert.AreEqual(0, graph.Edges.Length);
         }
 
         [Test]
         public void ConstructorArrayVertexDataClassGraph()
         {
-            var array = testData.ToArray();
-            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(array[0], array[1], array[2], array[3], array[4]);
+            var array = data.ToArray();
+            graph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(array[0], array[1], array[2], array[3], array[4]);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, array.Length);
-            Assert.AreEqual(classGraph.NumberOfEdges, 0);
-            Assert.AreEqual(classGraph.Vertices.Length, array.Length);
-            Assert.AreEqual(classGraph.Edges.Length, 0);
+            Assert.AreEqual(array.Length, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+            Assert.AreEqual(array.Length, graph.Vertices.Length);
+            Assert.AreEqual(0, graph.Edges.Length);
         }
 
         # endregion
@@ -105,24 +105,24 @@ namespace SmartNet.UnitTest
         [Test]
         public void ConstructorEnumerableEdgeDataClassGraph()
         {
-            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(testEdgeData);
+            graph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(edgeData);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, 6);
-            Assert.AreEqual(classGraph.NumberOfEdges, 3);
-            Assert.AreEqual(classGraph.Vertices.Length, 6);
-            Assert.AreEqual(classGraph.Edges.Length, 3);
+            Assert.AreEqual(6, graph.NumberOfVertices);
+            Assert.AreEqual(3, graph.NumberOfEdges);
+            Assert.AreEqual(6, graph.Vertices.Length);
+            Assert.AreEqual(3, graph.Edges.Length);
         }
 
         [Test]
         public void ConstructorArrayEdgeDataClassGraph()
         {
-            var array = testEdgeData.ToArray();
-            classGraph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(array[0], array[1], array[2]);
+            var array = edgeData.ToArray();
+            graph = new Graph<TestClass, Edge<TestClass, EdgeData>, GraphData, EdgeData>(array[0], array[1], array[2]);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, 6);
-            Assert.AreEqual(classGraph.NumberOfEdges, 3);
-            Assert.AreEqual(classGraph.Vertices.Length, 6);
-            Assert.AreEqual(classGraph.Edges.Length, 3);
+            Assert.AreEqual(6, graph.NumberOfVertices);
+            Assert.AreEqual(3, graph.NumberOfEdges);
+            Assert.AreEqual(6, graph.Vertices.Length);
+            Assert.AreEqual(3, graph.Edges.Length);
         }
 
         # endregion
@@ -132,14 +132,14 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddVertexClassGraph()
         {
-            Assert.AreEqual(classGraph.NumberOfVertices, 0);
-            Assert.AreEqual(classGraph.Vertices.Length, 0);
+            Assert.AreEqual(0, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.Vertices.Length);
 
             var klass = new TestClass(20);
-            classGraph.AddVertex(klass);
+            graph.AddVertex(klass);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, 1);
-            Assert.AreEqual(classGraph.Vertices.Length, 1);
+            Assert.AreEqual(1, graph.NumberOfVertices);
+            Assert.AreEqual(1, graph.Vertices.Length);
         }
 
         # endregion
@@ -152,15 +152,15 @@ namespace SmartNet.UnitTest
             var klass1 = new TestClass(2);
             var klass2 = new TestClass(10);
 
-            classGraph.AddVertex(klass1);
-            classGraph.AddVertex(klass2);
-            Assert.AreEqual(classGraph.NumberOfVertices, 2);
+            graph.AddVertex(klass1);
+            graph.AddVertex(klass2);
+            Assert.AreEqual(2, graph.NumberOfVertices);
 
-            classGraph.AddEdge(klass2, klass1);
+            graph.AddEdge(klass2, klass1);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, 2);
-            Assert.AreEqual(classGraph.NumberOfEdges, 1);
-            Assert.AreEqual(classGraph.Edges.Length, 1);
+            Assert.AreEqual(2, graph.NumberOfVertices);
+            Assert.AreEqual(1, graph.NumberOfEdges);
+            Assert.AreEqual(1, graph.Edges.Length);
         }
 
         # endregion
@@ -170,10 +170,10 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddEdgeWtihoutVerticesClassGraph()
         {
-            classGraph.AddEdge(new TestClass(20), new TestClass(15));
+            graph.AddEdge(new TestClass(20), new TestClass(15));
 
-            Assert.AreEqual(classGraph.NumberOfVertices, 2);
-            Assert.AreEqual(classGraph.NumberOfEdges, 1);
+            Assert.AreEqual(2, graph.NumberOfVertices);
+            Assert.AreEqual(1, graph.NumberOfEdges);
         }
 
         # endregion
@@ -183,10 +183,10 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddPathNoVertexPresentClassGraph()
         {
-            classGraph.AddPath(testData);
+            graph.AddPath(data);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, testData.Count);
-            Assert.AreEqual(classGraph.NumberOfEdges, testData.Count - 1);
+            Assert.AreEqual(data.Count, graph.NumberOfVertices);
+            Assert.AreEqual(data.Count - 1, graph.NumberOfEdges);
         }
 
         # endregion
@@ -196,14 +196,14 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddPathSomeVertexPresentClassGraph()
         {
-            classGraph.AddVertices(testData);
+            graph.AddVertices(data);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, testData.Count);
-            Assert.AreEqual(classGraph.NumberOfEdges, 0);
+            Assert.AreEqual(data.Count, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
 
-            classGraph.AddPath(testData);
-            Assert.AreEqual(classGraph.NumberOfVertices, testData.Count);
-            Assert.AreEqual(classGraph.NumberOfEdges, testData.Count - 1);
+            graph.AddPath(data);
+            Assert.AreEqual(data.Count, graph.NumberOfVertices);
+            Assert.AreEqual(data.Count - 1, graph.NumberOfEdges);
         }
 
         # endregion
@@ -213,10 +213,10 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddCycleNoVertexPresentClassGraph()
         {
-            classGraph.AddCycle(testData);
+            graph.AddCycle(data);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, testData.Count);
-            Assert.AreEqual(classGraph.NumberOfEdges, testData.Count);
+            Assert.AreEqual(data.Count, graph.NumberOfVertices);
+            Assert.AreEqual(data.Count, graph.NumberOfEdges);
         }
 
         # endregion
@@ -226,16 +226,16 @@ namespace SmartNet.UnitTest
         [Test]
         public void AddCycleWithSomeVertexPresentClassGraph()
         {
-            classGraph.AddVertices(testData[1], testData[0], new TestClass(9826593));
+            graph.AddVertices(data[1], data[0], new TestClass(9826593));
 
 
-            Assert.AreEqual(classGraph.NumberOfVertices, 3);
-            Assert.AreEqual(classGraph.NumberOfEdges, 0);
+            Assert.AreEqual(3, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
 
-            classGraph.AddCycle(testData);
+            graph.AddCycle(data);
 
-            Assert.AreEqual(classGraph.NumberOfVertices, testData.Count + 1);
-            Assert.AreEqual(classGraph.NumberOfEdges, testData.Count);
+            Assert.AreEqual(data.Count + 1, graph.NumberOfVertices);
+            Assert.AreEqual(data.Count, graph.NumberOfEdges);
         }
 
         # endregion
@@ -246,12 +246,12 @@ namespace SmartNet.UnitTest
         public void HasVertexClassGraph()
         {
             var klass = new TestClass(40000);
-            Assert.AreEqual(classGraph.HasVertex(klass), false);
+            Assert.AreEqual(false, graph.HasVertex(klass));
 
-            classGraph.AddEdge(testData[0], testData[1]);
+            graph.AddEdge(data[0], data[1]);
 
-            Assert.AreEqual(classGraph.HasVertex(testData[0]), true);
-            Assert.AreEqual(classGraph.HasVertex(klass), false);
+            Assert.AreEqual(true, graph.HasVertex(data[0]));
+            Assert.AreEqual(false, graph.HasVertex(klass));
         }
 
         # endregion
@@ -261,12 +261,12 @@ namespace SmartNet.UnitTest
         [Test]
         public void HasEdgeClassGraph()
         {
-            Assert.AreEqual(classGraph.HasEdge(testEdgeData[0]), false);
+            Assert.AreEqual(false, graph.HasEdge(edgeData[0]));
 
-            classGraph.AddEdge(testEdgeData[0]);
+            graph.AddEdge(edgeData[0]);
 
-            Assert.AreEqual(classGraph.HasEdge(testEdgeData[1]), false);
-            Assert.AreEqual(classGraph.HasEdge(testEdgeData[0]), true);
+            Assert.AreEqual(false, graph.HasEdge(edgeData[1]));
+            Assert.AreEqual(true, graph.HasEdge(edgeData[0]));
 
         }
 
@@ -277,12 +277,12 @@ namespace SmartNet.UnitTest
         [Test]
         public void NeighborsForClassGraph()
         {
-            classGraph.AddEdges(testEdgeData);
-            var neighbors = classGraph.Neighbors(testEdgeData[2].Target);
+            graph.AddEdges(edgeData);
+            var neighbors = graph.Neighbors(edgeData[2].Target);
 
-            Assert.AreEqual(neighbors.Length, 1);
+            Assert.AreEqual(1, neighbors.Length);
 
-            CheckValues(neighbors, new[] { testEdgeData[2].Source });
+            CheckValues(new[] { edgeData[2].Source }, neighbors);
 
         }
 

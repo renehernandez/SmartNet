@@ -17,8 +17,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Named.PetersenGraph();
 
-            Assert.AreEqual(graph.NumberOfVertices, 10);
-            Assert.AreEqual(graph.NumberOfEdges, 15);
+            Assert.AreEqual(10, graph.NumberOfVertices);
+            Assert.AreEqual(15, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
             Assert.IsTrue(graph.HasEdge(1, 2) && graph.HasEdge(2, 1));
@@ -45,8 +45,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Named.PetersenDiGraph();
 
-            Assert.AreEqual(graph.NumberOfVertices, 10);
-            Assert.AreEqual(graph.NumberOfEdges, 30);
+            Assert.AreEqual(10, graph.NumberOfVertices);
+            Assert.AreEqual(30, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
             Assert.IsTrue(graph.HasEdge(1, 2) && graph.HasEdge(2, 1));

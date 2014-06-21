@@ -25,8 +25,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteGraph(0);
 
-            Assert.AreEqual(graph.NumberOfEdges, 0);
-            Assert.AreEqual(graph.NumberOfVertices, 0);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+            Assert.AreEqual(0, graph.NumberOfVertices);
 
         }
 
@@ -35,8 +35,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteGraph(5);
 
-            Assert.AreEqual(graph.NumberOfVertices, 5);
-            Assert.AreEqual(graph.NumberOfEdges, 10);
+            Assert.AreEqual(5, graph.NumberOfVertices);
+            Assert.AreEqual(10, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
             Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
@@ -59,8 +59,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteDiGraph(0);
 
-            Assert.AreEqual(graph.NumberOfVertices, 0);
-            Assert.AreEqual(graph.NumberOfEdges, 0);
+            Assert.AreEqual(0, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
         }
 
         [Test]
@@ -68,8 +68,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteDiGraph(5);
 
-            Assert.AreEqual(graph.NumberOfVertices, 5);
-            Assert.AreEqual(graph.NumberOfEdges, 20);
+            Assert.AreEqual(5, graph.NumberOfVertices);
+            Assert.AreEqual(20, graph.NumberOfEdges);
 
 
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
@@ -96,8 +96,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteBipartiteGraph(0, 0);
 
-            Assert.AreEqual(graph.NumberOfVertices, 0);
-            Assert.AreEqual(graph.NumberOfEdges, 0);
+            Assert.AreEqual(0, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
         }
 
         [Test]
@@ -105,8 +105,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteBipartiteGraph(5, 5);
 
-            Assert.AreEqual(graph.NumberOfVertices, 10);
-            Assert.AreEqual(graph.NumberOfEdges, 25);
+            Assert.AreEqual(10, graph.NumberOfVertices);
+            Assert.AreEqual(25, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 5) && graph.HasEdge(5, 0));
             Assert.IsTrue(graph.HasEdge(0, 6) && graph.HasEdge(6, 0));
@@ -144,8 +144,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteBipartiteDiGraph(0, 0);
 
-            Assert.AreEqual(graph.NumberOfVertices, 0);
-            Assert.AreEqual(graph.NumberOfEdges, 0);
+            Assert.AreEqual(0, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
         }
 
         [Test]
@@ -153,8 +153,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.CompleteBipartiteDiGraph(5, 5);
 
-            Assert.AreEqual(graph.NumberOfVertices, 10);
-            Assert.AreEqual(graph.NumberOfEdges, 50);
+            Assert.AreEqual(10, graph.NumberOfVertices);
+            Assert.AreEqual(50, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 5) && graph.HasEdge(5, 0));
             Assert.IsTrue(graph.HasEdge(0, 6) && graph.HasEdge(6, 0));
@@ -206,8 +206,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.StarGraph(5);
 
-            Assert.AreEqual(graph.NumberOfVertices, 6);
-            Assert.AreEqual(graph.NumberOfEdges, 5);
+            Assert.AreEqual(6, graph.NumberOfVertices);
+            Assert.AreEqual(5, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
             Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
@@ -231,8 +231,8 @@ namespace SmartNet.UnitTest
         {
             var graph = Classic.StarDiGraph(5);
 
-            Assert.AreEqual(graph.NumberOfVertices, 6);
-            Assert.AreEqual(graph.NumberOfEdges, 10);
+            Assert.AreEqual(6, graph.NumberOfVertices);
+            Assert.AreEqual(10, graph.NumberOfEdges);
 
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
             Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
