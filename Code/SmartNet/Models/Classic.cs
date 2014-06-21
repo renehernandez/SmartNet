@@ -10,6 +10,8 @@ namespace SmartNet.Models
     public static class Classic
     {
 
+        # region Complete Graphs
+
         public static SGraph<int> CompleteGraph(int n)
         {
             return CompleteGraph<SGraph<int>, SEdge<int>, GraphData, EdgeData>(n);
@@ -50,7 +52,57 @@ namespace SmartNet.Models
             return graph;
         }
 
+        # endregion
 
+        # region Complete Bipartite Graph
 
+        public static SGraph<int> CompleteBipartiteGraph(int n1, int n2)
+        {
+            return CompleteBipartiteGraph<SGraph<int>, SEdge<int>, GraphData, EdgeData>(n1, n2);
+        }
+
+        public static TGraph CompleteBipartiteGraph<TGraph, TEdge, TGraphData, TEdgeData>(int n1, int n2)
+            where TGraph : Graph<int, TEdge, TGraphData, TEdgeData>, IGraph<TGraph, int, TEdge, TGraphData, TEdgeData>,
+                new()
+            where TEdge : Edge<int, TEdgeData>, IEdge<TEdge, int, TEdgeData>
+            where TGraphData : IGraphData, new()
+            where TEdgeData : IEdgeData, new()
+        {
+
+            var graph = new TGraph {Data = {Name = string.Format("Complete Bipartite ({0}, {1}) Graph", n1, n2)}};
+
+            graph.AddEdges(Enumerable.Range(0, n1).SelectMany(i => Enumerable.Range(n1, n2).Select(
+                j => new Tuple<int, int>(i, j))));
+
+            return graph;
+
+        }
+
+        public static SDiGraph<int> CompleteBipartiteDiGraph(int n1, int n2)
+        {
+            return CompleteBipartiteDiGraph<SDiGraph<int>, SDiEdge<int>, GraphData, EdgeData>(n1, n2);
+        }
+
+        public static TGraph CompleteBipartiteDiGraph<TGraph, TEdge, TGraphData, TEdgeData>(int n1, int n2)
+            where TGraph : DiGraph<int, TEdge, TGraphData, TEdgeData>, IGraph<TGraph, int, TEdge, TGraphData, TEdgeData>,
+                new()
+            where TEdge : DiEdge<int, TEdgeData>, IEdge<TEdge, int, TEdgeData>
+            where TGraphData : IGraphData, new()
+            where TEdgeData : IEdgeData, new()
+        {
+
+            var graph = new TGraph { Data = { Name = string.Format("Complete Bipartite ({0}, {1}) DiGraph", n1, n2) } };
+
+            graph.AddEdges(Enumerable.Range(0, n1).SelectMany(i => Enumerable.Range(n1, n2).Select(
+                j => new Tuple<int, int>(i, j))));
+
+            graph.AddEdges(Enumerable.Range(0, n1).SelectMany(i => Enumerable.Range(n1, n2).Select(
+                j => new Tuple<int, int>(j, i))));
+
+            return graph;
+
+        }
+
+        # endregion
     }
 }
