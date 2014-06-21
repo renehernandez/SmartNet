@@ -65,8 +65,8 @@ namespace SmartNet.UnitTest
             heap.BuildMaxHeap(classData);
             heap.HeapIncreaseKey(classData, 4, new ClassTest(11, "24"));
 
-            Assert.AreEqual(classData[1].Index, 11);
-            Assert.AreEqual(classData[4].Index, 10);
+            Assert.AreEqual(11, classData[1].Index);
+            Assert.AreEqual(10, classData[4].Index);
         }
 
         [Test]
@@ -85,9 +85,9 @@ namespace SmartNet.UnitTest
             heap.BuildMaxHeap(classData);
             heap.HeapIncreaseKey(classData, 3, new ClassTest(-848342, "zaoidvaibv"));
 
-            Assert.AreEqual(classData[3].Name, "new");
-            Assert.AreEqual(classData[1].Name, "uhehg");
-            Assert.AreEqual(classData[0].Name, "zaoidvaibv");
+            Assert.AreEqual("new", classData[3].Name);
+            Assert.AreEqual("uhehg", classData[1].Name);
+            Assert.AreEqual("zaoidvaibv", classData[0].Name);
         }
 
         [Test]
@@ -110,9 +110,9 @@ namespace SmartNet.UnitTest
             heap.BuildMinHeap(classData);
             heap.HeapDecreaseKey(classData, 3, new ClassTest(-4579, "oaiubfoi"));
 
-            Assert.AreEqual(classData[0].Name, "436q6");
-            Assert.AreEqual(classData[1].Name, "oaiubfoi");
-            Assert.AreEqual(classData[3].Index, 1);
+            Assert.AreEqual("436q6", classData[0].Name);
+            Assert.AreEqual("oaiubfoi", classData[1].Name);
+            Assert.AreEqual(1, classData[3].Index);
         }
 
         [Test]
@@ -130,9 +130,9 @@ namespace SmartNet.UnitTest
             heap.BuildMinHeap(classData);
             heap.HeapDecreaseKey(classData, 4, new ClassTest(98245, "008349ADBA"));
 
-            Assert.AreEqual(classData[0].Name, "008349ADBA");
-            Assert.AreEqual(classData[1].Name, "1");
-            Assert.AreEqual(classData[4].Name, "436q6");
+            Assert.AreEqual("008349ADBA", classData[0].Name);
+            Assert.AreEqual("1", classData[1].Name);
+            Assert.AreEqual("436q6", classData[4].Name);
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace SmartNet.UnitTest
         {
             heap.BuildMaxHeap(classData);
 
-            Assert.AreEqual(classData[0].Index, 84756);
+            Assert.AreEqual(84756, classData[0].Index);
             Assert.True(classData[0].CompareTo(classData[1]) >= 0);
         }
 
@@ -163,7 +163,7 @@ namespace SmartNet.UnitTest
         {
             heap.BuildMinHeap(classData);
 
-            Assert.AreEqual(classData[0].Index, -4579);
+            Assert.AreEqual(-4579, classData[0].Index);
             Assert.True(classData[0].CompareTo(classData[1]) <= 0);
         }
         
@@ -173,7 +173,7 @@ namespace SmartNet.UnitTest
             heap = new BinaryHeap<ClassTest>(testComparer);
             heap.BuildMaxHeap(classData);
 
-            Assert.AreEqual(classData[0].Name, "uhehg");
+            Assert.AreEqual("uhehg", classData[0].Name);
             Assert.True(testComparer.Compare(classData[0], classData[1]) >= 0);
         }
 
@@ -184,7 +184,7 @@ namespace SmartNet.UnitTest
 
             heap.BuildMinHeap(classData);
 
-            Assert.AreEqual(classData[0].Name, "1");
+            Assert.AreEqual("1", classData[0].Name);
             Assert.True(testComparer.Compare(classData[0], classData[1]) <= 0);
         }
 

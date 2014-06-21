@@ -36,7 +36,7 @@ namespace SmartNet.UnitTest
                 new SEdge<int>(3, 4), new SEdge<int>(4, 5), new SEdge<int>(5, 6) };
 
 
-            CheckValues(DFS.Edges(intGraph, 3).ToArray(), check);
+            CheckValues(check, DFS.Edges(intGraph, 3).ToArray());
 
         }
 
@@ -58,7 +58,7 @@ namespace SmartNet.UnitTest
 
             var resul = DFS.Edges(intGraph).ToArray();
 
-            CheckValues(resul, check);
+            CheckValues(check, resul);
         }
 
         [Test]
@@ -81,9 +81,8 @@ namespace SmartNet.UnitTest
             check[5] = new SEdge<int>(5, 6);
 
             var resul = DFS.Edges(intGraph).ToArray();
-            CheckValues(resul, check);
+            CheckValues(check, resul);
         }
-
 
         [Test]
         public void DFSTreeFromGraph()
@@ -94,8 +93,8 @@ namespace SmartNet.UnitTest
 
             var treeGraph = DFS.Tree(intGraph);
 
-            Assert.AreEqual(treeGraph.NumberOfVertices, intGraph.NumberOfVertices);
-            Assert.AreEqual(treeGraph.NumberOfEdges, 5);
+            Assert.AreEqual(intGraph.NumberOfVertices, treeGraph.NumberOfVertices);
+            Assert.AreEqual(5, treeGraph.NumberOfEdges);
         }
 
         [Test]
@@ -108,8 +107,8 @@ namespace SmartNet.UnitTest
 
             var treeGraph = DFS.Tree(intGraph, 9);
 
-            Assert.AreEqual(treeGraph.NumberOfVertices, 3);
-            Assert.AreEqual(treeGraph.NumberOfEdges, 2);
+            Assert.AreEqual(3, treeGraph.NumberOfVertices);
+            Assert.AreEqual(2, treeGraph.NumberOfEdges);
         }
 
         # region Private Methods
