@@ -88,6 +88,7 @@ namespace SmartNet
             NumberOfEdges = 0;
             NumberOfVertices = 0;
             Adj = new Dictionary<TVertex, Dictionary<TVertex, TEdge>>();
+            Data = new TGraphData();
 
             ReverseEdgeFactory = EdgeCreationFactory.GetReverseEdge<TVertex, TEdge, TEdgeData>();
             EdgeVerticesFactory = EdgeCreationFactory.GetEdgeFromVertices<TVertex, TEdge, TEdgeData>();
