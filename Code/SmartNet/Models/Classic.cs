@@ -158,7 +158,12 @@ namespace SmartNet.Models
         {
             var graph = StarGraph<TGraph, TEdge, TGraphData, TEdgeData>(n);
 
-            graph.AddCycle(Enumerable.Range(1, n));
+            if(n >= 2)
+                graph.AddEdges(Enumerable.Range(1, n - 1).Select(i => new Tuple<int, int>(i, i + 1)));
+
+            if(n > 2)
+                graph.AddEdge(1, n);
+            
             graph.Data.Name = string.Format("Wheel ({0}) Graph", n);
 
             return graph;

@@ -197,8 +197,8 @@ namespace SmartNet.UnitTest
 
             Assert.AreEqual(13, graph.NumberOfVertices);
             Assert.AreEqual(12, graph.NumberOfEdges);
-
             Assert.AreEqual(3, graph.Degree(0));
+
             Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
             Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
             Assert.IsTrue(graph.HasEdge(0, 3) && graph.HasEdge(3, 0));
@@ -218,6 +218,43 @@ namespace SmartNet.UnitTest
         }
 
         # endregion
+
+
+        # region Wheel Graph
+
+        [Test]
+        public void Wheel0GraphTest()
+        {
+            var graph = Classic.WheelGraph(0);
+
+            Assert.AreEqual(1, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+        }
+
+        [Test]
+        public void Wheel5GraphTest()
+        {
+            var graph = Classic.WheelGraph(5);
+
+            Assert.AreEqual(6, graph.NumberOfVertices);
+            Assert.AreEqual(10, graph.NumberOfEdges);
+
+            Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
+            Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
+            Assert.IsTrue(graph.HasEdge(0, 3) && graph.HasEdge(3, 0));
+            Assert.IsTrue(graph.HasEdge(0, 4) && graph.HasEdge(4, 0));
+            Assert.IsTrue(graph.HasEdge(0, 5) && graph.HasEdge(5, 0));
+
+            Assert.IsTrue(graph.HasEdge(1, 2) && graph.HasEdge(2, 1));
+            Assert.IsTrue(graph.HasEdge(2, 3) && graph.HasEdge(3, 2));
+            Assert.IsTrue(graph.HasEdge(3, 4) && graph.HasEdge(4, 3));
+            Assert.IsTrue(graph.HasEdge(4, 5) && graph.HasEdge(5, 4));
+            Assert.IsTrue(graph.HasEdge(5, 1) && graph.HasEdge(1, 5));
+
+        }
+
+        # endregion
+
 
     }
 }
