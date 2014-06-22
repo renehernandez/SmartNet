@@ -36,7 +36,7 @@ namespace SmartNet.Models
 
         public static SGraph<int> HouseXGraph()
         {
-            return HouseGraph<SGraph<int>, SEdge<int>, GraphData, EdgeData>();
+            return HouseXGraph<SGraph<int>, SEdge<int>, GraphData, EdgeData>();
         }
 
         public static TGraph HouseXGraph<TGraph, TEdge, TGraphData, TEdgeData>()

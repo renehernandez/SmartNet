@@ -13,6 +13,40 @@ namespace SmartNet.UnitTest
     {
 
         [Test]
+        public void HouseGraphTest()
+        {
+            var graph = Named.HouseGraph();
+
+            Assert.AreEqual(5, graph.NumberOfVertices);
+            Assert.AreEqual(6, graph.NumberOfEdges);
+
+            Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
+            Assert.IsTrue(graph.HasEdge(1, 2) && graph.HasEdge(2, 1));
+            Assert.IsTrue(graph.HasEdge(2, 3) && graph.HasEdge(3, 2));
+            Assert.IsTrue(graph.HasEdge(3, 4) && graph.HasEdge(4, 3));
+            Assert.IsTrue(graph.HasEdge(4, 0) && graph.HasEdge(0, 4));
+            Assert.IsTrue(graph.HasEdge(4, 1) && graph.HasEdge(1, 4));
+        }
+
+        [Test]
+        public void HouseXGraphTest()
+        {
+            var graph = Named.HouseXGraph();
+
+            Assert.AreEqual(5, graph.NumberOfVertices);
+            Assert.AreEqual(8, graph.NumberOfEdges);
+
+            Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
+            Assert.IsTrue(graph.HasEdge(1, 2) && graph.HasEdge(2, 1));
+            Assert.IsTrue(graph.HasEdge(1, 3) && graph.HasEdge(3, 1));
+            Assert.IsTrue(graph.HasEdge(2, 3) && graph.HasEdge(3, 2));
+            Assert.IsTrue(graph.HasEdge(2, 4) && graph.HasEdge(4, 2));
+            Assert.IsTrue(graph.HasEdge(3, 4) && graph.HasEdge(4, 3));
+            Assert.IsTrue(graph.HasEdge(4, 0) && graph.HasEdge(0, 4));
+            Assert.IsTrue(graph.HasEdge(4, 1) && graph.HasEdge(1, 4));
+        }
+
+        [Test]
         public void PetersenGraphTest()
         {
             var graph = Named.PetersenGraph();
