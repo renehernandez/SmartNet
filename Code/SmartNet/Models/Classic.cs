@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -150,5 +151,44 @@ namespace SmartNet.Models
         }
 
         # endregion
+
+        # region Balanced Tree
+
+        public static SGraph<int> BalancedTree(int b, int h)
+        {
+            return BalancedTree<SGraph<int>, SEdge<int>, GraphData, EdgeData>(b, h);
+        }
+
+        public static TGraph BalancedTree<TGraph, TEdge, TGraphData, TEdgeData>(int b, int h)
+            where TGraph : Graph<int, TEdge, TGraphData, TEdgeData>, IGraph<TGraph, int, TEdge, TGraphData, TEdgeData>,
+                new()
+            where TEdge : Edge<int, TEdgeData>, IEdge<TEdge, int, TEdgeData>
+            where TGraphData : IGraphData, new()
+            where TEdgeData : IEdgeData, new()
+        {
+            var graph = new TGraph();
+
+            graph.AddVertex(0);
+
+            int n = b;
+            int current = 1;
+
+            for (int i = 0; i < h; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    graph.AddEdge(current, (current - 1)/b);
+                    current += 1;
+                }
+                n *= b;
+            }
+
+            return graph;
+        }
+
+        # endregion
+
+
+
     }
 }

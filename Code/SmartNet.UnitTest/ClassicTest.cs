@@ -243,5 +243,54 @@ namespace SmartNet.UnitTest
 
         # endregion
 
+        # region Balanced Tree
+
+        [Test]
+        public void Balanced10TreeTest()
+        {
+            var graph = Classic.BalancedTree(1, 0);
+
+            Assert.AreEqual(1, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+        }
+
+        [Test]
+        public void Balanced50TreeTest()
+        {
+            var graph = Classic.BalancedTree(5, 0);
+
+            Assert.AreEqual(1, graph.NumberOfVertices);
+            Assert.AreEqual(0, graph.NumberOfEdges);
+        }
+
+        [Test]
+        public void Balanced32TreeTest()
+        {
+            var graph = Classic.BalancedTree(3, 2);
+
+            Assert.AreEqual(13, graph.NumberOfVertices);
+            Assert.AreEqual(12, graph.NumberOfEdges);
+
+            Assert.AreEqual(3, graph.Degree(0));
+            Assert.IsTrue(graph.HasEdge(0, 1) && graph.HasEdge(1, 0));
+            Assert.IsTrue(graph.HasEdge(0, 2) && graph.HasEdge(2, 0));
+            Assert.IsTrue(graph.HasEdge(0, 3) && graph.HasEdge(3, 0));
+
+            Assert.IsTrue(graph.HasEdge(1, 4) && graph.HasEdge(4, 1));
+            Assert.IsTrue(graph.HasEdge(1, 5) && graph.HasEdge(5, 1));
+            Assert.IsTrue(graph.HasEdge(1, 6) && graph.HasEdge(6, 1));
+
+            Assert.IsTrue(graph.HasEdge(2, 7) && graph.HasEdge(7, 2));
+            Assert.IsTrue(graph.HasEdge(2, 8) && graph.HasEdge(8, 2));
+            Assert.IsTrue(graph.HasEdge(2, 9) && graph.HasEdge(9, 2));
+
+            Assert.IsTrue(graph.HasEdge(3, 10) && graph.HasEdge(10, 3));
+            Assert.IsTrue(graph.HasEdge(3, 11) && graph.HasEdge(11, 3));
+            Assert.IsTrue(graph.HasEdge(3, 12) && graph.HasEdge(12, 3));
+
+        }
+
+        # endregion
+
     }
 }
